@@ -1,0 +1,21 @@
+  {% extends "base" %}
+
+  {% block body %}
+
+  <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+    <div class="col-10 col-sm-8 col-lg-6">
+      <img src="/concert.png" class="d-block mx-lg-auto img-fluid" width="700" height="500" loading="lazy">
+    </div>
+    <div class="col-lg-6">
+      <h1 class="display-5 fw-bold lh-1 mb-3">Internetowa baza utworów muzycznych</h1>
+      <p class="lead"> Oceniaj utwory, płyty, artystów i wiele więcej!</p>
+      <p class="lead"> Twórz własne playlisty!</p>
+      <p class="lead mb-3"> Dziel się muzyką ze znajomymi!</p>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a href="/register" class="btn btn-primary btn-lg px-4 me-md-2">Utwórz konto</a>
+        <a href="/login" class="btn btn-outline-secondary btn-lg px-4">Zaloguj się</a>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

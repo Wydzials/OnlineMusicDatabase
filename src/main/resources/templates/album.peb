@@ -1,0 +1,49 @@
+{# @pebvariable name="album" type="pl.wydzials.onlinemusicdatabase.model.Album" #}
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row">
+  <div class="col-3">
+    <img src="/placeholder.png" class="img-fluid">
+  </div>
+
+  <div class="col">
+    <h1 class="display-5">{{ album.name }}</h1>
+    <h3><a href="#">{{ album.artist.name }}</a></h3>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Rok wydania: {{ album.year }}</li>
+      <li class="list-group-item">Całkowita długość: {{ album.durationAsString }}</li>
+    </ul>
+  </div>
+</div>
+
+<table class="table my-3">
+  <thead>
+  <tr>
+    <th scope="col">Tytuł</th>
+    <th scope="col">Długość</th>
+    <th scope="col">Ocena</th>
+    <th scope="col">Twoja ocena</th>
+  </tr>
+  </thead>
+  <tbody>
+      {% for recording in album.recordings %}
+    <tr>
+      <td><strong>{{ recording.title }}</strong></td>
+      <td>{{ recording.durationAsString }}</td>
+      <td>{{ averageRating(recording) }}</td>
+      <td>
+        {{ userRatingModalButton(recording, userRatings.getUserRating(recording.id)) }}
+        {{ userRatingModal(recording) }}
+      </td>
+    </tr>
+      {% endfor %}
+
+  </tbody>
+</table>
+
+{% endblock %}

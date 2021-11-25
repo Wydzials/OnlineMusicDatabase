@@ -1,0 +1,49 @@
+  {% macro averageRating(entity) %}
+  <a class="btn btn-primary">
+    <span class="me-2">⭐ {{ entity.averageRating | numberformat("#.##") }}</span>
+    <span class="badge bg-light text-dark rounded-pill">{{ entity.numberOfRatings }}</span>
+  </a>
+  {% endmacro %}
+
+    {% macro userRatingModal(entity) %}
+    <div class="modal fade" id="rating-{{ entity.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="/user/rating/{{ entity.id }}">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Dodaj ocenę</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% for stars in [1,2,3,4,5] %}
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="stars" id="inlineRadio{{ stars }}"
+                         value="{{ stars }}" required>
+                  <label class="form-check-label" for="inlineRadio{{ stars }}">{{ stars }}⭐</label>
+                </div>
+              {% endfor %}
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="stars" id="inlineRadio6" value="-1">
+                <label class="form-check-label" for="inlineRadio6">Usuń</label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+              <button type="submit" class="btn btn-primary">Zapisz ocenę</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endmacro %}
+
+
+  {% macro userRatingModalButton(entity, userRating) %}
+  {# @pebvariable name="userRating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
+  {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
+
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rating-{{ entity.id }}">
+      {{ userRating is null ? "Oceń" : "⭐" + userRating }}
+  </button>
+  {% endmacro %}

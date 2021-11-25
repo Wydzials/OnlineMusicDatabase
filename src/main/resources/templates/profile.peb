@@ -1,0 +1,49 @@
+  {% extends "base" %}
+
+  {% block body %}
+
+  <div class="col-md-10 mx-auto col-lg-5 my-5">
+
+    <div class="col-md-7 col-lg-8 mb-5">
+      <h4 class="mb-3">Aktualizuj dane konta</h4>
+
+      <form action="/user/update" method="post">
+
+        <div class="col-12">
+          <label for="username" class="form-label">Nazwa użytkownika</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="" required>
+        </div>
+
+        <button class="btn btn-primary mt-3" type="submit">Aktualizuj dane</button>
+      </form>
+    </div>
+
+    <div class="col-md-7 col-lg-8">
+      <h4 class="mb-3">Zmień hasło</h4>
+
+      <form action="/user/update-password" method="post">
+
+        <div class="col-12">
+          <label for="oldPassword" class="form-label">Stare hasło</label>
+          <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+        </div>
+
+        <div class="col-12">
+          <label for="newPassword1" class="form-label">Nowe hasło</label>
+          <input type="password" class="form-control" id="newPassword1" name="newPassword1" required>
+        </div>
+
+        <div class="col-12">
+          <label for="newPassword2" class="form-label">Powtórz nowe hasło</label>
+          <input type="password" class="form-control" id="newPassword1" name="newPassword2" required>
+        </div>
+
+        <button class="btn btn-primary mt-3" type="submit">Zmień hasło</button>
+
+      </form>
+    </div>
+  </div>
+
+  {% endblock %}
+
+
