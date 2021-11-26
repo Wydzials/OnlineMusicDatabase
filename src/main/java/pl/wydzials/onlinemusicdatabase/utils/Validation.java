@@ -16,5 +16,9 @@ public class Validation extends org.apache.commons.lang3.Validate {
   public static void throwIllegalArgumentException() {
     throw new IllegalArgumentException();
   }
+
+  public static void throwIllegalStateException() {
+    throw new IllegalArgumentException();
+  }
 }
 

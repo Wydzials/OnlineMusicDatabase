@@ -67,12 +67,6 @@ public class Recording extends RateableEntity {
     return duration;
   }
 
-  public String getDurationAsString() {
-    long minutes = duration.getSeconds() / 60;
-    long seconds = duration.getSeconds() % 60;
-    return String.format("%02d:%02d", minutes, seconds);
-  }
-
   public Artist getArtist() {
     return artist;
   }

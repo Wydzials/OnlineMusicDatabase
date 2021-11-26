@@ -1,5 +1,5 @@
   {% macro averageRating(entity) %}
-  <a class="btn btn-primary">
+  <a class="btn btn-primary btn-fixed-width">
     <span class="me-2">⭐ {{ entity.averageRating | numberformat("#.##") }}</span>
     <span class="badge bg-light text-dark rounded-pill">{{ entity.numberOfRatings }}</span>
   </a>
@@ -39,11 +39,12 @@
     {% endmacro %}
 
 
-  {% macro userRatingModalButton(entity, userRating) %}
-  {# @pebvariable name="userRating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
+  {% macro userRatingModalButton(entity, userRatingsContainer) %}
+  {# @pebvariable name="userRatingContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
   {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
 
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rating-{{ entity.id }}">
-      {{ userRating is null ? "Oceń" : "⭐" + userRating }}
+  <button type="button" class="btn btn-primary btn-fixed-width" data-bs-toggle="modal"
+          data-bs-target="#rating-{{ entity.id }}">
+      {{ userRating is null ? "Oceń" : "⭐" + userRatingsContainer.getUserRating(entity.id) }}
   </button>
   {% endmacro %}

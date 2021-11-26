@@ -19,6 +19,9 @@ public abstract class RateableEntity extends BaseEntity {
     Validation.notNull(stars);
     Validation.notNull(ratingRepository);
 
+    if (ratingRepository.findByUsernameAndEntity(user.getUsername(), this).isPresent())
+      Validation.throwIllegalStateException();
+
     final Rating rating = new Rating(this, user, stars);
     ratingRepository.save(rating);
 

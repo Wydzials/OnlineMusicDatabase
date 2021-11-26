@@ -1,6 +1,7 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -74,15 +75,19 @@ public class Album extends RateableEntity {
     return recordings;
   }
 
-  public String getDurationAsString() {
+  public Set<RateableEntity> getAllRateableEntities() {
+    final Set<RateableEntity> recordingsSet = new HashSet<>(recordings);
+    recordingsSet.add(this);
+    return Collections.unmodifiableSet(recordingsSet);
+  }
+
+  public Duration getDuration() {
     final long totalSeconds = recordings.stream()
-        .map(recording -> recording.getDuration())
+        .map(Recording::getDuration)
         .mapToLong(Duration::getSeconds)
         .sum();
 
-    long minutes = totalSeconds / 60;
-    long seconds = totalSeconds % 60;
-    return String.format("%02d:%02d", minutes, seconds);
+    return Duration.ofSeconds(totalSeconds);
   }
 
   public int getYear() {

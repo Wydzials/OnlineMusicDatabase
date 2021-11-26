@@ -35,7 +35,7 @@ public class AlbumController extends BaseController {
 
     final List<Rating> ratings;
     if (principal != null) {
-      ratings = ratingRepository.findByUsernameAndEntities(principal.getName(), album.getRecordings());
+      ratings = ratingRepository.findByUsernameAndEntities(principal.getName(), album.getAllRateableEntities());
     } else {
       ratings = new ArrayList<>();
     }

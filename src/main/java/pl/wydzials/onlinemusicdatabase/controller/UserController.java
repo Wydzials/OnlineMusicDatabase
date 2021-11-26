@@ -1,9 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +30,7 @@ public class UserController extends BaseController {
 
   @PostMapping("/login-failure")
   public String getLoginFailure(final RedirectAttributes redirectAttributes) {
-    redirectAttributes.addFlashAttribute("messages", Collections.singletonList("Niepoprawne dane logowania"));
+    addFlashMessage(redirectAttributes, "Niepoprawne dane logowania");
     return "redirect:/login";
   }
 
@@ -46,26 +43,22 @@ public class UserController extends BaseController {
   public String postRegister(final PostRegisterRequest request, final RedirectAttributes redirectAttributes) {
     Validation.notNull(request);
 
-    List<String> flashMessages = new ArrayList<>();
-
     if (!request.isUsernameCorrect())
-      flashMessages.add("Nieprawidłowa nazwa użytkownika");
+      addFlashMessage(redirectAttributes, "Nieprawidłowa nazwa użytkownika");
 
     if (!request.isPasswordCorrect())
-      flashMessages.add("Nieprawidłowe hasło");
+      addFlashMessage(redirectAttributes, "Nieprawidłowe hasło");
 
     if (userRepository.findByUsername(request.username).isPresent())
-      flashMessages.add("Nazwa użytkownika jest zajęta");
+      addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
 
-    if (!flashMessages.isEmpty()) {
-      redirectAttributes.addFlashAttribute("messages", flashMessages);
+    if (redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/register";
     }
 
     User user = new User(request.username, passwordEncoder.encode(request.password1));
     userRepository.save(user);
 
-    redirectAttributes.addFlashAttribute("messages", Collections.singletonList("Konto zostało utworzone"));
     return "redirect:/login";
   }
 
@@ -80,23 +73,19 @@ public class UserController extends BaseController {
       final RedirectAttributes redirectAttributes) {
     Validation.notNull(principal);
 
-    List<String> flashMessages = new ArrayList<>();
-
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
     if (userRepository.findByUsername(request.username).isPresent())
-      flashMessages.add("Nazwa użytkownika jest zajęta");
+      addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
 
-    if (!flashMessages.isEmpty()) {
-      redirectAttributes.addFlashAttribute("messages", flashMessages);
+    if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/user/profile";
     }
 
     user.updateDetails(request.username);
     SecurityContextHolder.getContext().setAuthentication(null);
 
-    flashMessages.add("Dane konta zostały zaktualizowane, zaloguj się ponownie");
-    redirectAttributes.addFlashAttribute("messages", flashMessages);
+    addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie");
     return "redirect:/login";
   }
 
@@ -106,26 +95,22 @@ public class UserController extends BaseController {
       final RedirectAttributes redirectAttributes) {
     Validation.notNull(principal);
 
-    List<String> flashMessages = new ArrayList<>();
-
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
     if (request.oldPassword != null && !user.isPasswordEqual(request.oldPassword, passwordEncoder))
-      flashMessages.add("Stare hasło jest nieprawidłowe");
+      addFlashMessage(redirectAttributes, "Stare hasło jest nieprawidłowe");
 
     if (!request.isPasswordCorrect())
-      flashMessages.add("Nowe hasło jest nieprawidłowe");
+      addFlashMessage(redirectAttributes, "Nowe hasło jest nieprawidłowe");
 
-    if (!flashMessages.isEmpty()) {
-      redirectAttributes.addFlashAttribute("messages", flashMessages);
+    if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/user/profile";
     }
 
     user.updatePassword(request.newPassword1, passwordEncoder);
     SecurityContextHolder.getContext().setAuthentication(null);
 
-    flashMessages.add("Hasło zostało zaktualizowane, zaloguj się ponownie");
-    redirectAttributes.addFlashAttribute("messages", flashMessages);
+    addFlashMessage(redirectAttributes, "Hasło zostało zaktualizowane, zaloguj się ponownie");
     return "redirect:/login";
   }
 
@@ -150,7 +135,9 @@ public class UserController extends BaseController {
   public record UpdatePasswordRequest(String oldPassword, String newPassword1, String newPassword2) {
 
     boolean isPasswordCorrect() {
-      return newPassword1 != null && newPassword1.length() > 0 && newPassword1.equals(newPassword2);
+      return newPassword1 != null
+          && newPassword1.length() > 0
+          && newPassword1.equals(newPassword2);
     }
   }
 }

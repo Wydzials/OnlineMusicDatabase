@@ -11,13 +11,32 @@
     <img src="/placeholder.png" class="img-fluid">
   </div>
 
-  <div class="col">
-    <h1 class="display-5">{{ album.name }}</h1>
-    <h3><a href="#">{{ album.artist.name }}</a></h3>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">Rok wydania: {{ album.year }}</li>
-      <li class="list-group-item">Całkowita długość: {{ album.durationAsString }}</li>
-    </ul>
+  <div class="col-9">
+
+    <div class="row mb-3">
+      <h1 class="display-5">{{ album.name }}</h1>
+    </div>
+
+    <div class="col-5">
+      <ul class="list-group">
+        <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/wykonawca</strong></span>
+          {{ album.artist.name }}
+        </li>
+        <li class="list-group-item text-end"><span class="float-start"><strong>Rok wydania</strong></span>
+          {{ album.year }}
+        </li>
+        <li class="list-group-item text-end"><span class="float-start"><strong>Całkowita długość</strong></span>
+          {{ album.duration }}
+        </li>
+        <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
+          {{ averageRating(album) }}
+        </li>
+        <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
+          {{ userRatingModalButton(album, userRatings) }}
+          {{ userRatingModal(album) }}
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 
@@ -26,7 +45,7 @@
   <tr>
     <th scope="col">Tytuł</th>
     <th scope="col">Długość</th>
-    <th scope="col">Ocena</th>
+    <th scope="col">Średnia ocena</th>
     <th scope="col">Twoja ocena</th>
   </tr>
   </thead>
@@ -34,15 +53,14 @@
       {% for recording in album.recordings %}
     <tr>
       <td><strong>{{ recording.title }}</strong></td>
-      <td>{{ recording.durationAsString }}</td>
+      <td>{{ recording.duration | durationFormat }}</td>
       <td>{{ averageRating(recording) }}</td>
       <td>
-        {{ userRatingModalButton(recording, userRatings.getUserRating(recording.id)) }}
+        {{ userRatingModalButton(recording, userRatings) }}
         {{ userRatingModal(recording) }}
       </td>
     </tr>
       {% endfor %}
-
   </tbody>
 </table>
 

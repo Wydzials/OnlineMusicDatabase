@@ -53,12 +53,18 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     final Recording underTheWater = album.createAlbumRecording("Under The Water",
         Duration.ofMinutes(4).plusSeconds(24));
 
-    User user = new User("szymon", passwordEncoder.encode("1"));
-    underTheWater.createRating(user, Stars.FIVE, ratingRepository);
-    underTheWater.createRating(user, Stars.FIVE, ratingRepository);
-    underTheWater.createRating(user, Stars.FOUR, ratingRepository);
+    User user1 = new User("szymon", passwordEncoder.encode("1"));
+    underTheWater.createRating(user1, Stars.FIVE, ratingRepository);
 
-    userRepository.save(user);
+    User user2 = new User("test", passwordEncoder.encode("1"));
+    underTheWater.createRating(user2, Stars.FIVE, ratingRepository);
+
+    User user3 = new User("john", passwordEncoder.encode("1"));
+    underTheWater.createRating(user3, Stars.FOUR, ratingRepository);
+
+    userRepository.save(user1);
+    userRepository.save(user2);
+    userRepository.save(user3);
 
     createFakeData();
   }
