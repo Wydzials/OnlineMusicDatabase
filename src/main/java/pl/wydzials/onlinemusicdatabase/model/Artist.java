@@ -1,6 +1,5 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,8 +62,7 @@ public class Artist extends RateableEntity {
     return recording;
   }
 
-  @JsonGetter
-  private Set<Recording> getSingleRecordings() {
+  public Set<Recording> getSingleRecordings() {
     return recordings.stream()
         .filter(Recording::isSingle)
         .collect(Collectors.toSet());
@@ -91,10 +89,6 @@ public class Artist extends RateableEntity {
     return artistType;
   }
 
-  public Set<Recording> getRecordings() {
-    return recordings;
-  }
-
   public Set<Album> getAlbums() {
     return albums;
   }
@@ -107,6 +101,12 @@ public class Artist extends RateableEntity {
   }
 
   public enum ArtistType {
-    BAND, PERSON
+    BAND("Zespół"), PERSON("Osoba");
+
+    public final String name;
+
+    ArtistType(final String name) {
+      this.name = name;
+    }
   }
 }

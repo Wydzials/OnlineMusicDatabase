@@ -18,41 +18,55 @@
 
 <body>
 <div class="container mb-5">
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-3">
+    <div class="container-fluid">
       <img src="/placeholder.png" alt="mdo" width="60" class="px-2">
-      <span class="fs-4">Muzyczna baza</span>
-    </a>
-
-    <ul class="nav nav-pills">
-      <li class="nav-item"><a href="/" class="nav-link">Strona główna</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Artyści</a></li>
-      <li class="nav-item"><a href="#" class="nav-link">Utwory</a></li>
-      {% if username is not null %}
-        <li class="nav-item"><a href="/login" class="nav-link">Zaloguj</a></li>
-      {% endif %}
-    </ul>
-
-    {% if username is not null %}
-      <div class="dropdown text-end">
-        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
-           data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="/placeholder.png" alt="profile picture" width="32" height="32" class="rounded-circle">
-          {{ username }}
-        </a>
-        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-          <li><a class="dropdown-item" href="/user/profile">Profil</a></li>
-          <li><a class="dropdown-item" href="#">Ustawienia</a></li>
-          <li><a class="dropdown-item" href="#">Playlisty</a></li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" href="/logout">Wyloguj</a></li>
+      <a class="navbar-brand text-primary lead" style="font-size: 2rem">
+        Muzyczna Baza
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a href="/" class="nav-link">Strona główna</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Artyści</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Utwory</a></li>
         </ul>
-      </div>
-    {% endif %}
 
-  </header>
+        {% if username is not null %}
+          <div class="d-flex">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                  <img src="/placeholder.png" alt="profile picture" width="32" height="32" class="rounded-circle">
+                  {{ username }}
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><h6 class="dropdown-header text-primary">Znajomi</h6></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+
+                  <li><h6 class="dropdown-header text-primary">Konto</h6></li>
+                  <li><a class="dropdown-item" href="/user/profile">Ustawienia</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+
+                  <li><a class="dropdown-item text-danger" href="/logout">Wyloguj</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          {% else %}
+          <a class="btn btn-outline-primary" href="/login">Logowanie</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
 
   <div class="row justify-content-center">
     <div class="col-6">

@@ -1,0 +1,82 @@
+{# @pebvariable name="artist" type="pl.wydzials.onlinemusicdatabase.model.Artist" #}
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row mb-5">
+  <div class="col-3">
+    <img src="/placeholder.png" class="img-fluid">
+  </div>
+
+  <div class="col-9">
+    <div class="row mb-3">
+      <h1 class="display-5">{{ artist.name }}</h1>
+    </div>
+
+    <div class="col-5">
+      <ul class="list-group">
+        <li class="list-group-item">
+            {{ artist.description }}
+        </li>
+        <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
+          {{ averageRating(artist) }}
+        </li>
+        <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
+          {{ userRatingModalButton(artist, userRatings) }}
+          {{ userRatingModal(artist) }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-5">
+  <h3 class="mb-0">Albumy</h3>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      {% for album in artist.albums %}
+      <div class="col">
+        <div class="card">
+          <img src="/placeholder.png" class="card-img-top" alt="placeholder">
+          <div class="card-body">
+            <h5 class="card-title">{{ album.name }}</h5>
+            <p class="card-text"></p>
+            {{ averageRating(album) }}
+            {{ userRatingModalButton(album, userRatings) }}
+            {{ userRatingModal(album) }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+
+<h3>Single</h3>
+<table class="table my-3">
+  <thead>
+  <tr>
+    <th scope="col">Tytuł</th>
+    <th scope="col">Długość</th>
+    <th scope="col">Średnia ocena</th>
+    <th scope="col">Twoja ocena</th>
+  </tr>
+  </thead>
+  <tbody>
+      {% for recording in artist.singleRecordings %}
+    <tr>
+      <td>{{ recording.title }}</td>
+      <td>{{ recording.duration | durationFormat }}</td>
+      <td>{{ averageRating(recording) }}</td>
+      <td>
+        {{ userRatingModalButton(recording, userRatings) }}
+        {{ userRatingModal(recording) }}
+      </td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
