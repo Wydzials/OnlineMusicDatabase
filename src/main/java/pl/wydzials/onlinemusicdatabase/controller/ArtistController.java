@@ -37,6 +37,7 @@ public class ArtistController extends BaseController {
     final Artist artist = artistRepository.findById(id).orElseThrow();
 
     final Set<RateableEntity> rateableEntities = new HashSet<>(artist.getSingleRecordings());
+    rateableEntities.addAll(artist.getAlbums());
     rateableEntities.add(artist);
 
     final List<Rating> ratings;
@@ -47,7 +48,7 @@ public class ArtistController extends BaseController {
     }
 
     model.addAttribute("artist", artist);
-    model.addAttribute("userRatingsContainer", new UserRatingsContainer(ratings));
+    model.addAttribute("userRatings", new UserRatingsContainer(ratings));
 
     return MvcView.ARTIST.get();
   }

@@ -39,14 +39,17 @@
       {% for album in artist.albums %}
       <div class="col">
         <div class="card">
-          <img src="/placeholder.png" class="card-img-top" alt="placeholder">
-          <div class="card-body">
-            <h5 class="card-title">{{ album.name }}</h5>
-            <p class="card-text"></p>
-            {{ averageRating(album) }}
-            {{ userRatingModalButton(album, userRatings) }}
-            {{ userRatingModal(album) }}
-          </div>
+          <a href="/album/{{ album.id }}" class="link-unstyled">
+            <img src="/placeholder.png" class="card-img-top" alt="placeholder">
+
+            <div class="card-body">
+              <h5 class="card-title">{{ album.name }}</h5>
+              <p class="card-text"></p>
+              {{ averageRating(album) }}
+              {{ userRatingModalButton(album, userRatings) }}
+              {{ userRatingModal(album) }}
+            </div>
+          </a>
         </div>
       </div>
       {% endfor %}

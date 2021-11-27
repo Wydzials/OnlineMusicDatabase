@@ -94,7 +94,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private Duration getRandomRecordingDuration() {
-    return Duration.ofMinutes(faker.random().nextInt(6))
+    return Duration.ofMinutes(faker.random().nextInt(4) + 2)
         .plusSeconds(faker.random().nextInt(60));
   }
 }

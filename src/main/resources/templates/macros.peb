@@ -40,7 +40,7 @@
 
 
   {% macro userRatingModalButton(entity, userRatingsContainer) %}
-  {# @pebvariable name="userRatingContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+  {# @pebvariable name="userRatingsContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
   {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
 
     {% set userRating = userRatingsContainer.getUserRating(entity.id) %}

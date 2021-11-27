@@ -8,7 +8,7 @@
 
 <div class="row">
   <div class="col-3">
-    <img src="/placeholder.png" class="img-fluid">
+    <img src="/placeholder.png" class="img-fluid" alt="album cover">
   </div>
 
   <div class="col-9">
@@ -20,13 +20,15 @@
     <div class="col-5">
       <ul class="list-group">
         <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/wykonawca</strong></span>
-          {{ album.artist.name }}
+          <a href="/artist/{{ album.artist.id }}" class="text-decoration-none">
+              {{ album.artist.name }}
+          </a>
         </li>
         <li class="list-group-item text-end"><span class="float-start"><strong>Rok wydania</strong></span>
           {{ album.year }}
         </li>
         <li class="list-group-item text-end"><span class="float-start"><strong>Całkowita długość</strong></span>
-          {{ album.duration }}
+          {{ album.duration | durationFormat }}
         </li>
         <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
           {{ averageRating(album) }}
