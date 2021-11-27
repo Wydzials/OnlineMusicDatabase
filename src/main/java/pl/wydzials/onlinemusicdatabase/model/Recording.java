@@ -20,15 +20,19 @@ public class Recording extends RateableEntity {
   @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
   private Album album;
 
+  private Integer albumPosition;
+
   @Deprecated
   protected Recording() {
   }
 
-  private Recording(final String title, final Duration duration, final Artist artist, final Album album) {
+  private Recording(final String title, final Duration duration, final Artist artist, final Album album,
+      final Integer albumPosition) {
     this.title = title;
     this.duration = duration;
     this.artist = artist;
     this.album = album;
+    this.albumPosition = albumPosition;
   }
 
   public static Recording createSingleRecording(final String title, final Duration duration, final Artist artist,
@@ -38,11 +42,11 @@ public class Recording extends RateableEntity {
     Validation.notNull(artist);
     Validation.notNull(token);
 
-    return new Recording(title, duration, artist, null);
+    return new Recording(title, duration, artist, null, null);
   }
 
   public static Recording createAlbumRecording(final String title, final Duration duration, final Artist artist,
-      final Album album, final Album.PrivateToken token) {
+      final Album album, final int albumPosition, final Album.PrivateToken token) {
     Validation.notNull(title);
     Validation.notNull(duration);
     Validation.notNull(artist);
@@ -52,7 +56,7 @@ public class Recording extends RateableEntity {
 
     Validation.notNull(token);
 
-    return new Recording(title, duration, artist, album);
+    return new Recording(title, duration, artist, album, albumPosition);
   }
 
   public boolean isSingle() {
@@ -73,5 +77,9 @@ public class Recording extends RateableEntity {
 
   public Album getAlbum() {
     return album;
+  }
+
+  public Integer getAlbumPosition() {
+    return albumPosition;
   }
 }

@@ -43,6 +43,7 @@
 <table class="table my-3">
   <thead>
   <tr>
+    <th scope="col">Pozycja</th>
     <th scope="col">Tytuł</th>
     <th scope="col">Długość</th>
     <th scope="col">Średnia ocena</th>
@@ -52,7 +53,8 @@
   <tbody>
       {% for recording in album.recordings %}
     <tr>
-      <td><strong>{{ recording.title }}</strong></td>
+      <td><strong>#{{ recording.albumPosition }}</strong></td>
+      <td>{{ recording.title }}</td>
       <td>{{ recording.duration | durationFormat }}</td>
       <td>{{ averageRating(recording) }}</td>
       <td>

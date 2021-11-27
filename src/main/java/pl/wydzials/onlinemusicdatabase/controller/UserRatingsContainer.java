@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import pl.wydzials.onlinemusicdatabase.model.Rating;
@@ -11,6 +12,8 @@ public class UserRatingsContainer {
 
   public UserRatingsContainer(final Collection<Rating> ratings) {
     Validation.notNull(ratings);
+
+    System.out.println(Arrays.deepToString(ratings.toArray()));
 
     this.ratings = ratings;
   }

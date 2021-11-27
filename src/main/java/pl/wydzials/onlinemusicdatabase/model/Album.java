@@ -1,13 +1,16 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
@@ -22,7 +25,8 @@ public class Album extends RateableEntity {
   private Artist artist;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "album")
-  private Set<Recording> recordings = new HashSet<>();
+  @OrderBy("albumPosition")
+  private List<Recording> recordings = new ArrayList<>();
 
   public Album(final String name, final Artist artist, final int year, final Artist.PrivateToken token) {
     Validation.notNull(name);
@@ -39,11 +43,17 @@ public class Album extends RateableEntity {
   protected Album() {
   }
 
-  public Recording createAlbumRecording(final String title, final Duration duration) {
+  public Recording createAlbumRecording(final String title, final Duration duration, final int albumPosition) {
     Validation.notEmpty(title);
     Validation.notNull(duration);
 
-    final Recording recording = Recording.createAlbumRecording(title, duration, artist, this, PrivateToken.INSTANCE);
+    final boolean positionOccupied = recordings.stream()
+        .anyMatch(recording -> recording.getAlbumPosition() == albumPosition);
+    if (positionOccupied)
+      Validation.throwIllegalArgumentException();
+
+    final Recording recording = Recording.createAlbumRecording(title, duration, artist, this, albumPosition,
+        PrivateToken.INSTANCE);
     recordings.add(recording);
 
     return recording;
@@ -71,7 +81,7 @@ public class Album extends RateableEntity {
     return artist;
   }
 
-  public Set<Recording> getRecordings() {
+  public List<Recording> getRecordings() {
     return recordings;
   }
 

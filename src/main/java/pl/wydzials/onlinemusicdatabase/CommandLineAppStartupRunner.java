@@ -51,7 +51,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     artist.createAlbum("A Different Kind Of Human (Step 2)", 2019);
 
     final Recording underTheWater = album.createAlbumRecording("Under The Water",
-        Duration.ofMinutes(4).plusSeconds(24));
+        Duration.ofMinutes(4).plusSeconds(24), 1);
 
     User user1 = new User("szymon", passwordEncoder.encode("1"));
     underTheWater.createRating(user1, Stars.FIVE, ratingRepository);
@@ -73,7 +73,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     final int ARTISTS = 10;
     final int SINGLES_FOR_ARTIST = 5;
     final int ALBUMS_FOR_ARTIST = 10;
-    final int RECORDING_FOR_ALBUM = 10;
+    final int RECORDINGS_FOR_ALBUM = 10;
 
     for (int artistNumber = 0; artistNumber < ARTISTS; artistNumber++) {
       final Artist artist = new Artist(faker.rockBand().name(), "Opis zespołu", ArtistType.BAND);
@@ -86,8 +86,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
       for (int albumNumber = 0; albumNumber < ALBUMS_FOR_ARTIST; albumNumber++) {
         final Album album = artist.createAlbum(faker.book().title(), 2020);
 
-        for (int albumRecordingNumber = 0; albumRecordingNumber < RECORDING_FOR_ALBUM; albumRecordingNumber++) {
-          album.createAlbumRecording(faker.book().title(), getRandomRecordingDuration());
+        for (int albumRecordingNumber = 0; albumRecordingNumber < RECORDINGS_FOR_ALBUM; albumRecordingNumber++) {
+          album.createAlbumRecording(faker.book().title(), getRandomRecordingDuration(), albumRecordingNumber + 1);
         }
       }
     }

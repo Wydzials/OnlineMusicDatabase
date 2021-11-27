@@ -43,8 +43,10 @@
   {# @pebvariable name="userRatingContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
   {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
 
+    {% set userRating = userRatingsContainer.getUserRating(entity.id) %}
+
   <button type="button" class="btn btn-primary btn-fixed-width" data-bs-toggle="modal"
           data-bs-target="#rating-{{ entity.id }}">
-      {{ userRating is null ? "Oceń" : "⭐" + userRatingsContainer.getUserRating(entity.id) }}
+      {{ userRating is null ? "Oceń" : "⭐" + userRating }}
   </button>
   {% endmacro %}
