@@ -48,6 +48,7 @@ public class ArtistController extends BaseController {
 
     model.addAttribute("artist", artist);
     model.addAttribute("userRatingsContainer", new UserRatingsContainer(ratings));
-    return "artist";
+
+    return MvcView.ARTIST.get();
   }
 }

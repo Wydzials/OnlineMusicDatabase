@@ -32,7 +32,7 @@ public class BaseController {
   @ModelAttribute("user")
   public User getUser(final Principal principal) {
     if (principal != null)
-      return userRepository.findByUsername(principal.getName()).orElseThrow();
+      return userRepository.findByUsername(principal.getName()).orElse(null);
     return null;
   }
 
@@ -63,8 +63,8 @@ public class BaseController {
   @ExceptionHandler(NoSuchElementException.class)
   public ModelAndView noSuchElementException() {
     ModelAndView modelAndView = new ModelAndView();
-    modelAndView.setViewName("index");
-    modelAndView.addObject("messages", Collections.singletonList("Nie znaleziono podanego zasobu"));
+    modelAndView.setViewName(MvcView.INDEX.get());
+    modelAndView.addObject("flashMessages", Collections.singletonList("Nie znaleziono podanego zasobu"));
     return modelAndView;
   }
 }

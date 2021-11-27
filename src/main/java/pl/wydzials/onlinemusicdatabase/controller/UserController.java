@@ -32,7 +32,7 @@ public class UserController extends BaseController {
 
   @GetMapping("/login")
   public String getLogin() {
-    return "login";
+    return MvcView.LOGIN.get();
   }
 
   @PostMapping("/login-failure")
@@ -43,7 +43,7 @@ public class UserController extends BaseController {
 
   @GetMapping("/register")
   public String getRegister() {
-    return "register";
+    return MvcView.REGISTER.get();
   }
 
   @PostMapping("/register")
@@ -59,19 +59,20 @@ public class UserController extends BaseController {
     if (userRepository.findByUsername(request.username).isPresent())
       addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
 
-    if (redirectAttributes.getFlashAttributes().isEmpty()) {
+    if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/register";
     }
 
     User user = new User(request.username, passwordEncoder.encode(request.password1));
     userRepository.save(user);
 
+    addFlashMessage(redirectAttributes, "Konto zostało utworzone, możesz się zalogować");
     return "redirect:/login";
   }
 
   @GetMapping("/user/settings")
   public String getSettings() {
-    return "settings";
+    return MvcView.SETTINGS.get();
   }
 
   @PostMapping("/user/update-image")
@@ -90,7 +91,6 @@ public class UserController extends BaseController {
       addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia");
     }
 
-    addFlashMessage(redirectAttributes, "Zdjęcie zostało zaktualizowane");
     return "redirect:/user/settings";
   }
 
@@ -118,7 +118,7 @@ public class UserController extends BaseController {
 
   @GetMapping("/user/change-password")
   public String getChangePassword() {
-    return "user/change-password";
+    return MvcView.CHANGE_PASSWORD.get();
   }
 
   @PostMapping("/user/change-password")

@@ -8,6 +8,6 @@ public class MainController extends BaseController {
 
   @GetMapping("/")
   public String get() {
-    return "index";
+    return MvcView.INDEX.get();
   }
 }

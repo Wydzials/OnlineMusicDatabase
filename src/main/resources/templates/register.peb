@@ -24,7 +24,6 @@
 
       <button class="w-100 btn btn-lg btn-primary" type="submit">Utwórz konto</button>
       <hr class="my-4">
-      <small class="text-muted">Przechodząc dalej, akceptujesz regulamin.</small>
     </form>
   </div>
 

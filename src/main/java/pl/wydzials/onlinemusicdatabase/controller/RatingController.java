@@ -18,6 +18,7 @@ import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
+@Transactional
 @RequestMapping("/user/rating")
 public class RatingController extends BaseController {
 
@@ -33,7 +34,6 @@ public class RatingController extends BaseController {
   }
 
   @PostMapping("/{id}")
-  @Transactional
   public String postRating(@PathVariable final Long id, final PostRatingRequest request, final Principal principal,
       final HttpServletRequest httpServletRequest) {
     Validation.notNull(id);

@@ -42,6 +42,7 @@ public class AlbumController extends BaseController {
 
     model.addAttribute("album", album);
     model.addAttribute("userRatings", new UserRatingsContainer(ratings));
-    return "album";
+
+    return MvcView.ALBUM.get();
   }
 }

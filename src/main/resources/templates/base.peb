@@ -70,19 +70,20 @@
     </div>
   </nav>
 
-  <div class="row justify-content-center">
-    <div class="col-6">
-        {% if flashMessages is not null %}
-        {% for message in flashMessages %}
-          <div class="alert alert-primary" role="alert">
-            <div>
-                {{ message }}
-            </div>
+  {% if flashMessages is not null %}
+    <div class="row justify-content-center">
+      <div class="col-5">
+
+          {% for message in flashMessages %}
+          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
           </div>
-        {% endfor %}
-        {% endif %}
+          {% endfor %}
+
+      </div>
     </div>
-  </div>
+  {% endif %}
 
   {% block body %}{% endblock %}
 
