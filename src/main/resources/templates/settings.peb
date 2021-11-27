@@ -1,0 +1,61 @@
+{# @pebvariable name="username" type="java.lang.String" #}
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+
+  {% extends "base" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <h1 class="display-6 pb-3">Ustawienia konta</h1>
+
+  <div class="row">
+    <div class="col-5">
+      <h3>Dane użytkownika</h3>
+
+      <ul class="list-group">
+        <li class="list-group-item">
+          <h6>Zdjęcie profilowe</h6>
+
+          <div class="row align-items-end">
+            <div class="col">
+              <p class="lead my-0">
+                <img src="/images/{{ user.imageId }}.jpg" class="rounded-circle" width="120" alt="profile image"></p>
+            </div>
+
+            <div class="col-8 float-end">
+              <form action="/user/update-image" method="post" enctype="multipart/form-data">
+
+                <input type="file" class="form-control" id="profileImage" name="profileImage"
+                       accept=".jpg,.jpeg,.png,.bmp,.wbmp" required>
+
+                <button class="btn btn-outline-primary mt-3 float-end" type="submit">Aktualizuj zdjęcie</button>
+              </form>
+            </div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <h6 class="my-0">Nazwa użytkownika</h6>
+          <p class="lead my-0">{{ user.username }}</p>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h6 class="my-0">Hasło</h6>
+              <p class="lead my-0">**********</p>
+            </div>
+            <div class="col">
+              <a class="btn btn-outline-primary float-end align-items-end" href="/user/change-password">
+                Zmień hasło
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

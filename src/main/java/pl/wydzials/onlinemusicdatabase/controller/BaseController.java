@@ -6,18 +6,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.wydzials.onlinemusicdatabase.model.User;
+import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 public class BaseController {
 
+  @Autowired
+  private UserRepository userRepository;
+
+  public BaseController() {}
+
   @ModelAttribute("username")
-  public String getUsername(Principal principal) {
+  public String getUsername(final Principal principal) {
     if (principal != null)
       return principal.getName();
+    return null;
+  }
+
+  @ModelAttribute("user")
+  public User getUser(final Principal principal) {
+    if (principal != null)
+      return userRepository.findByUsername(principal.getName()).orElseThrow();
     return null;
   }
 

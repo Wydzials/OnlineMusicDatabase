@@ -8,7 +8,7 @@
 
 <div class="row mb-5">
   <div class="col-3">
-    <img src="/placeholder.png" class="img-fluid">
+    <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid" alt="artist image">
   </div>
 
   <div class="col-9">

@@ -1,4 +1,5 @@
 {# @pebvariable name="username" type="java.lang.String" #}
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
 {# @pebvariable name="flashMessages" type="java.util.Set<String>" #}
 
 <!doctype html>
@@ -20,8 +21,8 @@
 <div class="container mb-5">
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-3">
     <div class="container-fluid">
-      <img src="/placeholder.png" alt="mdo" width="60" class="px-2">
-      <a class="navbar-brand text-primary lead" style="font-size: 2rem">
+      <img src="/placeholder.png" alt="logo" width="60" class="px-2">
+      <a class="navbar-brand text-primary" style="font-size: 2rem">
         Muzyczna Baza
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -40,7 +41,8 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
                 <a class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
-                  <img src="/placeholder.png" alt="profile picture" width="32" height="32" class="rounded-circle">
+                  <img src="/images/{{ user.imageId }}.jpg" alt="profile picture" width="32" height="32"
+                       class="rounded-circle">
                   {{ username }}
                 </a>
 
@@ -51,7 +53,7 @@
                   </li>
 
                   <li><h6 class="dropdown-header text-primary">Konto</h6></li>
-                  <li><a class="dropdown-item" href="/user/profile">Ustawienia</a></li>
+                  <li><a class="dropdown-item" href="/user/settings">Ustawienia</a></li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>

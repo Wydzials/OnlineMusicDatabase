@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.web.multipart.MultipartFile;
+import pl.wydzials.onlinemusicdatabase.configuration.MvcConfiguration;
+import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
@@ -28,6 +32,8 @@ public class Artist extends RateableEntity {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "artist")
   private Set<Album> albums = new HashSet<>();
 
+  private String imageId;
+
   @Deprecated
   protected Artist() {
   }
@@ -40,6 +46,8 @@ public class Artist extends RateableEntity {
     this.name = name;
     this.description = description;
     this.artistType = artistType;
+
+    this.imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
   }
 
   public Album createAlbum(final String name, final int year) {
@@ -60,6 +68,13 @@ public class Artist extends RateableEntity {
     recordings.add(recording);
 
     return recording;
+  }
+
+  public void addImage(final MultipartFile multipartFile, final ImageStorageService imageStorageService)
+      throws IOException {
+    Validation.notNull(imageId);
+
+    this.imageId = imageStorageService.save(multipartFile);
   }
 
   public Set<Recording> getSingleRecordings() {
@@ -91,6 +106,10 @@ public class Artist extends RateableEntity {
 
   public Set<Album> getAlbums() {
     return albums;
+  }
+
+  public String getImageId() {
+    return imageId;
   }
 
   static final class PrivateToken {

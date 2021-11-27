@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import javax.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,20 +8,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
+import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
+@Transactional
 public class UserController extends BaseController {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final ImageStorageService imageStorageService;
 
-  public UserController(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
+  public UserController(final UserRepository userRepository, final PasswordEncoder passwordEncoder,
+      final ImageStorageService imageStorageService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.imageStorageService = imageStorageService;
   }
 
   @GetMapping("/login")
@@ -62,36 +69,60 @@ public class UserController extends BaseController {
     return "redirect:/login";
   }
 
-  @GetMapping("/user/profile")
-  public String getProfile() {
-    return "profile";
+  @GetMapping("/user/settings")
+  public String getSettings() {
+    return "settings";
   }
 
-  @PostMapping("/user/update")
-  @Transactional
-  public String updateUser(final UpdateUserRequest request, final Principal principal,
+  @PostMapping("/user/update-image")
+  public String updateImage(final UpdateImageRequest request, final Principal principal,
+      final RedirectAttributes redirectAttributes) {
+
+    final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+
+    if (request.profileImage != null && !request.profileImage.isEmpty()) {
+      try {
+        user.addImage(request.profileImage, imageStorageService);
+      } catch (IOException e) {
+        addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia");
+      }
+    } else {
+      addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia");
+    }
+
+    addFlashMessage(redirectAttributes, "Zdjęcie zostało zaktualizowane");
+    return "redirect:/user/settings";
+  }
+
+  @PostMapping("/user/update-details")
+  public String updateUser(final UpdateUserDetailsRequest request, final Principal principal,
       final RedirectAttributes redirectAttributes) {
     Validation.notNull(principal);
 
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
-    if (userRepository.findByUsername(request.username).isPresent())
-      addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
+    if (request.isUsernameCorrect()) {
+      if (userRepository.findByUsername(request.username).isPresent()) {
+        addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
+        return "redirect:/user/settings";
+      }
 
-    if (!redirectAttributes.getFlashAttributes().isEmpty()) {
-      return "redirect:/user/profile";
+      user.updateDetails(request.username);
+      SecurityContextHolder.getContext().setAuthentication(null);
+      addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie");
+      return "redirect:/login";
     }
 
-    user.updateDetails(request.username);
-    SecurityContextHolder.getContext().setAuthentication(null);
-
-    addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie");
-    return "redirect:/login";
+    return "redirect:/user/settings";
   }
 
-  @PostMapping("/user/update-password")
-  @Transactional
-  public String updatePassword(final UpdatePasswordRequest request, final Principal principal,
+  @GetMapping("/user/change-password")
+  public String getChangePassword() {
+    return "user/change-password";
+  }
+
+  @PostMapping("/user/change-password")
+  public String postUpdatePassword(final UpdatePasswordRequest request, final Principal principal,
       final RedirectAttributes redirectAttributes) {
     Validation.notNull(principal);
 
@@ -104,7 +135,7 @@ public class UserController extends BaseController {
       addFlashMessage(redirectAttributes, "Nowe hasło jest nieprawidłowe");
 
     if (!redirectAttributes.getFlashAttributes().isEmpty()) {
-      return "redirect:/user/profile";
+      return "redirect:/user/change-password";
     }
 
     user.updatePassword(request.newPassword1, passwordEncoder);
@@ -125,7 +156,9 @@ public class UserController extends BaseController {
     }
   }
 
-  public record UpdateUserRequest(String username) {
+  public record UpdateImageRequest(MultipartFile profileImage) {}
+
+  public record UpdateUserDetailsRequest(String username) {
 
     boolean isUsernameCorrect() {
       return username != null && username.length() > 0;

@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import javax.persistence.Column;
@@ -7,6 +8,9 @@ import javax.persistence.Entity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+import pl.wydzials.onlinemusicdatabase.configuration.MvcConfiguration;
+import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
@@ -18,6 +22,8 @@ public class User extends BaseEntity implements UserDetails {
   @Column(nullable = false)
   private String password;
 
+  private String imageId;
+
   @Deprecated
   protected User() {
   }
@@ -28,6 +34,8 @@ public class User extends BaseEntity implements UserDetails {
 
     this.username = username;
     this.password = password;
+
+    this.imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
   }
 
   public void updateDetails(final String username) {
@@ -53,6 +61,13 @@ public class User extends BaseEntity implements UserDetails {
     return passwordEncoder.matches(rawPassword, this.password);
   }
 
+  public void addImage(final MultipartFile multipartFile, final ImageStorageService imageStorageService)
+      throws IOException {
+    Validation.notNull(imageId);
+
+    this.imageId = imageStorageService.save(multipartFile);
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();
@@ -66,6 +81,10 @@ public class User extends BaseEntity implements UserDetails {
   @Override
   public String getUsername() {
     return username;
+  }
+
+  public String getImageId() {
+    return imageId;
   }
 
   @Override
