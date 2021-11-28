@@ -40,7 +40,7 @@
       <div class="col">
         <div class="card">
           <a href="/album/{{ album.id }}" class="link-unstyled">
-            <img src="/placeholder.png" class="card-img-top" alt="placeholder">
+            <img src="/images/{{ album.imageId }}.jpg" class="card-img-top" alt="placeholder">
 
             <div class="card-body">
               <h5 class="card-title">{{ album.name }}</h5>

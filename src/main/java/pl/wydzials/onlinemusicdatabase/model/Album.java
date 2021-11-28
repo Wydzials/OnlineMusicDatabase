@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.web.multipart.MultipartFile;
+import pl.wydzials.onlinemusicdatabase.configuration.MvcConfiguration;
+import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
@@ -27,6 +31,8 @@ public class Album extends RateableEntity {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "album")
   @OrderBy("albumPosition")
   private List<Recording> recordings = new ArrayList<>();
+
+  private String imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
 
   public Album(final String name, final Artist artist, final int year, final Artist.PrivateToken token) {
     Validation.notNull(name);
@@ -102,6 +108,24 @@ public class Album extends RateableEntity {
 
   public int getYear() {
     return year;
+  }
+
+  public String getImageId() {
+    return imageId;
+  }
+
+  public void addImage(final MultipartFile multipartFile, final ImageStorageService imageStorageService)
+      throws IOException {
+    Validation.notNull(imageId);
+
+    this.imageId = imageStorageService.save(multipartFile);
+  }
+
+  // For tests only
+  @Deprecated
+  public void addImageId(final String imageId) {
+    Validation.notNull(imageId);
+    this.imageId = imageId;
   }
 
   static final class PrivateToken {
