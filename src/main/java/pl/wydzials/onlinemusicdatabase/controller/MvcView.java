@@ -7,7 +7,8 @@ public enum MvcView {
   LOGIN("login"),
   REGISTER("register"),
   SETTINGS("user/settings"),
-  CHANGE_PASSWORD("user/change-password");
+  CHANGE_PASSWORD("user/change-password"),
+  ARTISTS("artists");
 
   private final String path;
 

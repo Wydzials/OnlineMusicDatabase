@@ -1,0 +1,50 @@
+{# @pebvariable name="topArtists" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist>" #}
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <div class="col-6 mb-2">
+    <h2>Ranking najlepiej ocenianych artystów</h2>
+
+    <div class="row-cols-1">
+        {% for artist in topArtists %}
+
+        <div class="col mb-3">
+          <div class="card">
+            <div class="row g-0">
+              <div class="col-1 d-flex flex-column justify-content-center align-items-center">
+                <h1>{{ loop.index + 1 }}</h1>
+              </div>
+              <div class="col-3">
+                <a href="/artist/{{ artist.id }}" class="link-unstyled">
+                  <img class="img-fluid" src="/images/{{ artist.imageId }}.jpg" alt="artist image">
+                </a>
+              </div>
+              <div class="col-8">
+                <div class="card-body">
+                  <a href="/artist/{{ artist.id }}" class="link-unstyled">
+                    <h5 class="card-title">{{ artist.name }}</h5>
+                  </a>
+                  <p class="card-text">
+                      {{ artist.description }}
+                  </p>
+                  <p class="card-text">
+                    {{ averageRating(artist) }}
+                    {{ userRatingModalButton(artist, userRatings) }}
+                    {{ userRatingModal(artist) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

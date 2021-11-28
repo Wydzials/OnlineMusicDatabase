@@ -2,6 +2,8 @@ package pl.wydzials.onlinemusicdatabase;
 
 import com.github.javafaker.Faker;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,14 +72,26 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createFakeData() {
-    final int ARTISTS = 5;
+    final int ARTISTS = 15;
     final int SINGLES_FOR_ARTIST = 5;
     final int ALBUMS_FOR_ARTIST = 5;
     final int RECORDINGS_FOR_ALBUM = 10;
 
+    List<User> users = new ArrayList<>();
+    for (int userNumber = 0; userNumber < 10; userNumber++) {
+      final String username = "User" + (userNumber + 1);
+      final String password = String.valueOf(userNumber + 1);
+
+      users.add(new User(username, password));
+    }
+
     for (int artistNumber = 0; artistNumber < ARTISTS; artistNumber++) {
       final Artist artist = new Artist(faker.rockBand().name(), "Opis zespołu", ArtistType.BAND);
       artistRepository.save(artist);
+
+      for (User user : users) {
+        artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository);
+      }
 
       for (int singleNumber = 0; singleNumber < SINGLES_FOR_ARTIST; singleNumber++) {
         artist.createSingleRecording(faker.book().title(), getRandomRecordingDuration());
