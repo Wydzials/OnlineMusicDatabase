@@ -53,4 +53,8 @@ public abstract class RateableEntity extends BaseEntity {
   public Double getAverageRating() {
     return averageRating;
   }
+
+  public int getNumberOfRatings() {
+    return numberOfRatings;
+  }
 }

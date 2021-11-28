@@ -70,9 +70,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createFakeData() {
-    final int ARTISTS = 10;
+    final int ARTISTS = 5;
     final int SINGLES_FOR_ARTIST = 5;
-    final int ALBUMS_FOR_ARTIST = 10;
+    final int ALBUMS_FOR_ARTIST = 5;
     final int RECORDINGS_FOR_ALBUM = 10;
 
     for (int artistNumber = 0; artistNumber < ARTISTS; artistNumber++) {
