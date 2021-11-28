@@ -8,7 +8,7 @@
     {% macro userRatingModal(entity) %}
     <div class="modal fade" id="rating-{{ entity.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <form method="post" action="/user/rating/{{ entity.id }}">
             <div class="modal-header">

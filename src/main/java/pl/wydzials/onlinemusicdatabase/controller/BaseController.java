@@ -1,17 +1,23 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
+import pl.wydzials.onlinemusicdatabase.model.Rating;
 import pl.wydzials.onlinemusicdatabase.model.User;
+import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
@@ -19,6 +25,9 @@ public class BaseController {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private RatingRepository ratingRepository;
 
   public BaseController() {}
 
@@ -34,6 +43,11 @@ public class BaseController {
     if (principal != null)
       return userRepository.findByUsername(principal.getName()).orElse(null);
     return null;
+  }
+
+  @ModelAttribute("flashMessages")
+  public List<String> getFlashMessages() {
+    return Collections.emptyList();
   }
 
   public String redirectToReferrer(final HttpServletRequest httpServletRequest) {
@@ -58,6 +72,25 @@ public class BaseController {
     } else {
       Validation.throwIllegalArgumentException();
     }
+  }
+
+  @SafeVarargs
+  public final UserRatingsContainer createUserRatingsContainer(final Principal principal,
+      Collection<? extends RateableEntity>... entityCollections) {
+    if (principal == null) {
+      return new UserRatingsContainer(Collections.emptyList());
+    }
+
+    Validation.notNull(entityCollections);
+
+    final Set<RateableEntity> entitySet = new HashSet<>();
+    for (Collection<? extends RateableEntity> entityCollection : entityCollections) {
+      Validation.notNull(entityCollection);
+      entitySet.addAll(entityCollection);
+    }
+
+    final List<Rating> ratings = ratingRepository.findByUsernameAndEntities(principal.getName(), entitySet);
+    return new UserRatingsContainer(ratings);
   }
 
   @ExceptionHandler(NoSuchElementException.class)

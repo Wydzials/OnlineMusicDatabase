@@ -1,18 +1,13 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import pl.wydzials.onlinemusicdatabase.model.Artist;
-import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
-import pl.wydzials.onlinemusicdatabase.model.Rating;
 import pl.wydzials.onlinemusicdatabase.repository.ArtistRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
@@ -35,19 +30,13 @@ public class ArtistController extends BaseController {
 
     final Artist artist = artistRepository.findById(id).orElseThrow();
 
-    final Set<RateableEntity> rateableEntities = new HashSet<>(artist.getSingleRecordings());
-    rateableEntities.addAll(artist.getAlbums());
-    rateableEntities.add(artist);
-
-    final List<Rating> ratings;
-    if (principal != null) {
-      ratings = ratingRepository.findByUsernameAndEntities(principal.getName(), rateableEntities);
-    } else {
-      ratings = new ArrayList<>();
-    }
+    final UserRatingsContainer userRatingsContainer = createUserRatingsContainer(principal,
+        artist.getSingleRecordings(),
+        artist.getAlbums(),
+        Collections.singleton(artist));
 
     model.addAttribute("artist", artist);
-    model.addAttribute("userRatings", new UserRatingsContainer(ratings));
+    model.addAttribute("userRatings", userRatingsContainer);
 
     return MvcView.ARTIST.get();
   }
@@ -56,15 +45,8 @@ public class ArtistController extends BaseController {
   public String getArtists(final Principal principal, final Model model) {
     final List<Artist> topArtists = artistRepository.findTopArtists(10);
 
-    final List<Rating> ratings;
-    if (principal != null) {
-      ratings = ratingRepository.findByUsernameAndEntities(principal.getName(), new HashSet<>(topArtists));
-    } else {
-      ratings = new ArrayList<>();
-    }
-
     model.addAttribute("topArtists", topArtists);
-    model.addAttribute("userRatings", new UserRatingsContainer(ratings));
+    model.addAttribute("userRatings", createUserRatingsContainer(principal, topArtists));
 
     return MvcView.ARTISTS.get();
   }
