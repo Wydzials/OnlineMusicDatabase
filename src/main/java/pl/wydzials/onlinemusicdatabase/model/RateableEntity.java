@@ -5,10 +5,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
+import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class RateableEntity extends BaseEntity {
 
   private Double averageRating;
@@ -19,7 +20,7 @@ public abstract class RateableEntity extends BaseEntity {
     Validation.notNull(stars);
     Validation.notNull(ratingRepository);
 
-    if (ratingRepository.findByUsernameAndEntity(user.getUsername(), this).isPresent())
+    if (!ConfigurationProvider.isIsGeneratingData() && ratingRepository.findByUserAndEntity(user, this).isPresent())
       Validation.throwIllegalStateException();
 
     final Rating rating = new Rating(this, user, stars);
@@ -38,7 +39,7 @@ public abstract class RateableEntity extends BaseEntity {
     Validation.notNull(user);
     Validation.notNull(ratingRepository);
 
-    final Rating rating = ratingRepository.findByUsernameAndEntity(user.getUsername(), this).orElseThrow();
+    final Rating rating = ratingRepository.findByUserAndEntity(user, this).orElseThrow();
     ratingRepository.delete(rating);
 
     if (numberOfRatings == 1) {

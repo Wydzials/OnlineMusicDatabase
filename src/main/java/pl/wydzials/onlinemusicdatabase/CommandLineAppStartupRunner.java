@@ -21,6 +21,7 @@ import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.ArtistRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
+import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
 import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 
 @Component
@@ -53,24 +54,28 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws IOException {
+    ConfigurationProvider.setIsGeneratingData(true);
+
     createUsers();
     createAuroraData();
     createPinkFloydData();
     createFakeData();
 
     System.out.println("Data generated");
+    ConfigurationProvider.setIsGeneratingData(false);
   }
 
   private void createUsers() {
-    User user1 = new User("szymon", passwordEncoder.encode("1"));
-    userRepository.save(user1);
+    users.add(new User("szymon", passwordEncoder.encode("1")));
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       final String username = "User" + (i + 1);
       final String password = String.valueOf(i + 1);
 
-      users.add(new User(username, password));
+      final User user = new User(username, password);
+      users.add(user);
     }
+    userRepository.saveAll(users);
   }
 
   private void createRatings(final Set<? extends RateableEntity> entities, int min, int max) {

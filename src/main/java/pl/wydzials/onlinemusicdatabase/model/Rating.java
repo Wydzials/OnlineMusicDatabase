@@ -6,7 +6,6 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.CascadeType;
 import javax.persistence.Converter;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
@@ -15,10 +14,10 @@ import pl.wydzials.onlinemusicdatabase.utils.Validation;
 @Entity
 public class Rating extends BaseEntity {
 
-  @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   private RateableEntity entity;
 
-  @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   private User user;
 
   private Stars stars;

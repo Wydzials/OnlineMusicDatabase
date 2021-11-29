@@ -43,7 +43,7 @@ public class RatingController extends BaseController {
     final RateableEntity entity = rateableEntityRepository.findById(id).orElseThrow();
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
-    final Optional<Rating> ratingOptional = ratingRepository.findByUsernameAndEntity(user.getUsername(), entity);
+    final Optional<Rating> ratingOptional = ratingRepository.findByUserAndEntity(user, entity);
 
     if (ratingOptional.isPresent())
       entity.deleteRating(user, ratingRepository);
