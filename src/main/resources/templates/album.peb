@@ -19,7 +19,7 @@
 
     <div class="col-5">
       <ul class="list-group">
-        <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/wykonawca</strong></span>
+        <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/osoba</strong></span>
           <a href="/artist/{{ album.artist.id }}" class="text-decoration-none">
               {{ album.artist.name }}
           </a>

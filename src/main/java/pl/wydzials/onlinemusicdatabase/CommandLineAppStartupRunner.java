@@ -68,7 +68,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   private void createUsers() {
     users.add(new User("szymon", passwordEncoder.encode("1")));
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
       final String username = "User" + (i + 1);
       final String password = String.valueOf(i + 1);
 
@@ -208,11 +208,16 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     final int RECORDINGS_FOR_ALBUM = 10;
 
     for (int artistNumber = 0; artistNumber < ARTISTS; artistNumber++) {
-      final Artist artist = new Artist(faker.rockBand().name(), "Opis zespołu", ArtistType.BAND);
+      final ArtistType artistType = faker.random().nextBoolean()
+          ? ArtistType.BAND
+          : ArtistType.PERSON;
+
+      final Artist artist = new Artist(faker.rockBand().name(), "Opis...", artistType);
       artistRepository.save(artist);
 
       for (User user : users) {
-        artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository);
+        if (faker.random().nextBoolean())
+          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository);
       }
 
       for (int singleNumber = 0; singleNumber < SINGLES_FOR_ARTIST; singleNumber++) {

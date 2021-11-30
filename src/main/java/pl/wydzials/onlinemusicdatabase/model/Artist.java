@@ -3,8 +3,11 @@ package pl.wydzials.onlinemusicdatabase.model;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -131,10 +134,16 @@ public class Artist extends RateableEntity {
   public enum ArtistType {
     BAND("Zespół"), PERSON("Osoba");
 
-    public final String name;
+    public final String viewName;
 
-    ArtistType(final String name) {
-      this.name = name;
+    ArtistType(final String viewName) {
+      this.viewName = viewName;
+    }
+
+    public static Optional<ArtistType> of(String name) {
+      return Arrays.stream(values())
+          .filter(type -> Objects.equals(type.name(), name))
+          .findFirst();
     }
   }
 }
