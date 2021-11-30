@@ -1,6 +1,8 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating;
 import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
@@ -35,7 +38,7 @@ public class RatingController extends BaseController {
 
   @PostMapping("/{id}")
   public String postRating(@PathVariable final Long id, final PostRatingRequest request, final Principal principal,
-      final HttpServletRequest httpServletRequest) {
+      final HttpServletRequest httpServletRequest, final RedirectAttributes redirectAttributes) {
     Validation.notNull(id);
     Validation.notNull(principal);
     Validation.notNull(request);
@@ -48,13 +51,19 @@ public class RatingController extends BaseController {
     if (ratingOptional.isPresent())
       entity.deleteRating(user, ratingRepository);
 
-    if (!request.isDeleteRequest())
-      entity.createRating(user, request.getStarsEnum(), ratingRepository);
+    if (!request.isDeleteRequest()) {
+      try {
+        final LocalDate parsedDate = LocalDate.parse(request.date());
+        entity.createRating(user, request.getStarsEnum(), ratingRepository, parsedDate);
+      } catch (DateTimeParseException e) {
+        addFlashMessage(redirectAttributes, "Podano nieprawidłową datę");
+      }
+    }
 
     return redirectToReferrer(httpServletRequest);
   }
 
-  public record PostRatingRequest(int stars) {
+  public record PostRatingRequest(int stars, String date) {
 
     public boolean isDeleteRequest() {
       return stars == -1;

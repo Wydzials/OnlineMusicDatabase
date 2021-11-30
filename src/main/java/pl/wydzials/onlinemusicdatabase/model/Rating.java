@@ -1,5 +1,6 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import javax.persistence.AttributeConverter;
@@ -8,7 +9,7 @@ import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
@@ -22,13 +23,13 @@ public class Rating extends BaseEntity {
 
   private Stars stars;
 
-  private LocalDateTime lastEdit;
+  private LocalDateTime created;
 
   @Deprecated
   protected Rating() {
   }
 
-  public Rating(final RateableEntity entity, final User user, final Stars stars) {
+  public Rating(final RateableEntity entity, final User user, final Stars stars, final LocalDate date) {
     Validation.notNull(entity);
     Validation.notNull(user);
     Validation.notNull(stars);
@@ -36,7 +37,7 @@ public class Rating extends BaseEntity {
     this.entity = entity;
     this.user = user;
     this.stars = stars;
-    this.lastEdit = ConfigurationProvider.getCurrentDateTime();
+    this.created = date.atTime(GlobalConfiguration.getCurrentTime());
   }
 
   public int getStarsValue() {

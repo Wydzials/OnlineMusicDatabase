@@ -1,11 +1,12 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
-import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Entity
@@ -15,15 +16,16 @@ public abstract class RateableEntity extends BaseEntity {
   private Double averageRating;
   private int numberOfRatings;
 
-  public void createRating(final User user, final Stars stars, final RatingRepository ratingRepository) {
+  public void createRating(final User user, final Stars stars, final RatingRepository ratingRepository,
+      final LocalDate date) {
     Validation.notNull(user);
     Validation.notNull(stars);
     Validation.notNull(ratingRepository);
 
-    if (!ConfigurationProvider.isIsGeneratingData() && ratingRepository.findByUserAndEntity(user, this).isPresent())
+    if (!GlobalConfiguration.isIsGeneratingData() && ratingRepository.findByUserAndEntity(user, this).isPresent())
       Validation.throwIllegalStateException();
 
-    final Rating rating = new Rating(this, user, stars);
+    final Rating rating = new Rating(this, user, stars, date);
     ratingRepository.save(rating);
 
     if (averageRating == null) {

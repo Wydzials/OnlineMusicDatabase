@@ -35,7 +35,7 @@
         </li>
         <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
           {{ userRatingModalButton(album, userRatings) }}
-          {{ userRatingModal(album) }}
+          {{ userRatingModal(album, currentDate) }}
         </li>
       </ul>
     </div>
@@ -61,7 +61,7 @@
       <td>{{ averageRating(recording) }}</td>
       <td>
         {{ userRatingModalButton(recording, userRatings) }}
-        {{ userRatingModal(recording) }}
+        {{ userRatingModal(recording, currentDate) }}
       </td>
     </tr>
       {% endfor %}

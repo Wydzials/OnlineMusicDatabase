@@ -21,7 +21,7 @@ import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.ArtistRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
-import pl.wydzials.onlinemusicdatabase.utils.ConfigurationProvider;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 
 @Component
@@ -54,7 +54,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws IOException {
-    ConfigurationProvider.setIsGeneratingData(true);
+    GlobalConfiguration.setIsGeneratingData(true);
 
     createUsers();
     createAuroraData();
@@ -62,7 +62,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     createFakeData();
 
     System.out.println("Data generated");
-    ConfigurationProvider.setIsGeneratingData(false);
+    GlobalConfiguration.setIsGeneratingData(false);
   }
 
   private void createUsers() {
@@ -86,7 +86,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         final User user = users.get(i);
         final Stars stars = Stars.of(faker.random().nextInt(min, max));
 
-        entity.createRating(user, stars, ratingRepository);
+        entity.createRating(user, stars, ratingRepository, GlobalConfiguration.getCurrentDate());
       }
     }
   }
@@ -217,7 +217,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
       for (User user : users) {
         if (faker.random().nextBoolean())
-          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository);
+          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository,
+              GlobalConfiguration.getCurrentDate());
       }
 
       for (int singleNumber = 0; singleNumber < SINGLES_FOR_ARTIST; singleNumber++) {

@@ -5,7 +5,8 @@
   </a>
   {% endmacro %}
 
-    {% macro userRatingModal(entity) %}
+    {% macro userRatingModal(entity, currentDate) %}
+    {# @pebvariable name="currentDate" type="java.time.LocalDate" #}
     <div class="modal fade" id="rating-{{ entity.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -16,18 +17,36 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              {% for stars in [1,2,3,4,5] %}
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="stars" id="inlineRadio{{ stars }}"
-                         value="{{ stars }}" required>
-                  <label class="form-check-label" for="inlineRadio{{ stars }}">{{ stars }}⭐</label>
+
+              <div class="btn-group d-flex">
+                {% for stars in [1,2,3,4,5] %}
+                  <div class="col form-check form-check-inline m-1 p-0">
+                    <input class="btn-check" type="radio" name="stars" id="inlineRadio-{{ entity.id }}-{{ stars }}"
+                           value="{{ stars }}" autocomplete="off" required>
+                    <label class="btn btn-outline-primary" for="inlineRadio-{{ entity.id }}-{{ stars }}">
+                      {{ stars }}⭐
+                    </label>
+                  </div>
+                {% endfor %}
+                <div class="col form-check form-check-inline m-1 p-0">
+                  <input class="btn-check" type="radio" name="stars" id="inlineRadio-{{ entity.id }}-delete" value="-1"
+                         autocomplete="off">
+                  <label class="btn btn-outline-danger" for="inlineRadio-{{ entity.id }}-delete">Usuń</label>
                 </div>
-              {% endfor %}
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="stars" id="inlineRadio6" value="-1">
-                <label class="form-check-label" for="inlineRadio6">Usuń</label>
               </div>
+
+              <div class="row justify-content-center">
+                <div class="col text-end">
+                  <div class="form-check mt-3">
+                    <label for="date">Ustaw datę</label>
+                    <input type="date" id="date" name="date" value="{{ currentDate | date("yyyy-MM-dd") }}"
+                           min="1900-01-01" max="{{ currentDate | date("yyyy-MM-dd") }}">
+                  </div>
+                </div>
+              </div>
+
             </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
               <button type="submit" class="btn btn-primary">Zapisz ocenę</button>

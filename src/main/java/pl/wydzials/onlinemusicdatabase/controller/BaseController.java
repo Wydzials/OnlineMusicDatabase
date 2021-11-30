@@ -1,6 +1,7 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import pl.wydzials.onlinemusicdatabase.model.Rating;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 public class BaseController {
@@ -54,6 +56,11 @@ public class BaseController {
     Validation.notNull(httpServletRequest);
 
     return "redirect:" + httpServletRequest.getHeader("Referer");
+  }
+
+  @ModelAttribute("currentDate")
+  public LocalDate getCurrentDate() {
+    return GlobalConfiguration.getCurrentDate();
   }
 
   @SuppressWarnings("unchecked")
