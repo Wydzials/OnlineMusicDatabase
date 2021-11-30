@@ -7,28 +7,49 @@
 {% block body %}
 
 <div class="row mb-5">
-  <div class="col-3">
+  <div class="col-4">
     <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid" alt="artist image">
   </div>
 
-  <div class="col-9">
+  <div class="col-8">
     <div class="row mb-3">
       <h1 class="display-5">{{ artist.name }}</h1>
+      <p>{{ artist.description }}</p>
     </div>
 
-    <div class="col-5">
-      <ul class="list-group">
-        <li class="list-group-item">
-            {{ artist.description }}
-        </li>
-        <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
-          {{ averageRating(artist) }}
-        </li>
-        <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
-          {{ userRatingModalButton(artist, userRatings) }}
-          {{ userRatingModal(artist, currentDate) }}
-        </li>
-      </ul>
+    <div class="row">
+      <div class="col-5">
+        <ul class="list-group">
+          <li class="list-group-item fs-4 text-center text-secondary">
+            Informacje
+          </li>
+
+          <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
+            {{ averageRating(artist) }}
+          </li>
+          <li class="list-group-item text-end align-middle"><span
+              class="float-start"><strong>Twoja ocena</strong></span>
+            {{ userRatingModalButton(artist, userRatings) }}
+            {{ userRatingModal(artist, currentDate) }}
+          </li>
+        </ul>
+      </div>
+
+      {% if artist.links.size() > 0 %}
+        <div class="col-4">
+          <ul class="list-group">
+            <li class="list-group-item fs-4 text-center text-secondary">
+              Linki
+            </li>
+            {% for link in artist.links %}
+              <li class="list-group-item">
+                <a href="{{ link.link }}">{{ link.text }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
     </div>
   </div>
 </div>
@@ -56,7 +77,7 @@
   </div>
 </div>
 
-
+{% if artist.singleRecordings.size() > 0 %}
 <h3>Single</h3>
 <table class="table my-3">
   <thead>
@@ -75,11 +96,12 @@
       <td>{{ averageRating(recording) }}</td>
       <td>
         {{ userRatingModalButton(recording, userRatings) }}
-        {{ userRatingModal(recording, currentDate) }}
+          {{ userRatingModal(recording, currentDate) }}
       </td>
     </tr>
       {% endfor %}
   </tbody>
 </table>
+{% endif %}
 
 {% endblock %}

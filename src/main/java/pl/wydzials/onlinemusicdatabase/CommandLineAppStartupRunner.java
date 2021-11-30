@@ -95,6 +95,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     Artist aurora = new Artist("AURORA", "Norweska piosenkarka i autorka tekstów", ArtistType.PERSON);
     artistRepository.save(aurora);
 
+    aurora.addLink("Oficjalna strona", "https://www.aurora-music.com/");
+    aurora.addLink("Instagram", "https://www.instagram.com/auroramusic/");
+    aurora.addLink("YouTube", "https://www.youtube.com/channel/UCNjHgaLpdy1IMNK57pYiKiQ");
+
     //    aurora.addImage(new MockMultipartFile("aurora.jpg", new FileInputStream("images/aurora.jpg")),
     //        imageStorageService);
     aurora.addImageId("aurora2");
@@ -156,6 +160,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   private void createPinkFloydData() throws IOException {
     Artist pinkFloyd = new Artist("Pink Floyd", "Angielski zespół rockowy", ArtistType.BAND);
     artistRepository.save(pinkFloyd);
+
+    pinkFloyd.addLink("Oficjalna strona", "https://www.pinkfloyd.com/");
+    pinkFloyd.addLink("Instagram", "https://www.instagram.com/pinkfloyd/");
+    pinkFloyd.addLink("Twitter", "https://twitter.com/PinkFloyd");
 
     //    pinkFloyd.addImage(new MockMultipartFile("pinkFloyd.jpg", new FileInputStream("images/pink-floyd.jpg")),
     //        imageStorageService);

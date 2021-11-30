@@ -41,6 +41,9 @@ public class Artist extends RateableEntity {
 
   private String imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Link> links = new ArrayList<>();
+
   @Deprecated
   protected Artist() {
   }
@@ -80,6 +83,14 @@ public class Artist extends RateableEntity {
     Validation.notNull(imageId);
 
     this.imageId = imageStorageService.save(multipartFile);
+  }
+
+  public void addLink(final String text, final String link) {
+    Validation.notEmpty(text);
+    Validation.notEmpty(link);
+
+    final Link newLink = new Link(text, link);
+    links.add(newLink);
   }
 
   // For tests only
@@ -123,6 +134,11 @@ public class Artist extends RateableEntity {
   public String getImageId() {
     return imageId;
   }
+
+  public List<Link> getLinks() {
+    return links;
+  }
+
 
   static final class PrivateToken {
 
