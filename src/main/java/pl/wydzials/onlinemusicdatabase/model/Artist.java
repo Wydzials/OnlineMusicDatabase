@@ -41,7 +41,7 @@ public class Artist extends RateableEntity {
 
   private String imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "artist")
   private List<Link> links = new ArrayList<>();
 
   @Deprecated
@@ -89,7 +89,7 @@ public class Artist extends RateableEntity {
     Validation.notEmpty(text);
     Validation.notEmpty(link);
 
-    final Link newLink = new Link(text, link);
+    final Link newLink = new Link(text, link, this);
     links.add(newLink);
   }
 
