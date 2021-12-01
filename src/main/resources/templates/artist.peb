@@ -8,7 +8,7 @@
 
 <div class="row mb-5">
   <div class="col-4">
-    <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid" alt="artist image">
+    <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid img-thumbnail bg-dark" alt="artist image">
   </div>
 
   <div class="col-8">
@@ -59,9 +59,9 @@
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
       {% for album in artist.albums %}
       <div class="col">
-        <div class="card">
+        <div class="card bg-light">
           <a href="/album/{{ album.id }}" class="link-unstyled">
-            <img src="/images/{{ album.imageId }}.jpg" class="card-img-top" alt="placeholder">
+            <img src="/images/{{ album.imageId }}.jpg" class="card-img-top img-thumbnail bg-dark" alt="placeholder">
 
             <div class="card-body">
               <h5 class="card-title">{{ album.name }}</h5>

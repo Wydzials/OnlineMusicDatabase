@@ -1,14 +1,15 @@
 package pl.wydzials.onlinemusicdatabase.controller;
 
 public enum MvcView {
-  ALBUM("album"),
-  ARTIST("artist"),
   INDEX("index"),
   LOGIN("login"),
   REGISTER("register"),
   SETTINGS("user/settings"),
   CHANGE_PASSWORD("user/change-password"),
-  ARTISTS("artists");
+  ALBUM("album"),
+  ARTIST("artist"),
+  ARTISTS("artists"),
+  PLAYLISTS("user/playlists");
 
   private final String path;
 

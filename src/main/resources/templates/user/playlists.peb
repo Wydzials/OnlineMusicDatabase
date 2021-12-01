@@ -1,0 +1,63 @@
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+
+        {% for playlist in user.playlists %}
+        <div class="col">
+          <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="/placeholder.png" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ playlist.name }}</h5>
+                  <p class="card-text">
+                    <button type="button" class="btn btn-outline-primary">Edytuj</button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#delete-playlist-{{ playlist.id }}">Usuń
+                    </button>
+                  </p>
+                  <p class="card-text"><small class="text-muted"></small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="delete-playlist-{{ playlist.id }}" tabindex="-1"
+               aria-labelledby="exampleModalLabel"
+               aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <form method="post" action="/user/playlist/delete/{{ playlist.id }}">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Czy na pewno chcesz usunąć playlistę?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    Playlista <span class="fw-bold">{{ playlist.name }}</span> oraz wszystkie zapisane utwory zostaną
+                    bezpowrotnie usunięte.
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-danger">Usuń</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

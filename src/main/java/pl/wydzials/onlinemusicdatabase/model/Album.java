@@ -32,7 +32,7 @@ public class Album extends RateableEntity {
   @OrderBy("albumPosition")
   private List<Recording> recordings = new ArrayList<>();
 
-  private String imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
+  private String imageId = MvcConfiguration.PLACEHOLDER_ALBUM_IMAGE_ID;
 
   public Album(final String name, final Artist artist, final int year, final Artist.PrivateToken token) {
     Validation.notNull(name);

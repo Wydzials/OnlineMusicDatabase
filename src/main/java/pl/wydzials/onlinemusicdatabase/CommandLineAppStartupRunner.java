@@ -66,7 +66,12 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createUsers() {
-    users.add(new User("szymon", passwordEncoder.encode("1")));
+    final User szymon = new User("szymon", passwordEncoder.encode("1"));
+    users.add(szymon);
+
+    szymon.createPlaylist("Moja pierwsza playlista");
+    szymon.createPlaylist("Moja druga playlista");
+    szymon.createPlaylist("Moja trzecia playlista");
 
     for (int i = 0; i < 10; i++) {
       final String username = "User" + (i + 1);

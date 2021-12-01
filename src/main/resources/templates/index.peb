@@ -4,7 +4,7 @@
 
   <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
     <div class="col-10 col-sm-8 col-lg-6">
-      <img src="/concert.png" class="d-block mx-lg-auto img-fluid" width="700" height="500" loading="lazy">
+      <img src="/concert.png" class="img-fluid rounded-3" width="700" height="500" loading="lazy" alt="concert">
     </div>
     <div class="col-lg-6">
       <h1 class="display-5 fw-bold lh-1 mb-3">Internetowa baza utworów muzycznych</h1>

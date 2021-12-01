@@ -53,6 +53,7 @@
                   </li>
 
                   <li><h6 class="dropdown-header text-primary">Konto</h6></li>
+                  <li><a class="dropdown-item" href="/user/playlists">Playlisty</a></li>
                   <li><a class="dropdown-item" href="/user/settings">Ustawienia</a></li>
                   <li>
                     <hr class="dropdown-divider">
