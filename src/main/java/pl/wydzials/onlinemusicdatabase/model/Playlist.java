@@ -2,6 +2,7 @@ package pl.wydzials.onlinemusicdatabase.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -33,21 +34,34 @@ public class Playlist extends BaseEntity {
     this.user = user;
   }
 
-  public void createEntry(final Recording recording) {
+  public void addRecording(final Recording recording) {
     Validation.notNull(recording);
+    if (contains(recording))
+      Validation.throwIllegalArgumentException();
 
-    final PlaylistEntry playlistEntry = new PlaylistEntry(recording, this, entries.size(),
-        PrivateToken.INSTANCE);
+    final PlaylistEntry playlistEntry = new PlaylistEntry(recording, this, entries.size(), PrivateToken.INSTANCE);
 
     entries.add(playlistEntry);
+  }
+
+  public boolean isUserEqualTo(final User user) {
+    Validation.notNull(user);
+    return this.user.equals(user);
   }
 
   public String getName() {
     return name;
   }
 
-  public List<PlaylistEntry> getEntries() {
-    return entries;
+  public List<Recording> getRecordings() {
+    return entries.stream()
+        .map(PlaylistEntry::getRecording)
+        .collect(Collectors.toList());
+  }
+
+  public boolean contains(final Recording recording) {
+    return entries.stream()
+        .anyMatch(playlistEntry -> playlistEntry.getRecording().equals(recording));
   }
 
   static final class PrivateToken {

@@ -1,10 +1,10 @@
 package pl.wydzials.onlinemusicdatabase.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class User extends BaseEntity implements UserDetails {
   private String imageId;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-  private Set<Playlist> playlists = new HashSet<>();
+  private List<Playlist> playlists = new ArrayList<>();
 
   @Deprecated
   protected User() {
@@ -116,7 +116,7 @@ public class User extends BaseEntity implements UserDetails {
     return imageId;
   }
 
-  public Set<Playlist> getPlaylists() {
+  public List<Playlist> getPlaylists() {
     return playlists;
   }
 

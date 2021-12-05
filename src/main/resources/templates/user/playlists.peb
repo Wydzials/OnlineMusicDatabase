@@ -1,24 +1,29 @@
 {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="activePlaylist" type="pl.wydzials.onlinemusicdatabase.model.Playlist" #}
 
   {% extends "base" %}
   {% import "macros" %}
 
 {% block body %}
 
-<div class="row justify-content-center">
-  <div class="col-10">
-    <div class="row row-cols-1 row-cols-md-2 g-2">
+<div class="row">
+  <div class="col-6">
+    <div class="row row-cols-1 g-2">
 
         {% for playlist in user.playlists %}
         <div class="col">
-          <div class="card mb-3" style="max-width: 540px;">
+          <div
+              class="card mb-3 {{ (activePlaylist != null and playlist.id == activePlaylist.id) ? 'border border-2 border-primary' : '' }}"
+              style="max-width: 540px;">
             <div class="row g-0">
               <div class="col-md-4">
                 <img src="/placeholder.png" class="img-fluid rounded-start" alt="...">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">{{ playlist.name }}</h5>
+                  <a href="/user/playlists?activePlaylistId={{ playlist.id }}" class="link-unstyled">
+                    <h5 class="card-title">{{ playlist.name }}</h5>
+                  </a>
                   <p class="card-text">
                     <button type="button" class="btn btn-outline-primary">Edytuj</button>
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -32,8 +37,7 @@
           </div>
 
           <div class="modal fade" id="delete-playlist-{{ playlist.id }}" tabindex="-1"
-               aria-labelledby="exampleModalLabel"
-               aria-hidden="true">
+               aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <form method="post" action="/user/playlist/delete/{{ playlist.id }}">
@@ -56,8 +60,44 @@
           </div>
         </div>
         {% endfor %}
-
     </div>
+  </div>
+
+  <div class="col-6">
+      {% if activePlaylist is not null %}
+      <h3>{{ activePlaylist.name }}</h3>
+
+      {% if activePlaylist.recordings.size() > 0 %}
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Tytuł</th>
+            <th scope="col">Artysta</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for recording in activePlaylist.recordings %}
+            <tr>
+              <td>
+                <a href="/album/{{ recording.album.id }}" class="link-unstyled">
+                    {{ recording.title }}
+                </a>
+              </td>
+              <td>
+                <a href="/artist/{{ recording.artist.id }}" class="link-unstyled">
+                    {{ recording.artist.name }}
+                </a>
+              </td>
+            </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>Playlista jest pusta. Po dodaniu utworów, będą one widoczne w tym miejscu.</p>
+
+      {% endif %}
+
+      {% endif %}
   </div>
 </div>
 {% endblock %}
