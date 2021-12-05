@@ -93,7 +93,7 @@ public class PlaylistController extends BaseController {
     Validation.notNull(principal);
 
     if (!request.isValid()) {
-      addFlashMessage(redirectAttributes, "Nie udało się dodać utworu do playlisty");
+      addFlashMessage(redirectAttributes, "Nie udało się dodać utworu do playlisty.");
       return redirectToReferrer(httpServletRequest);
     }
 
@@ -103,12 +103,12 @@ public class PlaylistController extends BaseController {
 
     if (playlist.isUserEqualTo(user)) {
       if (playlist.contains(recording)) {
-        addFlashMessage(redirectAttributes, "Utwór znajdował się już na tej playliście");
+        addFlashMessage(redirectAttributes, "Utwór znajdował się już na tej playliście.");
         return redirectToReferrer(httpServletRequest);
       }
 
       playlist.addRecording(recording);
-      addFlashMessage(redirectAttributes, "Utwór '" + recording.getTitle() + "' został dodany do playlisty");
+      addFlashMessage(redirectAttributes, "Utwór '" + recording.getTitle() + "' został dodany do playlisty.");
     } else {
       addFlashMessage(redirectAttributes, "Brak uprawnień!");
     }
@@ -123,7 +123,7 @@ public class PlaylistController extends BaseController {
     Validation.notNull(principal);
 
     if (!request.isValid()) {
-      addFlashMessage(redirectAttributes, "Nie udało się usunąć utworu z playlisty");
+      addFlashMessage(redirectAttributes, "Nie udało się usunąć utworu z playlisty.");
       return redirectToReferrer(httpServletRequest);
     }
 
@@ -133,12 +133,12 @@ public class PlaylistController extends BaseController {
 
     if (playlist.isUserEqualTo(user)) {
       if (!playlist.contains(recording)) {
-        addFlashMessage(redirectAttributes, "Utwór nie znajdował się na tej playliście");
+        addFlashMessage(redirectAttributes, "Utwór nie znajdował się na tej playliście.");
         return redirectToReferrer(httpServletRequest);
       }
 
       playlist.deleteRecording(recording);
-      addFlashMessage(redirectAttributes, "Utwór '" + recording.getTitle() + "' został usunięty z playlisty");
+      addFlashMessage(redirectAttributes, "Utwór '" + recording.getTitle() + "' został usunięty z playlisty.");
     } else {
       addFlashMessage(redirectAttributes, "Brak uprawnień!");
     }

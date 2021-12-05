@@ -2,6 +2,7 @@ package pl.wydzials.onlinemusicdatabase.controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -73,9 +74,9 @@ public class BaseController {
     final Object flashMessages = attributes.get("flashMessages");
 
     if (flashMessages instanceof List) {
-      ((List<String>) flashMessages).add(message);
+      ((ArrayList<String>) flashMessages).add(message);
     } else if (flashMessages == null) {
-      redirectAttributes.addFlashAttribute("flashMessages", Collections.singletonList(message));
+      redirectAttributes.addFlashAttribute("flashMessages", new ArrayList<>(Collections.singleton(message)));
     } else {
       Validation.throwIllegalArgumentException();
     }
@@ -104,7 +105,7 @@ public class BaseController {
   public ModelAndView noSuchElementException() {
     ModelAndView modelAndView = new ModelAndView();
     modelAndView.setViewName(MvcView.INDEX.get());
-    modelAndView.addObject("flashMessages", Collections.singletonList("Nie znaleziono podanego zasobu"));
+    modelAndView.addObject("flashMessages", Collections.singletonList("Nie znaleziono podanego zasobu."));
     return modelAndView;
   }
 }

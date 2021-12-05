@@ -37,7 +37,7 @@ public class UserController extends BaseController {
 
   @PostMapping("/login-failure")
   public String getLoginFailure(final RedirectAttributes redirectAttributes) {
-    addFlashMessage(redirectAttributes, "Niepoprawne dane logowania");
+    addFlashMessage(redirectAttributes, "Niepoprawne dane logowania.");
     return "redirect:/login";
   }
 
@@ -51,13 +51,13 @@ public class UserController extends BaseController {
     Validation.notNull(request);
 
     if (!request.isUsernameCorrect())
-      addFlashMessage(redirectAttributes, "Nieprawidłowa nazwa użytkownika");
+      addFlashMessage(redirectAttributes, "Nieprawidłowa nazwa użytkownika.");
 
     if (!request.isPasswordCorrect())
-      addFlashMessage(redirectAttributes, "Nieprawidłowe hasło");
+      addFlashMessage(redirectAttributes, "Nieprawidłowe hasło.");
 
     if (userRepository.findByUsername(request.username).isPresent())
-      addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
+      addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta.");
 
     if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/register";
@@ -66,7 +66,7 @@ public class UserController extends BaseController {
     User user = new User(request.username, passwordEncoder.encode(request.password1));
     userRepository.save(user);
 
-    addFlashMessage(redirectAttributes, "Konto zostało utworzone, możesz się zalogować");
+    addFlashMessage(redirectAttributes, "Konto zostało utworzone, możesz się zalogować.");
     return "redirect:/login";
   }
 
@@ -85,10 +85,10 @@ public class UserController extends BaseController {
       try {
         user.addImage(request.profileImage, imageStorageService);
       } catch (IOException e) {
-        addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia");
+        addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia.");
       }
     } else {
-      addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia");
+      addFlashMessage(redirectAttributes, "Nieprawidłowy format zdjęcia.");
     }
 
     return "redirect:/user/settings";
@@ -103,13 +103,13 @@ public class UserController extends BaseController {
 
     if (request.isUsernameCorrect()) {
       if (userRepository.findByUsername(request.username).isPresent()) {
-        addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta");
+        addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta.");
         return "redirect:/user/settings";
       }
 
       user.updateDetails(request.username);
       SecurityContextHolder.getContext().setAuthentication(null);
-      addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie");
+      addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie.");
       return "redirect:/login";
     }
 
@@ -129,10 +129,10 @@ public class UserController extends BaseController {
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
     if (request.oldPassword != null && !user.isPasswordEqual(request.oldPassword, passwordEncoder))
-      addFlashMessage(redirectAttributes, "Stare hasło jest nieprawidłowe");
+      addFlashMessage(redirectAttributes, "Stare hasło jest nieprawidłowe.");
 
     if (!request.isPasswordCorrect())
-      addFlashMessage(redirectAttributes, "Nowe hasło jest nieprawidłowe");
+      addFlashMessage(redirectAttributes, "Nowe hasło jest nieprawidłowe.");
 
     if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/user/change-password";
@@ -141,7 +141,7 @@ public class UserController extends BaseController {
     user.updatePassword(request.newPassword1, passwordEncoder);
     SecurityContextHolder.getContext().setAuthentication(null);
 
-    addFlashMessage(redirectAttributes, "Hasło zostało zaktualizowane, zaloguj się ponownie");
+    addFlashMessage(redirectAttributes, "Hasło zostało zaktualizowane, zaloguj się ponownie.");
     return "redirect:/login";
   }
 

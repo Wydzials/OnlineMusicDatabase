@@ -56,7 +56,7 @@ public class ArtistController extends BaseController {
     final ArtistType artistTypeFilter = ArtistType.of(artistType).orElse(null);
 
     if (minRatingsFilter > maxRatingsFilter) {
-      addFlashMessage(redirectAttributes, "Minimalna liczba ocen nie może być większa od maksymalnej liczby ocen");
+      addFlashMessage(redirectAttributes, "Minimalna liczba ocen nie może być większa od maksymalnej liczby ocen.");
       return "redirect:/artists?artistType=" + artistType;
     }
 

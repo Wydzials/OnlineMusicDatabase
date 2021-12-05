@@ -56,7 +56,7 @@ public class RatingController extends BaseController {
         final LocalDate parsedDate = LocalDate.parse(request.date());
         entity.createRating(user, request.getStarsEnum(), ratingRepository, parsedDate);
       } catch (DateTimeParseException e) {
-        addFlashMessage(redirectAttributes, "Podano nieprawidłową datę");
+        addFlashMessage(redirectAttributes, "Podano nieprawidłową datę.");
       }
     }
 
