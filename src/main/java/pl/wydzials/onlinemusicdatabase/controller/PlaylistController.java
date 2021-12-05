@@ -68,8 +68,26 @@ public class PlaylistController extends BaseController {
     }
   }
 
+  @PostMapping("/user/playlist/delete/{id}")
+  public String deletePlaylist(@PathVariable final Long id, final Principal principal,
+      final RedirectAttributes redirectAttributes) {
+    Validation.notNull(id);
+    Validation.notNull(principal);
+
+    final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+    final Playlist playlist = playlistRepository.findById(id).orElseThrow();
+
+    if (playlist.isUserEqualTo(user)) {
+      user.deletePlaylist(playlist);
+    } else {
+      addFlashMessage(redirectAttributes, "Brak uprawnień!");
+    }
+
+    return "redirect:/user/playlists";
+  }
+
   @PostMapping("/user/playlist/add-recording")
-  public String addToPlaylist(final AddToPlaylistRequest request, final Principal principal,
+  public String addToPlaylist(final AddOrRemoveFromPlaylistRequest request, final Principal principal,
       final RedirectAttributes redirectAttributes, final HttpServletRequest httpServletRequest) {
     Validation.notNull(request);
     Validation.notNull(principal);
@@ -98,22 +116,37 @@ public class PlaylistController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
-  @PostMapping("/user/playlist/delete/{id}")
-  public String deletePlaylist(@PathVariable final Long id, final Principal principal,
-      final HttpServletRequest httpServletRequest, final RedirectAttributes redirectAttributes) {
-    Validation.notNull(id);
+  @PostMapping("/user/playlist/delete-recording")
+  public String deleteFromPlaylist(final AddOrRemoveFromPlaylistRequest request, final Principal principal,
+      final RedirectAttributes redirectAttributes, final HttpServletRequest httpServletRequest) {
+    Validation.notNull(request);
     Validation.notNull(principal);
 
+    if (!request.isValid()) {
+      addFlashMessage(redirectAttributes, "Nie udało się usunąć utworu z playlisty");
+      return redirectToReferrer(httpServletRequest);
+    }
+
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-    final Playlist playlist = playlistRepository.findById(id).orElseThrow();
+    final Playlist playlist = playlistRepository.findById(request.playlistId()).orElseThrow();
+    final Recording recording = recordingRepository.findById(request.recordingId()).orElseThrow();
 
-    user.deletePlaylist(playlist, playlistRepository);
+    if (playlist.isUserEqualTo(user)) {
+      if (!playlist.contains(recording)) {
+        addFlashMessage(redirectAttributes, "Utwór nie znajdował się na tej playliście");
+        return redirectToReferrer(httpServletRequest);
+      }
 
-    addFlashMessage(redirectAttributes, "Playlista została usunięta");
-    return redirectToReferrer(httpServletRequest);
+      playlist.deleteRecording(recording);
+      addFlashMessage(redirectAttributes, "Utwór '" + recording.getTitle() + "' został usunięty z playlisty");
+    } else {
+      addFlashMessage(redirectAttributes, "Brak uprawnień!");
+    }
+
+    return "redirect:/user/playlists?activePlaylistId=" + playlist.getId();
   }
 
-  public record AddToPlaylistRequest(Long playlistId, Long recordingId) {
+  public record AddOrRemoveFromPlaylistRequest(Long playlistId, Long recordingId) {
 
     public boolean isValid() {
       return playlistId != null && recordingId != null;

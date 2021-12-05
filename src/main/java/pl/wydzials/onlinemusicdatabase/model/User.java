@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import pl.wydzials.onlinemusicdatabase.configuration.MvcConfiguration;
-import pl.wydzials.onlinemusicdatabase.repository.PlaylistRepository;
 import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
@@ -86,15 +85,13 @@ public class User extends BaseEntity implements UserDetails {
     playlists.add(playlist);
   }
 
-  public void deletePlaylist(final Playlist playlist, final PlaylistRepository playlistRepository) {
+  public void deletePlaylist(final Playlist playlist) {
     Validation.notNull(playlist);
-    Validation.notNull(playlistRepository);
 
     if (!playlists.contains(playlist))
       Validation.throwIllegalArgumentException();
 
     playlists.remove(playlist);
-    playlistRepository.delete(playlist);
   }
 
   @Override

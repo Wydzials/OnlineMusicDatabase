@@ -10,7 +10,7 @@
 
 <div class="row">
   <div class="col-3">
-    <img src="/images/{{ album.imageId }}.jpg" class="img-fluid" alt="album cover">
+    <img src="/images/{{ album.imageId }}.jpg" class="img-fluid img-thumbnail bg-dark" alt="album cover">
   </div>
 
   <div class="col-9">
@@ -52,7 +52,9 @@
     <th scope="col">Długość</th>
     <th scope="col">Średnia ocena</th>
     <th scope="col">Twoja ocena</th>
-    <th scope="col">Dodaj do playlisty</th>
+    {% if user is not null %}
+      <th scope="col">Dodaj do playlisty</th>
+    {% endif %}
   </tr>
   </thead>
   <tbody>
@@ -66,22 +68,26 @@
         {{ userRatingModalButton(recording, userRatings) }}
         {{ userRatingModal(recording, currentDate) }}
       </td>
-      <td>
-        <form method="post" action="/user/playlist/add-recording" class="row g-3" style="width: 200px">
-          <div class="col">
-            <select class="form-select" aria-label="Select playlist" name="playlistId" required>
-              <option selected></option>
-              {% for playlist in user.playlists %}
-                <option value="{{ playlist.id }}">{{ playlist.name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <input type="hidden" name="recordingId" value="{{ recording.id }}">
-          <div class="col">
-            <button class="btn btn-outline-primary">💾</button>
-          </div>
-        </form>
-      </td>
+
+      {% if user is not null %}
+        <td>
+          <form method="post" action="/user/playlist/add-recording" class="row g-3" style="width: 200px">
+            <div class="col">
+              <select class="form-select" aria-label="Select playlist" name="playlistId" required>
+                <option selected></option>
+                {% for playlist in user.playlists %}
+                  <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <input type="hidden" name="recordingId" value="{{ recording.id }}">
+            <div class="col">
+              <button class="btn btn-outline-primary">💾</button>
+            </div>
+          </form>
+        </td>
+      {% endif %}
+
     </tr>
       {% endfor %}
   </tbody>

@@ -44,24 +44,41 @@ public class Playlist extends BaseEntity {
     entries.add(playlistEntry);
   }
 
+  public void deleteRecording(final Recording recording) {
+    Validation.notNull(recording);
+    if (!contains(recording))
+      Validation.throwIllegalArgumentException();
+
+    final PlaylistEntry playlistEntry = entries.stream()
+        .filter(entry -> entry.getRecording().equals(recording))
+        .findFirst()
+        .orElseThrow();
+
+    entries.remove(playlistEntry);
+  }
+
   public boolean isUserEqualTo(final User user) {
     Validation.notNull(user);
     return this.user.equals(user);
+  }
+
+  public boolean contains(final Recording recording) {
+    return entries.stream()
+        .anyMatch(playlistEntry -> playlistEntry.getRecording().equals(recording));
   }
 
   public String getName() {
     return name;
   }
 
+  public int getSize() {
+    return entries.size();
+  }
+
   public List<Recording> getRecordings() {
     return entries.stream()
         .map(PlaylistEntry::getRecording)
         .collect(Collectors.toList());
-  }
-
-  public boolean contains(final Recording recording) {
-    return entries.stream()
-        .anyMatch(playlistEntry -> playlistEntry.getRecording().equals(recording));
   }
 
   static final class PrivateToken {
