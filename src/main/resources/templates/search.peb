@@ -1,0 +1,140 @@
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="recordings" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Recording>" #}
+{# @pebvariable name="albums" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Album>" #}
+{# @pebvariable name="artists" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist>" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row justify-content-center gx-6">
+  <h1>Wyniki wyszukiwania: <span class="display-6"><em>{{ query }}</em></span></h1>
+
+  <div class="col mt-3 me-3">
+    <h1 class="display-6">Utwory</h1>
+    <div class="row row-cols-1 g-1">
+        {% for recording in recordings %}
+        <div class="col">
+          <div class="card mb-3 bg-light">
+            <div class="card-body">
+              <h5 class="card-title">{{ recording.title }}</h5>
+              <div class="card-text">
+                <ul class="list-group">
+
+                  {% if not recording.single %}
+                    <li class="list-group-item text-end">
+                      <span class="float-start"><strong>Album&nbsp;</strong></span>
+                      <a href="/album/{{ recording.album.id }}" class="link-unstyled text-primary">
+                          {{ recording.album.name }}
+                      </a>
+                    </li>
+                  {% endif %}
+
+                  <li class="list-group-item text-end"><span class="float-start"><strong>Artysta&nbsp;</strong></span>
+                    <a href="/artist/{{ recording.artist.id }}" class="link-unstyled text-primary">
+                        {{ recording.artist.name }}
+                    </a>
+                  </li>
+
+                  <li class="list-group-item text-end">
+                    <span class="float-start"><strong>Ocena&nbsp;</strong></span>
+                    {{ averageRating(recording) }}
+                  </li>
+
+                </ul>
+              </div>
+              <p class="card-text"><small class="text-muted"></small></p>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <h6>Brak znalezionych utworów</h6>
+        {% endfor %}
+    </div>
+  </div>
+
+  <div class="col mt-3 me-3">
+    <h1 class="display-6">Albumy</h1>
+    <div class="row row-cols-1 g-1">
+        {% for album in albums %}
+        <div class="col">
+
+          <div class="card mb-3 bg-light">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <a href="/albums/{{ album.id }}" class="link-unstyled">
+                  <img src="/images/{{ album.imageId }}.jpg" class="img-fluid rounded-start" alt="album cover">
+                </a>
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="/album/{{ album.id }}" class="link-unstyled">{{ album.name }}</a>
+                  </h5>
+                  <div class="card-text">
+                    <ul class="list-group">
+
+                      <li class="list-group-item">
+                        <a href="/artist/{{ album.artist.id }}" class="link-unstyled text-primary">
+                            {{ album.artist.name }}
+                        </a>
+                      </li>
+                      <li class="list-group-item text-center">
+                          {{ averageRating(album) }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        {% else %}
+        <h6>Brak znalezionych albumów</h6>
+        {% endfor %}
+    </div>
+  </div>
+
+
+  <div class="col mt-3">
+    <h1 class="display-6">Artyści</h1>
+    <div class="row row-cols-1 g-1">
+        {% for artist in artists %}
+        <div class="col">
+
+          <div class="card mb-3 bg-light">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <a href="/artist/{{ artist.id }}" class="link-unstyled">
+                  <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid rounded-start" alt="album cover">
+                </a>
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="/artist/{{ artist.id }}" class="link-unstyled">{{ artist.name }}</a>
+                  </h5>
+                  <div class="card-text">
+                    <ul class="list-group">
+                      <li class="list-group-item text-center">
+                          {{ averageRating(artist) }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        {% else %}
+        <h6>Brak znalezionych artystów</h6>
+        {% endfor %}
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}

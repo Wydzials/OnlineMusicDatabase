@@ -9,6 +9,7 @@ public enum MvcView {
   ALBUM("album"),
   ARTIST("artist"),
   ARTISTS("artists"),
+  SEARCH("search"),
   PLAYLISTS("user/playlists");
 
   private final String path;
