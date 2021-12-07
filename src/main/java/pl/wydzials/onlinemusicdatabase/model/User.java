@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +35,10 @@ public class User extends BaseEntity implements UserDetails {
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
   private List<Playlist> playlists = new ArrayList<>();
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+  @OrderBy("dateTime desc")
+  private List<LoginAttempt> loginAttempts = new LinkedList<>();
 
   @Deprecated
   protected User() {
@@ -94,6 +100,16 @@ public class User extends BaseEntity implements UserDetails {
     playlists.remove(playlist);
   }
 
+  public void addLoginAttempt(final String ip, final boolean successful) {
+    Validation.notEmpty(ip);
+
+    final LoginAttempt loginAttempt = new LoginAttempt(this, ip, successful);
+    loginAttempts.add(0, loginAttempt);
+
+    if (loginAttempts.size() > 10)
+      loginAttempts.remove(10);
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();
@@ -115,6 +131,10 @@ public class User extends BaseEntity implements UserDetails {
 
   public List<Playlist> getPlaylists() {
     return playlists;
+  }
+
+  public List<LoginAttempt> getLoginAttempts() {
+    return loginAttempts;
   }
 
   @Override

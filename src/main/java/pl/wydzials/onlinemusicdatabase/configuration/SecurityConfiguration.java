@@ -17,10 +17,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private final UserDetailsService userDetailsService;
+  private final LoginFailureHandler loginFailureHandler;
+  private final LoginSuccesHandler loginSuccessHandler;
 
   public SecurityConfiguration(
-      final UserDetailsService userDetailsService) {
+      final UserDetailsService userDetailsService,
+      final LoginFailureHandler loginFailureHandler,
+      final LoginSuccesHandler loginSuccessHandler) {
     this.userDetailsService = userDetailsService;
+    this.loginFailureHandler = loginFailureHandler;
+    this.loginSuccessHandler = loginSuccessHandler;
   }
 
   @Override
@@ -30,7 +36,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/login").permitAll()
         .antMatchers("/user/**").authenticated()
         .and()
-        .formLogin().loginPage("/login").failureForwardUrl("/login-failure")
+        .formLogin()
+        .loginPage("/login")
+        .successHandler(loginSuccessHandler)
+        .failureHandler(loginFailureHandler)
         .and()
         .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 

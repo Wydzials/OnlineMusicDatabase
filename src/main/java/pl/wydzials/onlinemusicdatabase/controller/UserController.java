@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     return MvcView.LOGIN.get();
   }
 
-  @PostMapping("/login-failure")
+  @GetMapping("/login-failure")
   public String getLoginFailure(final RedirectAttributes redirectAttributes) {
     addFlashMessage(redirectAttributes, "Niepoprawne dane logowania.");
     return "redirect:/login";

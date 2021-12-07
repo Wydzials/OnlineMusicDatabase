@@ -54,6 +54,36 @@
         </li>
       </ul>
     </div>
+
+    <div class="col-7">
+      <h3>Ostatnie próby logowania</h3>
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Data</th>
+          <th>Godzina</th>
+          <th>Adres IP</th>
+          <th>Czy udane?</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for attempt in user.loginAttempts %}
+          <tr>
+            <td>{{ attempt.dateTime | date("yyyy-MM-dd")}}</td>
+            <td>{{ attempt.dateTime | date("HH:mm:ss") }}</td>
+            <td>{{ attempt.ip }}</td>
+
+            {% if attempt.successful %}
+              <td class="table-success">Tak</td>
+              {% else %}
+              <td class="table-danger">Nie</td>
+            {% endif %}
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endblock %}
