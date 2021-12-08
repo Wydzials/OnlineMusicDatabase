@@ -21,7 +21,7 @@
           {% elseif user.hasFriendRequestSentFrom(userProfile) %}
           <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już otrzymane</button>
           {% else %}
-          <form action="/user/friend/send-request" method="post">
+          <form action="/user/friend-request" method="post">
             <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
             <button class="btn btn-outline-primary" type="submit">Zaproś do znajomych</button>
           </form>

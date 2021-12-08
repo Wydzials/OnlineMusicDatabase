@@ -102,12 +102,17 @@ public class UserController extends BaseController {
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
     if (request.isUsernameCorrect()) {
-      if (userRepository.findByUsername(request.username).isPresent()) {
+      if (principal.getName().equals(request.username())) {
+        addFlashMessage(redirectAttributes, "Nowa nazwa użytkownika nie może być taka sama jak poprzednia.");
+        return "redirect:/user/settings";
+      }
+
+      if (userRepository.findByUsername(request.username()).isPresent()) {
         addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta.");
         return "redirect:/user/settings";
       }
 
-      user.updateDetails(request.username);
+      user.updateDetails(request.username());
       SecurityContextHolder.getContext().setAuthentication(null);
       addFlashMessage(redirectAttributes, "Dane konta zostały zaktualizowane, zaloguj się ponownie.");
       return "redirect:/login";

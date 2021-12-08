@@ -8,6 +8,7 @@ import javax.persistence.AccessType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,6 +21,9 @@ public abstract class BaseEntity implements Serializable {
   @Id
   @GeneratedValue
   private Long id;
+
+  @Version
+  private Integer version;
 
   private String uuid = UUID.randomUUID().toString();
 

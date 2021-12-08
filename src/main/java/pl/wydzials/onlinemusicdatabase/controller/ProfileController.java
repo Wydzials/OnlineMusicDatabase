@@ -42,7 +42,7 @@ public class ProfileController extends BaseController {
     return MvcView.FRIEND_REQUESTS.get();
   }
 
-  @PostMapping("/user/friend/send-request")
+  @PostMapping("/user/friend-request")
   public String sendFriendRequest(final SendFriendRequest request, final Principal principal,
       final HttpServletRequest httpServletRequest, final RedirectAttributes redirectAttributes) {
     Validation.notNull(request);
@@ -57,7 +57,7 @@ public class ProfileController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
-  @PostMapping("/user/friend/respond-to-request")
+  @PostMapping("/user/friend-request/respond")
   public String respondToFriendRequest(final RespondToFriendRequest request, final Principal principal,
       final HttpServletRequest httpServletRequest, final RedirectAttributes redirectAttributes) {
     Validation.notNull(request);
@@ -77,7 +77,7 @@ public class ProfileController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
-  @PostMapping("/user/friend/cancel-request")
+  @PostMapping("/user/friend-request/cancel")
   public String cancelFriendRequest(final CancelFriendRequest request, final Principal principal,
       final HttpServletRequest httpServletRequest) {
     Validation.notNull(request);
