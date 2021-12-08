@@ -1,0 +1,78 @@
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+
+  {% extends "base" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <h1 class="display-6 pb-3">Zaproszenia do znajomych</h1>
+
+  <div class="col-lg-5 mb-5">
+    <h3>Wysłane zaproszenia</h3>
+
+    {% for friendRequest in user.friendRequestsSent %}
+      <div class="card mb-3 rounded-pill bg-light">
+        <div class="row g-0">
+          <div class="col-3">
+            <img src="/images/{{ friendRequest.recipient.imageId }}.jpg" class="img-fluid rounded-circle"
+                 alt="friend profile picture">
+          </div>
+          <div class="col-9 d-flex align-items-center">
+            <div class="card-body">
+              <div class="fs-5 card-text">
+                <a href="/profile/{{ friendRequest.recipient.id }}" class="link-unstyled">
+                    {{ friendRequest.recipient.username }}
+                </a>
+
+                <form action="/user/friend/cancel-request" method="post">
+                  <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
+                  <button class="btn btn-outline-danger" type="submit">Anuluj</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <div class="col-lg-5 mb-5">
+    <h3>Otrzymane zaproszenia</h3>
+
+    {% for friendRequest in user.friendRequestsReceived %}
+      <div class="card mb-3 rounded-pill bg-light">
+        <div class="row g-0">
+          <div class="col-3">
+            <img src="/images/{{ friendRequest.sender.imageId }}.jpg" class="img-fluid rounded-circle"
+                 alt="friend profile picture">
+          </div>
+          <div class="col-9 d-flex align-items-center">
+            <div class="card-body">
+              <div class="fs-5 card-text row">
+                <a href="/profile/{{ friendRequest.sender.id }}" class="link-unstyled">
+                    {{ friendRequest.sender.username }}
+                </a>
+
+                <form action="/user/friend/respond-to-request" method="post" class="col-4">
+                  <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
+                  <input type="hidden" name="accept" value="True">
+                  <button class="btn btn-outline-success" type="submit">Akceptuj</button>
+                </form>
+
+                <form action="/user/friend/respond-to-request" method="post" class="col-4">
+                  <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
+                  <input type="hidden" name="accept" value="False">
+                  <button class="btn btn-outline-danger" type="submit">Odrzuć</button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock %}

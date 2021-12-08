@@ -7,7 +7,8 @@
       <h3 class="pb-3">Rejestracja</h3>
 
       <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="username" name="username" placeholder="Nazwa użytkownika" required>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Nazwa użytkownika"
+               required autofocus>
         <label for="username">Nazwa użytkownika</label>
       </div>
 

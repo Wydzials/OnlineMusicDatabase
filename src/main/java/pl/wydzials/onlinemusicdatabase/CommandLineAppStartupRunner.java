@@ -75,12 +75,13 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     for (int i = 0; i < 10; i++) {
       final String username = faker.name().firstName() + " " + faker.name().lastName();
-      final String password = "1";
+      final String password = "$2a$10$0HuvqUt44Gqsa7jFMODsMeTvlMQN7C4S7RuKBqTQc2NKsZBlKdb1i";
 
       final User user = new User(username, password);
       users.add(user);
 
-      szymon.addFriend(user);
+      if (faker.random().nextBoolean())
+        szymon.addFriend(user);
     }
     userRepository.saveAll(users);
   }

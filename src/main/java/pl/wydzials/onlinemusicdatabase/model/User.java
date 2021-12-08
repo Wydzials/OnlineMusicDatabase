@@ -51,6 +51,12 @@ public class User extends BaseEntity implements UserDetails {
       inverseJoinColumns = {@JoinColumn(name = "user2_id")})
   private Set<User> friends = new HashSet<>();
 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sender")
+  private Set<FriendRequest> friendRequestsSent = new HashSet<>();
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipient")
+  private Set<FriendRequest> friendRequestsReceived = new HashSet<>();
+
   @Deprecated
   protected User() {
   }
@@ -130,6 +136,87 @@ public class User extends BaseEntity implements UserDetails {
     }
   }
 
+  public boolean isFriendOf(final User user) {
+    Validation.notNull(user);
+
+    return friends.contains(user);
+  }
+
+  public boolean hasFriendRequestSentTo(final User user) {
+    Validation.notNull(user);
+
+    return friendRequestsSent.stream()
+        .anyMatch(request -> request.isRecipientEqualTo(user));
+  }
+
+  public boolean hasFriendRequestSentFrom(final User user) {
+    Validation.notNull(user);
+
+    return friendRequestsReceived.stream()
+        .anyMatch(request -> request.isSenderEqualTo(user));
+  }
+
+  public void createFriendRequest(final User recipient) {
+    Validation.notNull(recipient);
+    if (recipient.equals(this))
+      Validation.throwIllegalArgumentException();
+    if (friends.contains(recipient))
+      Validation.throwIllegalArgumentException();
+    if (friendRequestsSent.stream().anyMatch(request -> request.isRecipientEqualTo(recipient)))
+      Validation.throwIllegalArgumentException();
+    if (friendRequestsReceived.stream().anyMatch(request -> request.isSenderEqualTo(recipient)))
+      Validation.throwIllegalArgumentException();
+
+    final FriendRequest friendRequest = new FriendRequest(this, recipient);
+
+    friendRequestsSent.add(friendRequest);
+    recipient.addFriendRequestToRecipient(friendRequest);
+  }
+
+  public void acceptFriendRequest(final FriendRequest friendRequest) {
+    Validation.notNull(friendRequest);
+    if (!friendRequest.isRecipientEqualTo(this))
+      Validation.throwIllegalArgumentException();
+
+    addFriend(friendRequest.getSender());
+    removeFriendRequest(friendRequest);
+  }
+
+  public void declineFriendRequest(final FriendRequest friendRequest) {
+    Validation.notNull(friendRequest);
+    if (!friendRequest.isRecipientEqualTo(this))
+      Validation.throwIllegalArgumentException();
+
+    removeFriendRequest(friendRequest);
+  }
+
+  public void cancelFriendRequest(final FriendRequest friendRequest) {
+    Validation.notNull(friendRequest);
+    if (!friendRequest.isSenderEqualTo(this))
+      Validation.throwIllegalArgumentException();
+
+    removeFriendRequest(friendRequest);
+  }
+
+  private void addFriendRequestToRecipient(final FriendRequest friendRequest) {
+    friendRequestsReceived.add(friendRequest);
+  }
+
+  private void removeFriendRequest(final FriendRequest friendRequest) {
+    if (friendRequestsSent.contains(friendRequest) || friendRequestsReceived.contains(friendRequest)) {
+      friendRequestsSent.remove(friendRequest);
+      friendRequestsReceived.remove(friendRequest);
+
+      final User sender = friendRequest.getSender();
+      final User recipient = friendRequest.getRecipient();
+
+      if (this.equals(sender))
+        recipient.removeFriendRequest(friendRequest);
+      else
+        sender.removeFriendRequest(friendRequest);
+    }
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();
@@ -159,6 +246,14 @@ public class User extends BaseEntity implements UserDetails {
 
   public Set<User> getFriends() {
     return friends;
+  }
+
+  public Set<FriendRequest> getFriendRequestsSent() {
+    return friendRequestsSent;
+  }
+
+  public Set<FriendRequest> getFriendRequestsReceived() {
+    return friendRequestsReceived;
   }
 
   @Override

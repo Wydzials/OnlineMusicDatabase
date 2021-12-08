@@ -7,6 +7,7 @@ public enum MvcView {
   SETTINGS("user/settings"),
   CHANGE_PASSWORD("user/change-password"),
   PLAYLISTS("user/playlists"),
+  FRIEND_REQUESTS("user/friend-requests"),
   ALBUM("album"),
   ARTIST("artist"),
   ARTISTS("artists"),

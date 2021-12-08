@@ -1,4 +1,3 @@
-{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
 {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
 {# @pebvariable name="userProfile" type="pl.wydzials.onlinemusicdatabase.model.User" #}
 
@@ -12,6 +11,23 @@
     <div class="col-4 text-center">
       <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle mb-0 col-9" alt="profile image">
       <p class="display-6 mt-0">{{ userProfile.username }}</p>
+
+      {% if user is not null and userProfile.id != user.id %}
+
+        {% if user.isFriendOf(userProfile) %}
+          <button class="btn btn-outline-primary" type="submit" disabled>Jesteście znajomymi</button>
+          {% elseif user.hasFriendRequestSentTo(userProfile) %}
+          <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już wysłane</button>
+          {% elseif user.hasFriendRequestSentFrom(userProfile) %}
+          <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już otrzymane</button>
+          {% else %}
+          <form action="/user/friend/send-request" method="post">
+            <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
+            <button class="btn btn-outline-primary" type="submit">Zaproś do znajomych</button>
+          </form>
+        {% endif %}
+
+      {% endif %}
     </div>
 
   </div>
@@ -27,7 +43,7 @@
             </div>
             <div class="col-9 d-flex align-items-center">
               <div class="card-body">
-                <div class="fs-4 card-text">
+                <div class="fs-5 card-text">
                     {{ friend.username }}
                 </div>
               </div>
