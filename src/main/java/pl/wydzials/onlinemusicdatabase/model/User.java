@@ -4,12 +4,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -39,6 +44,12 @@ public class User extends BaseEntity implements UserDetails {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
   @OrderBy("dateTime desc")
   private List<LoginAttempt> loginAttempts = new LinkedList<>();
+
+  @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinTable(name = "friend",
+      joinColumns = {@JoinColumn(name = "user1_id")},
+      inverseJoinColumns = {@JoinColumn(name = "user2_id")})
+  private Set<User> friends = new HashSet<>();
 
   @Deprecated
   protected User() {
@@ -110,6 +121,15 @@ public class User extends BaseEntity implements UserDetails {
       loginAttempts.remove(10);
   }
 
+  public void addFriend(final User user) {
+    Validation.notNull(user);
+
+    if (!friends.contains(user)) {
+      friends.add(user);
+      user.addFriend(this);
+    }
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.emptyList();
@@ -135,6 +155,10 @@ public class User extends BaseEntity implements UserDetails {
 
   public List<LoginAttempt> getLoginAttempts() {
     return loginAttempts;
+  }
+
+  public Set<User> getFriends() {
+    return friends;
   }
 
   @Override

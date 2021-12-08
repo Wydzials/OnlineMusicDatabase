@@ -74,11 +74,13 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     szymon.createPlaylist("Moja trzecia playlista");
 
     for (int i = 0; i < 10; i++) {
-      final String username = "User" + (i + 1);
-      final String password = String.valueOf(i + 1);
+      final String username = faker.name().firstName() + " " + faker.name().lastName();
+      final String password = "1";
 
       final User user = new User(username, password);
       users.add(user);
+
+      szymon.addFriend(user);
     }
     userRepository.saveAll(users);
   }

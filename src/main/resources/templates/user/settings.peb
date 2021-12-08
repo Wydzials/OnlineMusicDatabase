@@ -19,7 +19,8 @@
           <div class="row align-items-end">
             <div class="col">
               <p class="lead my-0">
-                <img src="/images/{{ user.imageId }}.jpg" class="rounded-circle" width="120" alt="profile image"></p>
+                <img src="/images/{{ user.imageId }}.jpg" class="rounded-circle" width="120" alt="profile image">
+              </p>
             </div>
 
             <div class="col-8 float-end">

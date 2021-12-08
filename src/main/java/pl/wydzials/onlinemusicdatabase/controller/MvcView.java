@@ -6,11 +6,12 @@ public enum MvcView {
   REGISTER("register"),
   SETTINGS("user/settings"),
   CHANGE_PASSWORD("user/change-password"),
+  PLAYLISTS("user/playlists"),
   ALBUM("album"),
   ARTIST("artist"),
   ARTISTS("artists"),
   SEARCH("search"),
-  PLAYLISTS("user/playlists");
+  PROFILE("profile");
 
   private final String path;
 

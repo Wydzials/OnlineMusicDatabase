@@ -1,0 +1,42 @@
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="userProfile" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+
+  {% extends "base" %}
+  {% import "macros" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <div class="col-9">
+    <div class="col-4 text-center">
+      <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle mb-0 col-9" alt="profile image">
+      <p class="display-6 mt-0">{{ userProfile.username }}</p>
+    </div>
+
+  </div>
+  <div class="col-3">
+    <h3>Znajomi</h3>
+
+    {% for friend in userProfile.friends %}
+      <a href="/profile/{{ friend.id }}" class="link-unstyled">
+        <div class="card mb-3 rounded-pill bg-light">
+          <div class="row g-0">
+            <div class="col-3">
+              <img src="/images/{{ friend.imageId }}.jpg" class="img-fluid rounded-circle" alt="friend profile picture">
+            </div>
+            <div class="col-9 d-flex align-items-center">
+              <div class="card-body">
+                <div class="fs-4 card-text">
+                    {{ friend.username }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

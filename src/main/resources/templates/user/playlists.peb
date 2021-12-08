@@ -117,6 +117,8 @@
 
       {% endif %}
 
+      {% else %}
+      <p class="text-muted">Aby wyświetlić zawartość playlisty, wybierz jej nazwę z menu po lewej stronie.</p>
       {% endif %}
   </div>
 </div>
