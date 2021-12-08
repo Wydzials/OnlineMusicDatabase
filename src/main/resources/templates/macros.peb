@@ -18,21 +18,21 @@
             </div>
             <div class="modal-body">
 
-              <div class="btn-group d-flex">
+              <div class="text-center">
                 {% for stars in [1,2,3,4,5] %}
-                  <div class="col form-check form-check-inline m-1 p-0">
+                  <span class="form-check form-check-inline m-1 p-0">
                     <input class="btn-check" type="radio" name="stars" id="inlineRadio-{{ entity.id }}-{{ stars }}"
                            value="{{ stars }}" autocomplete="off" required>
                     <label class="btn btn-outline-primary" for="inlineRadio-{{ entity.id }}-{{ stars }}">
                       {{ stars }}⭐
                     </label>
-                  </div>
+                  </span>
                 {% endfor %}
-                <div class="col form-check form-check-inline m-1 p-0">
+                <span class="form-check form-check-inline m-1 p-0">
                   <input class="btn-check" type="radio" name="stars" id="inlineRadio-{{ entity.id }}-delete" value="-1"
                          autocomplete="off">
                   <label class="btn btn-outline-danger" for="inlineRadio-{{ entity.id }}-delete">Usuń</label>
-                </div>
+                </span>
               </div>
 
               <div class="row justify-content-center">

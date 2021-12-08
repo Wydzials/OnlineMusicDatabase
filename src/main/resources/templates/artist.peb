@@ -6,19 +6,19 @@
 
 {% block body %}
 
-<div class="row mb-5">
-  <div class="col-4">
+<div class="row mb-5 mx-1">
+  <div class="col-lg-4">
     <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid img-thumbnail bg-dark" alt="artist image">
   </div>
 
-  <div class="col-8">
+  <div class="col-lg-8">
     <div class="row mb-3">
       <h1 class="display-5">{{ artist.name }}</h1>
       <p>{{ artist.description }}</p>
     </div>
 
-    <div class="row">
-      <div class="col-5">
+    <div class="row mx-1">
+      <div class="col-lg-5 mb-3">
         <ul class="list-group">
           <li class="list-group-item fs-4 text-center text-secondary">
             Informacje
@@ -36,7 +36,7 @@
       </div>
 
       {% if artist.links.size() > 0 %}
-        <div class="col-4">
+        <div class="col-lg-4 mx-1">
           <ul class="list-group">
             <li class="list-group-item fs-4 text-center text-secondary">
               Linki
@@ -54,9 +54,9 @@
   </div>
 </div>
 
-<div class="row mb-5">
+<div class="row mb-5 justify-content-center mx-1">
   <h3 class="mb-0">Albumy</h3>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-0">
       {% for album in artist.albums %}
       <div class="col">
         <div class="card bg-light">
@@ -79,29 +79,31 @@
 
 {% if artist.singleRecordings.size() > 0 %}
 <h3>Single</h3>
-<table class="table table-striped my-3">
-  <thead>
-  <tr>
-    <th scope="col">Tytuł</th>
-    <th scope="col">Długość</th>
-    <th scope="col">Średnia ocena</th>
-    <th scope="col">Twoja ocena</th>
-  </tr>
-  </thead>
-  <tbody>
-      {% for recording in artist.singleRecordings %}
+<div class="table-responsive">
+  <table class="table table-striped my-3">
+    <thead>
     <tr>
-      <td>{{ recording.title }}</td>
-      <td>{{ recording.duration | durationFormat }}</td>
-      <td>{{ averageRating(recording) }}</td>
-      <td>
-        {{ userRatingModalButton(recording, userRatings) }}
-          {{ userRatingModal(recording, currentDate) }}
-      </td>
+      <th scope="col">Tytuł</th>
+      <th scope="col">Długość</th>
+      <th scope="col">Średnia ocena</th>
+      <th scope="col">Twoja ocena</th>
     </tr>
-      {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+        {% for recording in artist.singleRecordings %}
+      <tr>
+        <td>{{ recording.title }}</td>
+        <td>{{ recording.duration | durationFormat }}</td>
+        <td>{{ averageRating(recording) }}</td>
+        <td>
+          {{ userRatingModalButton(recording, userRatings) }}
+          {{ userRatingModal(recording, currentDate) }}
+        </td>
+      </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
 
 {% endblock %}

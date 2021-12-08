@@ -6,24 +6,24 @@
 {% block body %}
 
 <div class="row justify-content-center">
-  <h1 class="display-6 pb-3">Ustawienia konta</h1>
+  <h1 class="display-6 mb-3">Ustawienia konta</h1>
 
   <div class="row">
-    <div class="col-5">
+    <div class="col-lg-5 mb-3">
       <h3>Dane użytkownika</h3>
 
       <ul class="list-group">
         <li class="list-group-item">
           <h6>Zdjęcie profilowe</h6>
 
-          <div class="row align-items-end">
-            <div class="col">
-              <p class="lead my-0">
+          <div class="row align-items-end justify-content-center">
+            <div class="col-lg-4">
+              <p class="lead text-center">
                 <img src="/images/{{ user.imageId }}.jpg" class="rounded-circle" width="120" alt="profile image">
               </p>
             </div>
 
-            <div class="col-8 float-end">
+            <div class="col-lg-8 float-end">
               <form action="/user/update-image" method="post" enctype="multipart/form-data">
 
                 <input type="file" class="form-control" id="profileImage" name="profileImage"
@@ -56,7 +56,7 @@
       </ul>
     </div>
 
-    <div class="col-7">
+    <div class="col-lg-7">
       <h3>Ostatnie próby logowania</h3>
 
       <table class="table">

@@ -8,18 +8,18 @@
 
 {% block body %}
 
-<div class="row">
-  <div class="col-3">
+<div class="row mx-1">
+  <div class="col-lg-3">
     <img src="/images/{{ album.imageId }}.jpg" class="img-fluid img-thumbnail bg-dark" alt="album cover">
   </div>
 
-  <div class="col-9">
+  <div class="col-lg-9">
 
     <div class="row mb-3">
       <h1 class="display-5">{{ album.name }}</h1>
     </div>
 
-    <div class="col-5">
+    <div class="col-lg-5">
       <ul class="list-group">
         <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/osoba</strong></span>
           <a href="/artist/{{ album.artist.id }}" class="text-decoration-none">
@@ -44,53 +44,55 @@
   </div>
 </div>
 
-<table class="table table-striped my-3">
-  <thead>
-  <tr>
-    <th scope="col">Pozycja</th>
-    <th scope="col">Tytuł</th>
-    <th scope="col">Długość</th>
-    <th scope="col">Średnia ocena</th>
-    <th scope="col">Twoja ocena</th>
-    {% if user is not null %}
-      <th scope="col">Dodaj do playlisty</th>
-    {% endif %}
-  </tr>
-  </thead>
-  <tbody>
-      {% for recording in album.recordings %}
+<div class="table-responsive">
+  <table class="table table-striped my-3">
+    <thead>
     <tr>
-      <td><strong>#{{ recording.albumPosition }}</strong></td>
-      <td>{{ recording.title }}</td>
-      <td>{{ recording.duration | durationFormat }}</td>
-      <td>{{ averageRating(recording) }}</td>
-      <td>
-        {{ userRatingModalButton(recording, userRatings) }}
-        {{ userRatingModal(recording, currentDate) }}
-      </td>
-
+      <th scope="col">Pozycja</th>
+      <th scope="col">Tytuł</th>
+      <th scope="col">Długość</th>
+      <th scope="col">Średnia ocena</th>
+      <th scope="col">Twoja ocena</th>
       {% if user is not null %}
-        <td>
-          <form method="post" action="/user/playlist/add-recording" class="row g-3" style="width: 200px">
-            <div class="col">
-              <select class="form-select" aria-label="Select playlist" name="playlistId" required>
-                <option selected></option>
-                {% for playlist in user.playlists %}
-                  <option value="{{ playlist.id }}">{{ playlist.name }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <input type="hidden" name="recordingId" value="{{ recording.id }}">
-            <div class="col">
-              <button class="btn btn-outline-primary">💾</button>
-            </div>
-          </form>
-        </td>
+        <th scope="col">Dodaj do playlisty</th>
       {% endif %}
-
     </tr>
-      {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+        {% for recording in album.recordings %}
+      <tr>
+        <td><strong>#{{ recording.albumPosition }}</strong></td>
+        <td>{{ recording.title }}</td>
+        <td>{{ recording.duration | durationFormat }}</td>
+        <td>{{ averageRating(recording) }}</td>
+        <td>
+          {{ userRatingModalButton(recording, userRatings) }}
+        {{ userRatingModal(recording, currentDate) }}
+        </td>
+
+        {% if user is not null %}
+          <td>
+            <form method="post" action="/user/playlist/add-recording" class="row g-3" style="width: 200px">
+              <div class="col">
+                <select class="form-select" aria-label="Select playlist" name="playlistId" required>
+                  <option selected></option>
+                  {% for playlist in user.playlists %}
+                    <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <input type="hidden" name="recordingId" value="{{ recording.id }}">
+              <div class="col">
+                <button class="btn btn-outline-primary">💾</button>
+              </div>
+            </form>
+          </td>
+        {% endif %}
+
+      </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {% endblock %}

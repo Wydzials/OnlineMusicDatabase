@@ -22,7 +22,7 @@
 <div class="container mb-5">
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
     <div class="container-fluid">
-      <img src="/headphones.svg" alt="logo" width="80" class="px-2">
+      <img src="/headphones.svg" alt="logo" width="80" class="px-2 d-none d-md-block">
       <a class="navbar-brand text-primary" style="font-size: 2rem">
         Muzyczna Baza
       </a>
@@ -37,40 +37,38 @@
           <li class="nav-item"><a href="#" class="nav-link">Utwory</a></li>
         </ul>
 
-        <form class="d-flex mx-3" method="get" action="/search">
-          <input class="form-control mx-1" type="search" placeholder="Wyszukaj" aria-label="search" name="query">
+        <form class="mx-lg-3 mb-2 mb-lg-0" method="get" action="/search">
+          <input class="form-control" type="search" placeholder="Wyszukaj" aria-label="search" name="query">
         </form>
 
         {% if username is not null and user is not null %}
-          <div class="d-flex">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
-                <a class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
-                  <img src="/images/{{ user.imageId }}.jpg" alt="profile picture" width="32" height="32"
-                       class="rounded-circle">
-                  {{ username }}
-                </a>
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="/images/{{ user.imageId }}.jpg" alt="profile picture" width="32" height="32"
+                     class="rounded-circle">
+                {{ username }}
+              </a>
 
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li><h6 class="dropdown-header text-primary">Znajomi</h6></li>
-                  <li><a class="dropdown-item" href="/profile/{{ user.id }}">Profil</a></li>
-                  <li><a class="dropdown-item" href="/user/friend-requests">Zaproszenia</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><h6 class="dropdown-header text-primary">Znajomi</h6></li>
+                <li><a class="dropdown-item" href="/profile/{{ user.id }}">Profil</a></li>
+                <li><a class="dropdown-item" href="/user/friend-requests">Zaproszenia</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
 
-                  <li><h6 class="dropdown-header text-primary">Konto</h6></li>
-                  <li><a class="dropdown-item" href="/user/playlists">Playlisty</a></li>
-                  <li><a class="dropdown-item" href="/user/settings">Ustawienia</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
+                <li><h6 class="dropdown-header text-primary">Konto</h6></li>
+                <li><a class="dropdown-item" href="/user/playlists">Playlisty</a></li>
+                <li><a class="dropdown-item" href="/user/settings">Ustawienia</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
 
-                  <li><a class="dropdown-item text-danger" href="/logout">Wyloguj</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+                <li><a class="dropdown-item text-danger" href="/logout">Wyloguj</a></li>
+              </ul>
+            </li>
+          </ul>
           {% else %}
           <a class="btn btn-outline-primary" href="/login">Logowanie</a>
         {% endif %}

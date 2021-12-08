@@ -13,11 +13,11 @@
     {% for friendRequest in user.friendRequestsSent %}
       <div class="card mb-3 rounded-pill bg-light">
         <div class="row g-0">
-          <div class="col-3">
+          <div class="col-md-3 col-4">
             <img src="/images/{{ friendRequest.recipient.imageId }}.jpg" class="img-fluid rounded-circle"
                  alt="friend profile picture">
           </div>
-          <div class="col-9 d-flex align-items-center">
+          <div class="col-md-9 col-8 d-flex align-items-center">
             <div class="card-body">
               <div class="fs-5 card-text">
                 <a href="/profile/{{ friendRequest.recipient.id }}" class="link-unstyled">

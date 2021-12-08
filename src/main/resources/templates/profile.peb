@@ -7,8 +7,8 @@
 {% block body %}
 
 <div class="row justify-content-center">
-  <div class="col-9">
-    <div class="col-4 text-center">
+  <div class="col-lg-9 mb-3">
+    <div class="col-lg-4 text-center">
       <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle mb-0 col-9" alt="profile image">
       <p class="display-6 mt-0">{{ userProfile.username }}</p>
 
@@ -31,7 +31,7 @@
     </div>
 
   </div>
-  <div class="col-3">
+  <div class="col-lg-3">
     <h3>Znajomi</h3>
 
     {% for friend in userProfile.friends %}

@@ -9,7 +9,7 @@
 {% block body %}
 
 
-<div class="row justify-content-center gx-6">
+<div class="row justify-content-center gx-6 mx-1">
   <h1>Wyniki wyszukiwania: <span class="display-6"><em>{{ query }}</em></span></h1>
 
   <nav aria-label="page navigation" class="mt-2">
