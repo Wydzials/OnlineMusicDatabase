@@ -18,6 +18,8 @@
         <label for="floatingPassword">Hasło</label>
       </div>
 
+      {{ csrf(request) }}
+
       <button class="w-100 btn btn-lg btn-primary" type="submit">Zaloguj się</button>
       <hr class="my-4">
       <small class="text-muted">Nie masz konta? <a href="/register">Zarejestruj się</a>.</small>
@@ -25,5 +27,3 @@
   </div>
 
   {% endblock %}
-
-

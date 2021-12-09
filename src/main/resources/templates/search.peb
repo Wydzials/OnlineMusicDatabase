@@ -4,7 +4,6 @@
 {# @pebvariable name="artists" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist>" #}
 
   {% extends "base" %}
-  {% import "macros" %}
 
 {% block body %}
 
@@ -76,7 +75,7 @@
           <div class="card mb-3 bg-light">
             <div class="row g-0">
               <div class="col-md-5">
-                <a href="/albums/{{ album.id }}" class="link-unstyled">
+                <a href="/album/{{ album.id }}" class="link-unstyled">
                   <img src="/images/{{ album.imageId }}.jpg" class="img-fluid rounded-start" alt="album cover">
                 </a>
               </div>

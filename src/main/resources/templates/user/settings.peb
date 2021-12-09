@@ -29,6 +29,7 @@
                 <input type="file" class="form-control" id="profileImage" name="profileImage"
                        accept=".jpg,.jpeg,.png,.bmp,.wbmp" required>
 
+                {{ csrf(request) }}
                 <button class="btn btn-outline-primary mt-3 float-end" type="submit">Aktualizuj zdjęcie</button>
               </form>
             </div>
@@ -46,6 +47,7 @@
               </label>
             </div>
             <div class="col-auto">
+              {{ csrf(request) }}
               <button class="btn btn-outline-primary" type="submit">Zmień nazwę</button>
             </div>
           </form>

@@ -26,6 +26,7 @@
 
                 <form action="/user/friend-request/cancel" method="post">
                   <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
+                  {{ csrf(request) }}
                   <button class="btn btn-outline-danger" type="submit">Anuluj</button>
                 </form>
               </div>
@@ -57,12 +58,14 @@
                 <form action="/user/friend-request/respond" method="post" class="col-4">
                   <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
                   <input type="hidden" name="accept" value="True">
+                  {{ csrf(request) }}
                   <button class="btn btn-outline-success" type="submit">Akceptuj</button>
                 </form>
 
                 <form action="/user/friend-request/respond" method="post" class="col-4">
                   <input type="hidden" name="friendRequestId" value="{{ friendRequest.id }}">
                   <input type="hidden" name="accept" value="False">
+                  {{ csrf(request) }}
                   <button class="btn btn-outline-danger" type="submit">Odrzuć</button>
                 </form>
 

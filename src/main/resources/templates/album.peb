@@ -4,7 +4,6 @@
 
 
   {% extends "base" %}
-  {% import "macros" %}
 
 {% block body %}
 
@@ -37,7 +36,7 @@
         </li>
         <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
           {{ userRatingModalButton(album, userRatings) }}
-          {{ userRatingModal(album, currentDate) }}
+          {{ userRatingModal(album, currentDate, request) }}
         </li>
       </ul>
     </div>
@@ -67,7 +66,7 @@
         <td>{{ averageRating(recording) }}</td>
         <td>
           {{ userRatingModalButton(recording, userRatings) }}
-        {{ userRatingModal(recording, currentDate) }}
+        {{ userRatingModal(recording, currentDate, request) }}
         </td>
 
         {% if user is not null %}
@@ -83,6 +82,7 @@
               </div>
               <input type="hidden" name="recordingId" value="{{ recording.id }}">
               <div class="col">
+                {{ csrf(request) }}
                 <button class="btn btn-outline-primary">💾</button>
               </div>
             </form>

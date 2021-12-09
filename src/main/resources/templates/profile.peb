@@ -2,7 +2,6 @@
 {# @pebvariable name="userProfile" type="pl.wydzials.onlinemusicdatabase.model.User" #}
 
   {% extends "base" %}
-  {% import "macros" %}
 
 {% block body %}
 
@@ -23,6 +22,7 @@
           {% else %}
           <form action="/user/friend-request" method="post">
             <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
+            {{ csrf(request) }}
             <button class="btn btn-outline-primary" type="submit">Zaproś do znajomych</button>
           </form>
         {% endif %}

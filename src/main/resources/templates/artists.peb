@@ -2,7 +2,6 @@
 {# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
 
   {% extends "base" %}
-  {% import "macros" %}
 
 {% block body %}
 
@@ -65,7 +64,7 @@
                   <p class="card-text">
                     {{ averageRating(artist) }}
                     {{ userRatingModalButton(artist, userRatings) }}
-                    {{ userRatingModal(artist, currentDate) }}
+                    {{ userRatingModal(artist, currentDate, request) }}
                   </p>
                 </div>
               </div>

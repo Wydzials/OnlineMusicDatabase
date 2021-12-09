@@ -5,7 +5,7 @@
   </a>
   {% endmacro %}
 
-    {% macro userRatingModal(entity, currentDate) %}
+    {% macro userRatingModal(entity, currentDate, request) %}
     {# @pebvariable name="currentDate" type="java.time.LocalDate" #}
     <div class="modal fade" id="rating-{{ entity.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -48,6 +48,7 @@
             </div>
 
             <div class="modal-footer">
+              {{ csrf(request) }}
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
               <button type="submit" class="btn btn-primary">Zapisz ocenę</button>
             </div>
@@ -58,14 +59,18 @@
     {% endmacro %}
 
 
-  {% macro userRatingModalButton(entity, userRatingsContainer) %}
-  {# @pebvariable name="userRatingsContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
-  {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
+    {% macro userRatingModalButton(entity, userRatingsContainer) %}
+    {# @pebvariable name="userRatingsContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+    {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
 
-    {% set userRating = userRatingsContainer.getUserRating(entity.id) %}
+      {% set userRating = userRatingsContainer.getUserRating(entity.id) %}
 
-  <button type="button" class="btn btn-primary btn-fixed-width" data-bs-toggle="modal"
-          data-bs-target="#rating-{{ entity.id }}">
-      {{ userRating is null ? "Oceń" : "⭐" + userRating }}
-  </button>
+    <button type="button" class="btn btn-primary btn-fixed-width" data-bs-toggle="modal"
+            data-bs-target="#rating-{{ entity.id }}">
+        {{ userRating is null ? "Oceń" : "⭐" + userRating }}
+    </button>
+    {% endmacro %}
+
+  {% macro csrf(request) %}
+  <input type="hidden" name="_csrf" value="{{ request.getAttribute("_csrf").getToken() }}">
   {% endmacro %}
