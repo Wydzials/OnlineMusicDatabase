@@ -25,6 +25,8 @@ public class Rating extends BaseEntity {
 
   private LocalDateTime created;
 
+  private Class<? extends RateableEntity> entityClass;
+
   @Deprecated
   protected Rating() {
   }
@@ -38,10 +40,15 @@ public class Rating extends BaseEntity {
     this.user = user;
     this.stars = stars;
     this.created = date.atTime(GlobalConfiguration.getCurrentTime());
+    this.entityClass = entity.getClass();
   }
 
   public int getStarsValue() {
     return stars.getValue();
+  }
+
+  public RateableEntity getEntity() {
+    return entity;
   }
 
   @Override

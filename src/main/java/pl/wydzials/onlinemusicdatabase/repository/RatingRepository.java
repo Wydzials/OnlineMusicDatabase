@@ -3,6 +3,7 @@ package pl.wydzials.onlinemusicdatabase.repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
@@ -16,4 +17,13 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
   @Query("select r from Rating r where r.user = :user and r.entity = :entity")
   Optional<Rating> findByUserAndEntity(User user, RateableEntity entity);
+
+  @Query("select r from Rating r where r.user = :user "
+      + "and r.entityClass = :entityClass "
+      + "order by r.created desc")
+  List<Rating> findByUserOrderByDateDesc(User user, Class<? extends RateableEntity> entityClass, Pageable pageable);
+
+  @Query("select count(r) from Rating r where r.user = :user "
+      + "and r.entityClass = :entityClass ")
+  long countRatingsByUser(User user, Class<? extends RateableEntity> entityClass);
 }

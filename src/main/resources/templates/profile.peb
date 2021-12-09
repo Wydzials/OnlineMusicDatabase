@@ -1,34 +1,114 @@
 {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
 {# @pebvariable name="userProfile" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="userProfileRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+{# @pebvariable name="tabs" type="java.util.Map<java.lang.String, java.lang.String>" #}
+{# @pebvariable name="recordings" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Recording>" #}
 
   {% extends "base" %}
 
 {% block body %}
 
 <div class="row justify-content-center">
+
   <div class="col-lg-9 mb-3">
-    <div class="col-lg-4 text-center">
-      <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle mb-0 col-9" alt="profile image">
-      <p class="display-6 mt-0">{{ userProfile.username }}</p>
+    <div class="row">
+      <div class="col-lg-4 text-center">
+        <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle mb-0 col-9"
+             alt="profile image">
+        <p class="display-6 mt-0">{{ userProfile.username }}</p>
 
-      {% if user is not null and userProfile.id != user.id %}
+        {% if user is not null and userProfile.id != user.id %}
 
-        {% if user.isFriendOf(userProfile) %}
-          <button class="btn btn-outline-primary" type="submit" disabled>Jesteście znajomymi</button>
-          {% elseif user.hasFriendRequestSentTo(userProfile) %}
-          <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już wysłane</button>
-          {% elseif user.hasFriendRequestSentFrom(userProfile) %}
-          <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już otrzymane</button>
-          {% else %}
-          <form action="/user/friend-request" method="post">
-            <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
-            {{ csrf(request) }}
-            <button class="btn btn-outline-primary" type="submit">Zaproś do znajomych</button>
-          </form>
+          {% if user.isFriendOf(userProfile) %}
+            <button class="btn btn-outline-primary" type="submit" disabled>Jesteście znajomymi</button>
+            {% elseif user.hasFriendRequestSentTo(userProfile) %}
+            <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już wysłane</button>
+            {% elseif user.hasFriendRequestSentFrom(userProfile) %}
+            <button class="btn btn-outline-primary" type="submit" disabled>Zaproszenie zostało już otrzymane</button>
+            {% else %}
+            <form action="/user/friend-request" method="post">
+              <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
+              {{ csrf(request) }}
+              <button class="btn btn-outline-primary" type="submit">Zaproś do znajomych</button>
+            </form>
+          {% endif %}
+
         {% endif %}
-
-      {% endif %}
+      </div>
+      <div class="col-lg-8">
+      </div>
     </div>
+
+    <ul class="nav nav-tabs my-3">
+        {% for tab in tabs %}
+        <li class="nav-item">
+          <a class="nav-link {{ request.getParameter("tab") == tab.key ? 'active' : '' }}"
+             href="/profile/{{ userProfile.id }}?tab={{ tab.key }}">{{ tab.value }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if request.getParameter("tab") == "recordings" %}
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <h3 class="display-6">Oceny utworów</h3>
+          <h5 class="mb-3">Całkowita liczba ocen: {{ totalCount }}</h5>
+
+          <div class="row row-cols-1 g-1">
+              {% for recording in recordings %}
+              <div class="col">
+                <div class="card mb-3 bg-light">
+                  <div class="card-body">
+                    <h5 class="card-title text-center">{{ recording.title }}</h5>
+                    <div class="card-text">
+                      <ul class="list-group">
+
+                        {% if not recording.single %}
+                          <li class="list-group-item text-end">
+                            <span class="float-start"><strong>Album&nbsp;</strong></span>
+                            <a href="/album/{{ recording.album.id }}" class="link-unstyled text-primary">
+                                {{ recording.album.name }}
+                            </a>
+                          </li>
+                        {% endif %}
+
+                        <li class="list-group-item text-end"><span
+                            class="float-start"><strong>Artysta&nbsp;</strong></span>
+                          <a href="/artist/{{ recording.artist.id }}" class="link-unstyled text-primary">
+                              {{ recording.artist.name }}
+                          </a>
+                        </li>
+
+                        <li class="list-group-item text-end">
+                          <span class="float-start"><strong>Ocena użytkownika&nbsp;</strong></span>
+                          {{ userProfileRatingModalButton(recording, userProfileRatings) }}
+                        </li>
+
+                        {% if user is not null %}
+                          <li class="list-group-item text-end">
+                            <span class="float-start"><strong>Twoja ocena&nbsp;</strong></span>
+                            {{ userRatingModalButton(recording, userRatings) }}
+                            {{ userRatingModal(recording, currentDate, request) }}
+                          </li>
+                        {% endif %}
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              {% else %}
+              <h6>Użytkownik nie ocenił jeszcze żadnych utworów</h6>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+
+
+    {% endif %}
 
   </div>
   <div class="col-lg-3">

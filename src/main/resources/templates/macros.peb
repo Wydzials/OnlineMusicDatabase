@@ -71,6 +71,17 @@
     </button>
     {% endmacro %}
 
+    {% macro userProfileRatingModalButton(entity, userRatingsContainer) %}
+    {# @pebvariable name="userRatingsContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+    {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
+
+      {% set userRating = userRatingsContainer.getUserRating(entity.id) %}
+
+    <button type="button" class="btn btn-primary btn-fixed-width">
+        {{ userRating is null ? "Brak oceny" : "⭐" + userRating }}
+    </button>
+    {% endmacro %}
+
   {% macro csrf(request) %}
   <input type="hidden" name="_csrf" value="{{ request.getAttribute("_csrf").getToken() }}">
   {% endmacro %}

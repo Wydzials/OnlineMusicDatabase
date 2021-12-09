@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,11 @@ import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
 @Transactional
 public class LoginSuccesHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  public LoginSuccesHandler(final UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Override
   public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
@@ -38,7 +40,7 @@ public class LoginSuccesHandler extends SavedRequestAwareAuthenticationSuccessHa
 
   private void handleCustomLoginLogic(final HttpServletRequest request, final Authentication authentication) {
     final String username = request.getParameter("username");
-    final User user = userRepository.findByUsername(username).orElseThrow();
+    final User user = userRepository.findByUsername(username.trim()).orElseThrow();
 
     user.addLoginAttempt(request.getRemoteAddr(), true);
   }
