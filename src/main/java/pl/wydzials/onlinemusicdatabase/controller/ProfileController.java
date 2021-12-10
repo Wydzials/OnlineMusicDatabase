@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.wydzials.onlinemusicdatabase.model.Album;
+import pl.wydzials.onlinemusicdatabase.model.Artist;
 import pl.wydzials.onlinemusicdatabase.model.FriendRequest;
+import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating;
 import pl.wydzials.onlinemusicdatabase.model.Recording;
 import pl.wydzials.onlinemusicdatabase.model.User;
@@ -44,11 +47,15 @@ public class ProfileController extends BaseController {
 
   @GetMapping("/profile/{id}")
   public String getProfile(@PathVariable final Long id, @RequestParam(required = false) String tab,
-      final Model model, final Principal principal) {
+      @RequestParam(required = false) final Integer page, final Model model, final Principal principal) {
     Validation.notNull(id);
 
     if (Tab.fromString(tab).isEmpty()) {
-      return "redirect:/profile/" + id + "?tab=recordings";
+      return "redirect:/profile/" + id + "?tab=recordings&page=1";
+    }
+
+    if (page == null || page < 0) {
+      return "redirect:/profile/" + id + "?tab=" + tab + "&page=1";
     }
 
     final User userProfile = userRepository.findById(id).orElseThrow();
@@ -57,24 +64,10 @@ public class ProfileController extends BaseController {
     final Tab activeTab = Tab.fromString(tab).orElseThrow();
 
     switch (activeTab) {
-      case RECORDINGS -> {
-        final List<Rating> userProfileRatings = ratingRepository.findByUserOrderByDateDesc(userProfile, Recording.class,
-            PageRequest.of(0, 10));
-
-        final List<Recording> recordings = userProfileRatings.stream()
-            .map(Rating::getEntity)
-            .filter(entity -> entity instanceof Recording)
-            .map(entity -> (Recording) entity)
-            .collect(Collectors.toList());
-        model.addAttribute("recordings", recordings);
-
-        model.addAttribute("userProfileRatings", new UserRatingsContainer(userProfileRatings));
-        model.addAttribute("userRatings", createUserRatingsContainer(principal, recordings));
-
-        final long totalCount = ratingRepository.countRatingsByUser(userProfile, Recording.class);
-        model.addAttribute("totalCount", totalCount);
-      }
-      case ALBUMS, ARTISTS, STATISTICS -> {}
+      case RECORDINGS -> prepareModelWithRatings(userProfile, model, principal, page, Recording.class);
+      case ALBUMS -> prepareModelWithRatings(userProfile, model, principal, page, Album.class);
+      case ARTISTS -> prepareModelWithRatings(userProfile, model, principal, page, Artist.class);
+      case STATISTICS -> {}
     }
 
     Map<String, String> tabs = new LinkedHashMap<>();
@@ -82,7 +75,10 @@ public class ProfileController extends BaseController {
     tabs.put("recordings", "Oceny utworów");
     tabs.put("albums", "Oceny albumów");
     tabs.put("artists", "Oceny artystów");
+
     model.addAttribute("tabs", tabs);
+    model.addAttribute("page", page);
+    model.addAttribute("tab", tab);
 
     return MvcView.PROFILE.get();
   }
@@ -151,6 +147,27 @@ public class ProfileController extends BaseController {
 
   public record CancelFriendRequest(long friendRequestId) {
 
+  }
+
+  private <T extends RateableEntity> void prepareModelWithRatings(final User userProfile, final Model model,
+      final Principal principal, final int page, final Class<T> clazz) {
+
+    final PageRequest pageRequest = PageRequest.of(page - 1, 10);
+    final List<Rating> userProfileRatings = ratingRepository.findByUserOrderByDateDesc(userProfile, clazz, pageRequest);
+
+    final List<T> entities = userProfileRatings.stream()
+        .map(Rating::getEntity)
+        .filter(entity -> clazz.isAssignableFrom(entity.getClass()))
+        .map(clazz::cast)
+        .collect(Collectors.toList());
+
+    model.addAttribute(clazz.getSimpleName().toLowerCase() + "s", entities);
+
+    model.addAttribute("userProfileRatings", new UserRatingsContainer(userProfileRatings));
+    model.addAttribute("userRatings", createUserRatingsContainer(principal, entities));
+
+    final long totalCount = ratingRepository.countRatingsByUser(userProfile, clazz);
+    model.addAttribute("totalCount", totalCount);
   }
 
   private enum Tab {
