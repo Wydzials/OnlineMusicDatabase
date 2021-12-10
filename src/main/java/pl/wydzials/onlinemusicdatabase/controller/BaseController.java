@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +108,13 @@ public class BaseController {
     modelAndView.setViewName(MvcView.INDEX.get());
     modelAndView.addObject("flashMessages", Collections.singletonList("Nie znaleziono podanego zasobu."));
     return modelAndView;
+  }
+
+  Optional<Integer> parseToInteger(final String value) {
+    try {
+      return Optional.of(Integer.parseInt(value));
+    } catch (NumberFormatException e) {
+      return Optional.empty();
+    }
   }
 }

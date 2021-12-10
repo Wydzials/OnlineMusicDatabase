@@ -11,6 +11,7 @@ public enum MvcView {
   ALBUM("album"),
   ARTIST("artist"),
   ARTISTS("artists"),
+  ALBUMS("albums"),
   SEARCH("search"),
   PROFILE("profile");
 

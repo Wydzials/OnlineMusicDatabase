@@ -36,6 +36,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a href="/" class="nav-link">Strona główna</a></li>
           <li class="nav-item"><a href="/artists" class="nav-link">Artyści</a></li>
+          <li class="nav-item"><a href="/albums" class="nav-link">Albumy</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Utwory</a></li>
         </ul>
 
@@ -63,6 +64,7 @@
                 <li><h6 class="dropdown-header text-primary">Konto</h6></li>
                 <li><a class="dropdown-item" href="/user/playlists">Playlisty</a></li>
                 <li><a class="dropdown-item" href="/user/settings">Ustawienia</a></li>
+                <li><a class="dropdown-item" href="/user/change-password">Zmień hasło</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>

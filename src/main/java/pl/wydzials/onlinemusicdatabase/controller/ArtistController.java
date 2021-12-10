@@ -3,7 +3,8 @@ package pl.wydzials.onlinemusicdatabase.controller;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,20 +61,19 @@ public class ArtistController extends BaseController {
       return "redirect:/artists?artistType=" + artistType;
     }
 
-    final List<Artist> topArtists = artistRepository.findTopArtists(10, artistTypeFilter,
-        minRatingsFilter, maxRatingsFilter);
+    final Set<ArtistType> artistTypes;
+    if (artistTypeFilter == null) {
+      artistTypes = Set.of(ArtistType.BAND, ArtistType.PERSON);
+    } else {
+      artistTypes = Set.of(artistTypeFilter);
+    }
+
+    final List<Artist> topArtists = artistRepository.findTopArtists(artistTypes, minRatingsFilter, maxRatingsFilter,
+        PageRequest.of(0, 10));
 
     model.addAttribute("topArtists", topArtists);
     model.addAttribute("userRatings", createUserRatingsContainer(principal, topArtists));
 
     return MvcView.ARTISTS.get();
-  }
-
-  private Optional<Integer> parseToInteger(final String value) {
-    try {
-      return Optional.of(Integer.parseInt(value));
-    } catch (NumberFormatException e) {
-      return Optional.empty();
-    }
   }
 }
