@@ -14,4 +14,10 @@ public interface RecordingRepository extends JpaRepository<Recording, Long> {
       + "where lower(r.title) like %:query% "
       + "order by r.numberOfRatings desc")
   List<Recording> search(String query, Pageable pageable);
+
+  @Query("select r from Recording r "
+      + "where r.numberOfRatings >= :minRatings "
+      + "and r.numberOfRatings <= :maxRatings "
+      + "order by r.averageRating desc")
+  List<Recording> findTopRecordings(final int minRatings, final int maxRatings, Pageable pageable);
 }

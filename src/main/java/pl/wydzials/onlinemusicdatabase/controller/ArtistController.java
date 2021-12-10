@@ -52,8 +52,8 @@ public class ArtistController extends BaseController {
       @RequestParam(required = false) String minRatings,
       @RequestParam(required = false) String maxRatings) {
 
-    final Integer minRatingsFilter = parseToInteger(minRatings).orElse(0);
-    final Integer maxRatingsFilter = parseToInteger(maxRatings).orElse(Integer.MAX_VALUE);
+    final int minRatingsFilter = parseToInteger(minRatings).orElse(0);
+    final int maxRatingsFilter = parseToInteger(maxRatings).orElse(Integer.MAX_VALUE);
     final ArtistType artistTypeFilter = ArtistType.of(artistType).orElse(null);
 
     if (minRatingsFilter > maxRatingsFilter) {

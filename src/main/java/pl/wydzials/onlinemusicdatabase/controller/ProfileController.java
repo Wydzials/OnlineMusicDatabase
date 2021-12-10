@@ -45,6 +45,16 @@ public class ProfileController extends BaseController {
     this.ratingRepository = ratingRepository;
   }
 
+  @GetMapping("/profile")
+  public String getMyProfile(final Principal principal) {
+    if (principal == null) {
+      return "redirect:/";
+    }
+
+    final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+    return "redirect:/profile/" + user.getId();
+  }
+
   @GetMapping("/profile/{id}")
   public String getProfile(@PathVariable final Long id, @RequestParam(required = false) String tab,
       @RequestParam(required = false) final Integer page, final Model model, final Principal principal) {

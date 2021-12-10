@@ -1,0 +1,86 @@
+{# @pebvariable name="topRecordings" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Recording>" #}
+{# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+  {% extends "base" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-6 col-md-8 mb-2">
+    <h2>Ranking najlepiej ocenianych utworów</h2>
+
+    <form action="/recordings" method="get" class="mb-3">
+      <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
+
+        <div class="col-md-4">
+          <label for="minRatings" class="form-label">Minimalna liczba ocen</label>
+          <input type="number" min="0" max="10000000" step="1" class="form-control" id="minRatings" name="minRatings"
+                 value="{{ request.getParameter("minRatings") }}" aria-label="minRatings">
+        </div>
+
+        <div class="col-md-4">
+          <label for="maxRatings" class="form-label">Maksymalna liczba ocen</label>
+          <input type="number" min="0" max="10000000" step="1" class="form-control" id="maxRatings" name="maxRatings"
+                 value="{{ request.getParameter("maxRatings") }}" aria-label="maxRatings">
+        </div>
+      </div>
+
+      <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
+        <button type="submit" class="btn btn-primary mt-3 col-6 col-md-4 align-self-start">Filtruj</button>
+      </div>
+    </form>
+
+    <div class="row-cols-1 mx-1">
+        {% for recording in topRecordings %}
+        <div class="col mb-3">
+          <div class="card bg-light">
+            <div class="row g-0 p-1">
+              <div class="col-lg-1 col-3 d-flex flex-column justify-content-center align-items-center">
+                <h1 style="font-size: xxx-large">{{ loop.index + 1 }}</h1>
+              </div>
+
+              <div class="col-lg-5 col-9 flex-column justify-content-center h-100">
+                <ul class="list-group">
+                  {% if not recording.single %}
+                    <li class="list-group-item text-end">
+                      <span class="float-start"><strong>Album&nbsp;</strong></span>
+                      <a href="/album/{{ recording.album.id }}" class="link-unstyled text-primary">
+                          {{ recording.album.name }}
+                      </a>
+                    </li>
+                  {% endif %}
+
+                  <li class="list-group-item text-end"><span
+                      class="float-start"><strong>Artysta&nbsp;</strong></span>
+                    <a href="/artist/{{ recording.artist.id }}" class="link-unstyled text-primary">
+                        {{ recording.artist.name }}
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
+
+              <div class="col-lg-6 col">
+                <div class="card-body">
+                  <a href="/album/{{ recording.id }}" class="link-unstyled">
+                    <h5 class="card-title">{{ recording.title }}</h5>
+                  </a>
+                  <p class="card-text">
+                    <span class="mb-1">
+                        {{ averageRating(recording) }}
+                    </span>
+                    {{ userRatingModalButton(recording, userRatings) }}
+                    {{ userRatingModal(recording, currentDate, request) }}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

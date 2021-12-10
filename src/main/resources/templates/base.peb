@@ -37,7 +37,7 @@
           <li class="nav-item"><a href="/" class="nav-link">Strona główna</a></li>
           <li class="nav-item"><a href="/artists" class="nav-link">Artyści</a></li>
           <li class="nav-item"><a href="/albums" class="nav-link">Albumy</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Utwory</a></li>
+          <li class="nav-item"><a href="/recordings" class="nav-link">Utwory</a></li>
         </ul>
 
         <form class="mx-lg-3 mb-2 mb-lg-0" method="get" action="/search">
@@ -55,7 +55,7 @@
 
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><h6 class="dropdown-header text-primary">Znajomi</h6></li>
-                <li><a class="dropdown-item" href="/profile/{{ user.id }}">Profil</a></li>
+                <li><a class="dropdown-item" href="/profile">Profil</a></li>
                 <li><a class="dropdown-item" href="/user/friend-requests">Zaproszenia</a></li>
                 <li>
                   <hr class="dropdown-divider">

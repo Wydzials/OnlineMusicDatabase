@@ -27,6 +27,7 @@ public class LoginSuccesHandler extends SavedRequestAwareAuthenticationSuccessHa
       final FilterChain chain, final Authentication authentication) throws IOException, ServletException {
 
     handleCustomLoginLogic(request, authentication);
+    response.sendRedirect("/profile");
     super.onAuthenticationSuccess(request, response, chain, authentication);
   }
 
@@ -35,6 +36,7 @@ public class LoginSuccesHandler extends SavedRequestAwareAuthenticationSuccessHa
       final Authentication authentication) throws IOException, ServletException {
 
     handleCustomLoginLogic(request, authentication);
+    response.sendRedirect("/profile");
     super.onAuthenticationSuccess(request, response, authentication);
   }
 

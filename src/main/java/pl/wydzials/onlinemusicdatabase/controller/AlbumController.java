@@ -39,7 +39,7 @@ public class AlbumController extends BaseController {
   }
 
   @GetMapping("/albums")
-  public String getArtists(final Principal principal, final Model model, final RedirectAttributes redirectAttributes,
+  public String getAlbums(final Principal principal, final Model model, final RedirectAttributes redirectAttributes,
       @RequestParam(required = false) String minRatings,
       @RequestParam(required = false) String maxRatings,
       @RequestParam(required = false) String minYear,
