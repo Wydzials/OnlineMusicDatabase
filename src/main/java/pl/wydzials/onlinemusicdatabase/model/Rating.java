@@ -2,12 +2,15 @@ package pl.wydzials.onlinemusicdatabase.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.persistence.AttributeConverter;
 import javax.persistence.CascadeType;
 import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
@@ -27,6 +30,9 @@ public class Rating extends BaseEntity {
 
   private Class<? extends RateableEntity> entityClass;
 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "rating")
+  private Set<UserLike> likes = new HashSet<>();
+
   @Deprecated
   protected Rating() {
   }
@@ -36,11 +42,38 @@ public class Rating extends BaseEntity {
     Validation.notNull(user);
     Validation.notNull(stars);
 
+    Validation.notNull(date);
+    if (date.isAfter(GlobalConfiguration.getCurrentDate()))
+      Validation.throwIllegalArgumentException();
+
     this.entity = entity;
     this.user = user;
     this.stars = stars;
     this.created = date.atTime(GlobalConfiguration.getCurrentTime());
     this.entityClass = entity.getClass();
+  }
+
+  public void createLike(final User user) {
+    Validation.notNull(user);
+    if (likes.stream().anyMatch(like -> like.isUserEqualTo(user)))
+      Validation.throwIllegalArgumentException();
+
+    final UserLike like = new UserLike(this, user);
+    likes.add(like);
+  }
+
+  public void removeLike(final User user) {
+    Validation.notNull(user);
+    if (likes.stream().noneMatch(like -> like.isUserEqualTo(user)))
+      Validation.throwIllegalArgumentException();
+
+    likes.removeIf(l -> l.isUserEqualTo(user));
+  }
+
+  public boolean hasLikeBy(final User user) {
+    Validation.notNull(user);
+
+    return likes.stream().anyMatch(like -> like.isUserEqualTo(user));
   }
 
   public int getStarsValue() {

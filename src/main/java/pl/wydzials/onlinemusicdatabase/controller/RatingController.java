@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating;
@@ -22,7 +21,6 @@ import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
 @Transactional
-@RequestMapping("/user/rating")
 public class RatingController extends BaseController {
 
   private final RatingRepository ratingRepository;
@@ -36,7 +34,7 @@ public class RatingController extends BaseController {
     this.rateableEntityRepository = rateableEntityRepository;
   }
 
-  @PostMapping("/{id}")
+  @PostMapping("/user/rating/{id}")
   public String postRating(@PathVariable final Long id, final PostRatingRequest request, final Principal principal,
       final HttpServletRequest httpServletRequest, final RedirectAttributes redirectAttributes) {
     Validation.notNull(id);
@@ -63,6 +61,23 @@ public class RatingController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
+  @PostMapping("/user/like")
+  public String postLike(final PostLikeRequest request, final Principal principal,
+      final HttpServletRequest httpServletRequest) {
+    Validation.notNull(request);
+    Validation.notNull(principal);
+
+    final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+    final Rating rating = ratingRepository.findById(request.ratingId()).orElseThrow();
+    if (request.create()) {
+      rating.createLike(user);
+    } else {
+      rating.removeLike(user);
+    }
+
+    return redirectToReferrer(httpServletRequest);
+  }
+
   public record PostRatingRequest(int stars, String date) {
 
     public boolean isDeleteRequest() {
@@ -72,5 +87,9 @@ public class RatingController extends BaseController {
     public Stars getStarsEnum() {
       return Stars.of(stars);
     }
+  }
+
+  public record PostLikeRequest(long ratingId, boolean create) {
+
   }
 }

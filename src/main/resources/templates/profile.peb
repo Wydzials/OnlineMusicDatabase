@@ -93,7 +93,32 @@
 
                           <li class="list-group-item text-end">
                             <span class="float-start"><strong>Ocena użytkownika&nbsp;</strong></span>
-                            {{ userProfileRatingModalButton(recording, userProfileRatings) }}
+
+                            {% if user is not null %}
+                              {% set userProfileRating = userProfileRatings.getUserRatingObject(recording.id) %}
+                              <form method="post" action="/user/like">
+                                <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
+                                {{ csrf(request) }}
+
+                                {% if userProfileRating.hasLikeBy(user) %}
+                                  <input type="hidden" name="create" value="false">
+                                  <button class="btn btn-outline-primary my-1" type="submit">
+                                    <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
+                                  </button>
+
+                                  {% else %}
+                                  <input type="hidden" name="create" value="true">
+                                  <button class="btn btn-outline-primary my-1" type="submit">
+                                    <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
+                                  </button>
+                                {% endif %}
+
+                                {{ userProfileRatingModalButton(recording, userProfileRatings) }}
+                              </form>
+
+                              {% else %}
+                              {{ userProfileRatingModalButton(recording, userProfileRatings) }}
+                            {% endif %}
                           </li>
 
                           {% if user is not null %}
@@ -151,7 +176,33 @@
 
                             <li class="list-group-item text-end">
                               <span class="float-start"><strong>Ocena użytkownika&nbsp;</strong></span>
-                              {{ userProfileRatingModalButton(album, userProfileRatings) }}
+
+
+                              {% if user is not null %}
+                                {% set userProfileRating = userProfileRatings.getUserRatingObject(album.id) %}
+                                <form method="post" action="/user/like">
+                                  <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
+                                  {{ csrf(request) }}
+
+                                  {% if userProfileRating.hasLikeBy(user) %}
+                                    <input type="hidden" name="create" value="false">
+                                    <button class="btn btn-outline-primary my-1" type="submit">
+                                      <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
+                                    </button>
+
+                                    {% else %}
+                                    <input type="hidden" name="create" value="true">
+                                    <button class="btn btn-outline-primary my-1" type="submit">
+                                      <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
+                                    </button>
+                                  {% endif %}
+
+                                  {{ userProfileRatingModalButton(album, userProfileRatings) }}
+                                </form>
+
+                                {% else %}
+                                {{ userProfileRatingModalButton(album, userProfileRatings) }}
+                              {% endif %}
                             </li>
 
                             {% if user is not null %}
@@ -174,7 +225,84 @@
           </div>
         </div>
 
-        {% elseif page == 'artists' %}
+        {% elseif tab == "artists" %}
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h3 class="display-6">Oceny artystów</h3>
+            <h5 class="mb-3">Całkowita liczba ocen: {{ totalCount }}</h5>
+
+            {{ pagination(page, tab, userProfile.id) }}
+
+            <div class="row row-cols-1 g-1 mb-5">
+                {% for artist in artists %}
+
+                <div class="card mb-3 bg-light">
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <a href="/album/{{ artist.id }}" class="link-unstyled">
+                        <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid rounded-start" alt="album cover">
+                      </a>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="/artist/{{ artist.id }}" class="link-unstyled">{{ artist.name }}</a>
+                        </h5>
+                        <div class="card-text">
+                          <ul class="list-group">
+
+                            <li class="list-group-item text-end">
+                              <span class="float-start"><strong>Ocena użytkownika&nbsp;</strong></span>
+
+                              {% if user is not null %}
+                                {% set userProfileRating = userProfileRatings.getUserRatingObject(artist.id) %}
+                                <form method="post" action="/user/like">
+                                  <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
+                                  {{ csrf(request) }}
+
+                                  {% if userProfileRating.hasLikeBy(user) %}
+                                    <input type="hidden" name="create" value="false">
+                                    <button class="btn btn-outline-primary my-1" type="submit">
+                                      <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
+                                    </button>
+
+                                    {% else %}
+                                    <input type="hidden" name="create" value="true">
+                                    <button class="btn btn-outline-primary my-1" type="submit">
+                                      <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
+                                    </button>
+                                  {% endif %}
+
+                                  {{ userProfileRatingModalButton(artist, userProfileRatings) }}
+                                </form>
+
+                                {% else %}
+                                {{ userProfileRatingModalButton(artist, userProfileRatings) }}
+                              {% endif %}
+
+                            </li>
+
+                            {% if user is not null %}
+                              <li class="list-group-item text-end">
+                                <span class="float-start"><strong>Twoja ocena&nbsp;</strong></span>
+                                {{ userRatingModalButton(artist, userRatings) }}
+                                {{ userRatingModal(artist, currentDate, request) }}
+                              </li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+            </div>
+            {{ pagination(page, tab, userProfile.id) }}
+          </div>
+        </div>
+
 
       {% endif %}
 

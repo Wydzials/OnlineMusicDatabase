@@ -14,6 +14,7 @@ public class FriendRequest extends BaseEntity {
   @ManyToOne(cascade = CascadeType.PERSIST)
   private User recipient;
 
+  @Deprecated
   protected FriendRequest() {
   }
 

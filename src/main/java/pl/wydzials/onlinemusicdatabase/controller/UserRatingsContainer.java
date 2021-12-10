@@ -23,4 +23,11 @@ public class UserRatingsContainer {
 
     return optionalRating.map(Rating::getStarsValue).orElse(null);
   }
+
+  public Rating getUserRatingObject(final long entityId) {
+    return ratings.stream()
+        .filter(rating -> rating.isEntityIdEqual(entityId))
+        .findFirst()
+        .orElse(null);
+  }
 }

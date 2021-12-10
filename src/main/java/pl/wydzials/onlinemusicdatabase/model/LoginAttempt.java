@@ -17,6 +17,7 @@ public class LoginAttempt extends BaseEntity {
   private String ip;
   private boolean successful;
 
+  @Deprecated
   protected LoginAttempt() {
   }
 
