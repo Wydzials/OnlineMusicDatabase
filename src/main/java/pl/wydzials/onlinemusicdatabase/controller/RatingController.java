@@ -52,7 +52,7 @@ public class RatingController extends BaseController {
     if (!request.isDeleteRequest()) {
       try {
         final LocalDate parsedDate = LocalDate.parse(request.date());
-        entity.createRating(user, request.getStarsEnum(), ratingRepository, parsedDate);
+        entity.createRating(user, request.getStarsEnum(), request.getReview(), ratingRepository, parsedDate);
       } catch (DateTimeParseException e) {
         addFlashMessage(redirectAttributes, "Podano nieprawidłową datę.");
       }
@@ -78,7 +78,7 @@ public class RatingController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
-  public record PostRatingRequest(int stars, String date) {
+  public record PostRatingRequest(int stars, String review, String date) {
 
     public boolean isDeleteRequest() {
       return stars == -1;
@@ -86,6 +86,13 @@ public class RatingController extends BaseController {
 
     public Stars getStarsEnum() {
       return Stars.of(stars);
+    }
+
+    public String getReview() {
+      if (review != null && review.length() > 1000)
+        Validation.throwIllegalArgumentException();
+
+      return (review == null || review.isBlank()) ? null : review;
     }
   }
 

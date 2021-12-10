@@ -16,16 +16,18 @@ public abstract class RateableEntity extends BaseEntity {
   private Double averageRating;
   private int numberOfRatings;
 
-  public void createRating(final User user, final Stars stars, final RatingRepository ratingRepository,
-      final LocalDate date) {
+  public void createRating(final User user, final Stars stars, final String review,
+      final RatingRepository ratingRepository, final LocalDate date) {
     Validation.notNull(user);
     Validation.notNull(stars);
+    if (review != null)
+      Validation.notEmpty(review);
     Validation.notNull(ratingRepository);
 
     if (!GlobalConfiguration.isIsGeneratingData() && ratingRepository.findByUserAndEntity(user, this).isPresent())
       Validation.throwIllegalStateException();
 
-    final Rating rating = new Rating(this, user, stars, date);
+    final Rating rating = new Rating(this, user, stars, review, date);
     ratingRepository.save(rating);
 
     if (averageRating == null) {

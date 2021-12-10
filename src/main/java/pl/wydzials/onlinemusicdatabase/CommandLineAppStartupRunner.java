@@ -94,7 +94,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         final User user = users.get(i);
         final Stars stars = Stars.of(faker.random().nextInt(min, max));
 
-        entity.createRating(user, stars, ratingRepository, GlobalConfiguration.getCurrentDate());
+        entity.createRating(user, stars, null, ratingRepository, GlobalConfiguration.getCurrentDate());
       }
     }
   }
@@ -233,7 +233,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
       for (User user : users) {
         if (faker.random().nextBoolean())
-          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), ratingRepository,
+          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), null, ratingRepository,
               GlobalConfiguration.getCurrentDate());
       }
 

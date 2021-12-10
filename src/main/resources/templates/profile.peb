@@ -125,7 +125,7 @@
                             <li class="list-group-item text-end">
                               <span class="float-start"><strong>Twoja ocena&nbsp;</strong></span>
                               {{ userRatingModalButton(recording, userRatings) }}
-                              {{ userRatingModal(recording, currentDate, request) }}
+                              {{ userRatingModal(recording, currentDate, request, userRatings) }}
                             </li>
                           {% endif %}
                         </ul>
@@ -209,7 +209,7 @@
                               <li class="list-group-item text-end">
                                 <span class="float-start"><strong>Twoja ocena&nbsp;</strong></span>
                                 {{ userRatingModalButton(album, userRatings) }}
-                                {{ userRatingModal(album, currentDate, request) }}
+                                {{ userRatingModal(album, currentDate, request, userRatings) }}
                               </li>
                             {% endif %}
                           </ul>
@@ -287,7 +287,7 @@
                               <li class="list-group-item text-end">
                                 <span class="float-start"><strong>Twoja ocena&nbsp;</strong></span>
                                 {{ userRatingModalButton(artist, userRatings) }}
-                                {{ userRatingModal(artist, currentDate, request) }}
+                                {{ userRatingModal(artist, currentDate, request, userRatings) }}
                               </li>
                             {% endif %}
                           </ul>

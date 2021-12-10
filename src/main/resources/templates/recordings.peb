@@ -70,7 +70,7 @@
                         {{ averageRating(recording) }}
                     </span>
                     {{ userRatingModalButton(recording, userRatings) }}
-                    {{ userRatingModal(recording, currentDate, request) }}
+                    {{ userRatingModal(recording, currentDate, request, userRatings) }}
                   </p>
                 </div>
               </div>

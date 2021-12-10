@@ -36,7 +36,7 @@
         </li>
         <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
           {{ userRatingModalButton(album, userRatings) }}
-          {{ userRatingModal(album, currentDate, request) }}
+          {{ userRatingModal(album, currentDate, request, userRatings) }}
         </li>
       </ul>
     </div>
@@ -66,7 +66,7 @@
         <td>{{ averageRating(recording) }}</td>
         <td>
           {{ userRatingModalButton(recording, userRatings) }}
-        {{ userRatingModal(recording, currentDate, request) }}
+        {{ userRatingModal(recording, currentDate, request, userRatings) }}
         </td>
 
         {% if user is not null %}

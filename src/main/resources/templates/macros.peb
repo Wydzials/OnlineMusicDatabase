@@ -5,24 +5,32 @@
   </a>
   {% endmacro %}
 
-    {% macro userRatingModal(entity, currentDate, request) %}
+    {% macro userRatingModal(entity, currentDate, request, userRatingsContainer) %}
     {# @pebvariable name="currentDate" type="java.time.LocalDate" #}
+    {# @pebvariable name="entity" type="pl.wydzials.onlinemusicdatabase.model.RateableEntity" #}
+    {# @pebvariable name="rating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
+    {# @pebvariable name="userRatingsContainer" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+
+      {% set rating = userRatingsContainer.getUserRatingObject(entity.id) %}
     <div class="modal fade" id="rating-{{ entity.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <form method="post" action="/user/rating/{{ entity.id }}">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Dodaj ocenę</h5>
+              <h5 class="modal-title" id="exampleModalLabel">
+                  {{ rating == null ? 'Dodaj ocenę' : 'Edytuj ocenę' }}
+              </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
               <div class="text-center">
+
                 {% for stars in [1,2,3,4,5] %}
                   <span class="form-check form-check-inline m-1 p-0">
                     <input class="btn-check" type="radio" name="stars" id="inlineRadio-{{ entity.id }}-{{ stars }}"
-                           value="{{ stars }}" autocomplete="off" required>
+                           value="{{ stars }}" autocomplete="off"
+                      {{ rating != null and rating.starsValue == stars ? 'checked=true' : ''}} required>
                     <label class="btn btn-outline-primary" for="inlineRadio-{{ entity.id }}-{{ stars }}">
                       {{ stars }}⭐
                     </label>
@@ -39,10 +47,21 @@
                 <div class="col text-end">
                   <div class="form-check mt-3">
                     <label for="date">Ustaw datę</label>
-                    <input type="date" id="date" name="date" value="{{ currentDate | date("yyyy-MM-dd") }}"
+                    {% set date = (rating != null) ?
+                    rating.created | date("yyyy-MM-dd")
+                    : currentDate | date("yyyy-MM-dd")  %}
+
+                    <input type="date" id="date" name="date" value="{{ date }}"
                            min="1900-01-01" max="{{ currentDate | date("yyyy-MM-dd") }}">
                   </div>
                 </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="review" class="form-label">Recenzja</label>
+                {% set review = (rating != null) ? rating.review : "" %}
+                <textarea class="form-control" maxlength="1000" id="review" name="review"
+                          rows="3">{{ review }}</textarea>
               </div>
 
             </div>

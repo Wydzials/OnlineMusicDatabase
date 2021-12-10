@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import javax.persistence.AttributeConverter;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Converter;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -26,6 +27,9 @@ public class Rating extends BaseEntity {
 
   private Stars stars;
 
+  @Column(length = 1000)
+  private String review;
+
   private LocalDateTime created;
 
   private Class<? extends RateableEntity> entityClass;
@@ -37,10 +41,13 @@ public class Rating extends BaseEntity {
   protected Rating() {
   }
 
-  public Rating(final RateableEntity entity, final User user, final Stars stars, final LocalDate date) {
+  public Rating(final RateableEntity entity, final User user, final Stars stars, final String review,
+      final LocalDate date) {
     Validation.notNull(entity);
     Validation.notNull(user);
     Validation.notNull(stars);
+    if (review != null)
+      Validation.notEmpty(review);
 
     Validation.notNull(date);
     if (date.isAfter(GlobalConfiguration.getCurrentDate()))
@@ -49,6 +56,7 @@ public class Rating extends BaseEntity {
     this.entity = entity;
     this.user = user;
     this.stars = stars;
+    this.review = review;
     this.created = date.atTime(GlobalConfiguration.getCurrentTime());
     this.entityClass = entity.getClass();
   }
@@ -82,6 +90,14 @@ public class Rating extends BaseEntity {
 
   public RateableEntity getEntity() {
     return entity;
+  }
+
+  public String getReview() {
+    return review;
+  }
+
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   @Override

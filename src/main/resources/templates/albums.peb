@@ -65,7 +65,7 @@
                   <p class="card-text">
                     {{ averageRating(album) }}
                     {{ userRatingModalButton(album, userRatings) }}
-                    {{ userRatingModal(album, currentDate, request) }}
+                    {{ userRatingModal(album, currentDate, request, userRatings) }}
                   </p>
                 </div>
               </div>
