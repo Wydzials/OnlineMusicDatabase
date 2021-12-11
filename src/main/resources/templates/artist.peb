@@ -23,6 +23,10 @@
             Informacje
           </li>
 
+          <li class="list-group-item text-end"><span class="float-start"><strong>Gatunek</strong></span>
+            {{ artist.genre.viewName }}
+          </li>
+
           <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
             {{ averageRating(artist) }}
           </li>

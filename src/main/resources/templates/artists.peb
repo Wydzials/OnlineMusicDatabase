@@ -1,5 +1,6 @@
 {# @pebvariable name="topArtists" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist>" #}
 {# @pebvariable name="userRatings" type="pl.wydzials.onlinemusicdatabase.controller.UserRatingsContainer" #}
+{# @pebvariable name="genres" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist.Genre>" #}
 
   {% extends "base" %}
 
@@ -14,6 +15,19 @@
       <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
 
         <div class="col-md-4">
+          <label for="genre" class="form-label">Gatunek muzyczny</label>
+          <select class="form-select" id="genre" name="genre" aria-label="genre">
+            {% set selectedGenre = request.getParameter("genre") %}
+            <option selected></option>
+            {% for genre in genres %}
+              <option value="{{ genre.name() }}" {{ genre.name() == selectedGenre ? 'selected' : '' }}>
+                  {{ genre.viewName }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-4">
           <label for="artistType" class="form-label">Rodzaj artysty</label>
           <select class="form-select" id="artistType" name="artistType" aria-label="artistType">
             {% set artistType = request.getParameter("artistType") %}
@@ -22,6 +36,9 @@
             <option value="PERSON" {{ artistType == 'PERSON' ? 'selected' : '' }}>Osoba</option>
           </select>
         </div>
+
+      </div>
+      <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
 
         <div class="col-md-4">
           <label for="minRatings" class="form-label">Minimalna liczba ocen</label>
@@ -35,7 +52,9 @@
                  value="{{ request.getParameter("maxRatings") }}" aria-label="maxRatings">
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3 col-6 col-md-4 align-self-start">Filtruj</button>
+        <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
+          <button type="submit" class="btn btn-primary mt-3 col-6 col-md-4 align-self-start">Filtruj</button>
+        </div>
       </div>
     </form>
 
@@ -59,7 +78,7 @@
                     <h5 class="card-title">{{ artist.name }}</h5>
                   </a>
                   <p class="card-text">
-                      {{ artist.description }}
+                      {{ artist.genre.viewName }}
                   </p>
                   <p class="card-text">
                     {{ averageRating(artist) }}

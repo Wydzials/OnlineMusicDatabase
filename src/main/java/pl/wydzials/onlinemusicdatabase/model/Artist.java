@@ -32,6 +32,9 @@ public class Artist extends RateableEntity {
   @Enumerated(EnumType.STRING)
   private ArtistType artistType;
 
+  @Enumerated(EnumType.STRING)
+  private Genre genre;
+
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "artist")
   private Set<Recording> recordings = new HashSet<>();
 
@@ -48,14 +51,16 @@ public class Artist extends RateableEntity {
   protected Artist() {
   }
 
-  public Artist(final String name, final String description, final ArtistType artistType) {
+  public Artist(final String name, final String description, final ArtistType artistType, final Genre genre) {
     Validation.notEmpty(name);
     Validation.notEmpty(description);
     Validation.notNull(artistType);
+    Validation.notNull(genre);
 
     this.name = name;
     this.description = description;
     this.artistType = artistType;
+    this.genre = genre;
   }
 
   public Album createAlbum(final String name, final int year) {
@@ -127,6 +132,10 @@ public class Artist extends RateableEntity {
     return artistType;
   }
 
+  public Genre getGenre() {
+    return genre;
+  }
+
   public List<Album> getAlbums() {
     return albums;
   }
@@ -157,6 +166,33 @@ public class Artist extends RateableEntity {
     }
 
     public static Optional<ArtistType> of(String name) {
+      return Arrays.stream(values())
+          .filter(type -> Objects.equals(type.name(), name))
+          .findFirst();
+    }
+  }
+
+  public enum Genre {
+    POP("Pop"),
+    ROCK("Rock"),
+    METAL("Metal"),
+    INDIE("Indie"),
+    HIP_HOP("Hip-hop"),
+    REGGAE("Reggae"),
+    COUNTRY("Country"),
+    JAZZ("Jazz"),
+    SOUNDSTRACK("Muzyka filmowa"),
+    CLASSICAL("Muzyka klasyczna"),
+    ELECTRONIC("Muzyka elektroniczna"),
+    DANCE("Muzyka taneczna");
+
+    public final String viewName;
+
+    Genre(final String viewName) {
+      this.viewName = viewName;
+    }
+
+    public static Optional<Genre> of(String name) {
       return Arrays.stream(values())
           .filter(type -> Objects.equals(type.name(), name))
           .findFirst();

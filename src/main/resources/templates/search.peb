@@ -130,6 +130,9 @@
                   </h5>
                   <div class="card-text">
                     <ul class="list-group">
+                      <li class="list-group-item">
+                          {{ artist.genre.viewName }}
+                      </li>
                       <li class="list-group-item text-center">
                           {{ averageRating(artist) }}
                       </li>

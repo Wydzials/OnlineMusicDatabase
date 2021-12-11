@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.wydzials.onlinemusicdatabase.model.Artist;
 import pl.wydzials.onlinemusicdatabase.model.Artist.ArtistType;
+import pl.wydzials.onlinemusicdatabase.model.Artist.Genre;
 
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
@@ -21,7 +22,8 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
       + "where a.numberOfRatings >= :minRatings "
       + "and a.numberOfRatings <= :maxRatings "
       + "and a.artistType in :artistTypes "
+      + "and a.genre in :genres "
       + "order by a.averageRating desc")
-  List<Artist> findTopArtists(final Set<ArtistType> artistTypes, final int minRatings, final int maxRatings,
-      Pageable pageable);
+  List<Artist> findTopArtists(final Set<ArtistType> artistTypes, final Set<Genre> genres,
+      final int minRatings, final int maxRatings, Pageable pageable);
 }

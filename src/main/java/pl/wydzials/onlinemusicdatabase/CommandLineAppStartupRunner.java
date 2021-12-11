@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import pl.wydzials.onlinemusicdatabase.model.Album;
 import pl.wydzials.onlinemusicdatabase.model.Artist;
 import pl.wydzials.onlinemusicdatabase.model.Artist.ArtistType;
+import pl.wydzials.onlinemusicdatabase.model.Artist.Genre;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
 import pl.wydzials.onlinemusicdatabase.model.User;
@@ -100,7 +101,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createAuroraData() throws IOException {
-    Artist aurora = new Artist("AURORA", "Norweska piosenkarka i autorka tekstów", ArtistType.PERSON);
+    Artist aurora = new Artist("AURORA", "Norweska piosenkarka i autorka tekstów", ArtistType.PERSON, Genre.INDIE);
     artistRepository.save(aurora);
 
     aurora.addLink("Oficjalna strona", "https://www.aurora-music.com/");
@@ -166,7 +167,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createPinkFloydData() throws IOException {
-    Artist pinkFloyd = new Artist("Pink Floyd", "Angielski zespół rockowy", ArtistType.BAND);
+    Artist pinkFloyd = new Artist("Pink Floyd", "Angielski zespół rockowy", ArtistType.BAND, Genre.ROCK);
     artistRepository.save(pinkFloyd);
 
     pinkFloyd.addLink("Oficjalna strona", "https://www.pinkfloyd.com/");
@@ -228,7 +229,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
           ? ArtistType.BAND
           : ArtistType.PERSON;
 
-      final Artist artist = new Artist(faker.rockBand().name(), "Opis...", artistType);
+      final Genre genre = Genre.values()[faker.random().nextInt(Genre.values().length)];
+      final Artist artist = new Artist(faker.rockBand().name(), "Opis...", artistType, genre);
       artistRepository.save(artist);
 
       for (User user : users) {

@@ -270,6 +270,11 @@
                         <div class="card-text">
                           <ul class="list-group">
 
+                            <li class="list-group-item text-end">
+                              <span class="float-start"><strong>Gatunek&nbsp;</strong></span>
+                              {{ artist.genre.viewName }}
+                            </li>
+
                             {% set userProfileRating = userProfileRatings.getUserRatingObject(artist.id) %}
 
                             <li class="list-group-item text-end">
