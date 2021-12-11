@@ -147,6 +147,33 @@ public class ProfileController extends BaseController {
     return redirectToReferrer(httpServletRequest);
   }
 
+  @GetMapping("/user/find-friends")
+  public String findFriends(final Model model,
+      @RequestParam(required = false) final String query,
+      @RequestParam(required = false) final Integer page) {
+
+    if (query == null) {
+      model.addAttribute("query", null);
+      return MvcView.FIND_FRIENDS.get();
+    }
+
+    if (page == null || page < 1) {
+      model.addAttribute("query", query);
+
+      return "redirect:/user/find-friends?query=" + query + "&page=1";
+    }
+
+    final List<User> users = userRepository.searchByUsername(query, PageRequest.of(page - 1, 10));
+    model.addAttribute("users", users);
+    model.addAttribute("query", query);
+    model.addAttribute("page", page);
+
+    System.out.println(query);
+    System.out.println(Arrays.deepToString(users.toArray()));
+
+    return MvcView.FIND_FRIENDS.get();
+  }
+
   public record SendFriendRequest(Long recipientId) {
 
   }

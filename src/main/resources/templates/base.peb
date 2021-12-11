@@ -56,6 +56,7 @@
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><h6 class="dropdown-header text-primary">Znajomi</h6></li>
                 <li><a class="dropdown-item" href="/profile">Profil</a></li>
+                <li><a class="dropdown-item" href="/user/find-friends">Znajdź znajomych</a></li>
                 <li><a class="dropdown-item" href="/user/friend-requests">Zaproszenia</a></li>
                 <li>
                   <hr class="dropdown-divider">

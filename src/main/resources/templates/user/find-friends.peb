@@ -1,0 +1,109 @@
+{# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+{# @pebvariable name="users" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.User>" #}
+{# @pebvariable name="query" type="java.lang.String" #}
+
+  {% extends "base" %}
+
+{% block body %}
+
+<div class="row justify-content-center gx-6 mx-1">
+  <div class="col-lg-10">
+
+    <h2>Wyszukiwanie nowych znajomych</h2>
+    <form action="/user/find-friends" method="get" class="row g-3 m-1 justify-content-center">
+      <div class="col-lg-8">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <label for="query" class="form-label">Nazwa użytkownika</label>
+            <input type="text" class="form-control" name="query" id="query" value="{{ query != null ? query : '' }}"
+                   required>
+          </div>
+          <div class="col-auto mt-auto align-items-end">
+            <button class="btn btn-primary px-3" type="submit">Szukaj</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    {% if query != null %}
+      <h1 class="display-6 mt-5">Wyniki wyszukiwania</h1>
+      <div class="col m-3">
+        <div class="row row-cols-1 row-cols-lg-2 g-3">
+            {% for userProfile in users %}
+            <div class="col">
+
+              <div class="card mb-3 rounded-pill bg-light">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <a href="/profile/{{ userProfile.id }}" class="link-unstyled">
+                      <img src="/images/{{ userProfile.imageId }}.jpg" class="img-fluid rounded-circle"
+                           alt="profile picture">
+                    </a>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        <a href="/profile/{{ userProfile.id }}" class="link-unstyled">{{ userProfile.username }}</a>
+                      </h4>
+                      <div class="card-text me-lg-4 mb-5 mb-lg-0 pb-3 pb-lg-0">
+                        <ul class="list-group">
+                          <li class="list-group-item text-end">
+                            <span class="float-start"><strong>Liczba znajomych&nbsp;</strong></span>
+                            {{ userProfile.friends.size() }}
+                          </li>
+
+                          {% if user is not null and userProfile.id != user.id %}
+                          <li class="list-group-item text-center">
+                            {% if user.isFriendOf(userProfile) %}
+                              <button class="btn btn-outline-primary btn-sm" type="submit" disabled>
+                                Jesteście znajomymi
+                              </button>
+                              {% elseif user.hasFriendRequestSentTo(userProfile) %}
+                              <button class="btn btn-outline-primary btn-sm" type="submit" disabled>
+                                Zaproszenie zostało już wysłane
+                              </button>
+                              {% elseif user.hasFriendRequestSentFrom(userProfile) %}
+                              <button class="btn btn-outline-primary btn-sm" type="submit" disabled>
+                                Zaproszenie zostało już otrzymane
+                              </button>
+                              {% else %}
+                              <form action="/user/friend-request" method="post">
+                                <input type="hidden" name="recipientId" value="{{ userProfile.id }}">
+                                {{ csrf(request) }}
+                                <button class="btn btn-outline-primary btn-sm" type="submit">
+                                  Zaproś do znajomych
+                                </button>
+                              </form>
+                            {% endif %}
+                            {% endif %}
+                        </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            {% else %}
+            <h6>Nie znaleziono użytkowników</h6>
+            {% endfor %}
+        </div>
+      </div>
+
+      <nav aria-label="page navigation" class="mt-2">
+        <ul class="pagination justify-content-center">
+          <li class="page-item {{ page == 1 ? 'disabled' : '' }}">
+            <a class="page-link" href="/user/find-friends?query={{ query }}&page={{ page - 1 }}">Poprzednia strona</a>
+          </li>
+          <li class="page-item active"><a class="page-link">Strona: {{ page }}</a></li>
+          <li class="page-item">
+            <a class="page-link" href="/user/find-friends?query={{ query }}&page={{ page + 1 }}">Następna strona</a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
