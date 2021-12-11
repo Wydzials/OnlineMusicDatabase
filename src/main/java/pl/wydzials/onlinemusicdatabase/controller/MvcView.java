@@ -14,7 +14,8 @@ public enum MvcView {
   ALBUMS("albums"),
   RECORDINGS("recordings"),
   SEARCH("search"),
-  PROFILE("profile");
+  PROFILE("profile"),
+  NOT_FOUND("not-found");
 
   private final String path;
 

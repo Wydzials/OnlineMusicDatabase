@@ -32,6 +32,11 @@ public class MainController extends BaseController {
     return MvcView.INDEX.get();
   }
 
+  @GetMapping("/not-found")
+  public String notFound() {
+    return MvcView.NOT_FOUND.get();
+  }
+
   @GetMapping("/search")
   public String search(final Model model,
       @RequestParam(required = false) final String query,

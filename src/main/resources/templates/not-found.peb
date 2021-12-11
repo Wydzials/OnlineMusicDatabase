@@ -1,0 +1,13 @@
+  {% extends "base" %}
+
+  {% block body %}
+
+  <div class="row text-center justify-content-center">
+    <div class="col-lg-6 m-1">
+      <img src="/not-found.svg" class="img-fluid" alt="not found">
+      <h1 class="display-2">Błąd 404</h1>
+      <h5>Nie znaleziono strony o podanym adresie</h5>
+    </div>
+  </div>
+
+  {% endblock %}
