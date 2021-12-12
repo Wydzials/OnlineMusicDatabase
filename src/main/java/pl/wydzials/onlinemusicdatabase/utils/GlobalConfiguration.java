@@ -27,4 +27,8 @@ public class GlobalConfiguration {
   public static void setIsGeneratingData(final boolean isGeneratingData) {
     GlobalConfiguration.isGeneratingData = isGeneratingData;
   }
+
+  public static double getMinPasswordEntropy() {
+    return 60;
+  }
 }

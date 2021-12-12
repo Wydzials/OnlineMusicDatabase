@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
+import pl.wydzials.onlinemusicdatabase.utils.SecurityUtils;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
@@ -53,8 +55,16 @@ public class UserController extends BaseController {
     if (!request.isUsernameCorrect())
       addFlashMessage(redirectAttributes, "Nieprawidłowa nazwa użytkownika.");
 
-    if (!request.isPasswordCorrect())
+    if (request.isPasswordCorrect()) {
+      final double entropy = SecurityUtils.getPasswordEntropy(request.password1());
+      final double minEntropy = GlobalConfiguration.getMinPasswordEntropy();
+      if (entropy < minEntropy) {
+        addFlashMessage(redirectAttributes, ("Zbyt słabe hasło. Minimalna entropia jest równa %.0f, "
+            + "entropia twojego hasła wynosiła %.2f.").formatted(minEntropy, entropy));
+      }
+    } else {
       addFlashMessage(redirectAttributes, "Nieprawidłowe hasło.");
+    }
 
     if (userRepository.findByUsername(request.username).isPresent())
       addFlashMessage(redirectAttributes, "Nazwa użytkownika jest zajęta.");
@@ -136,8 +146,16 @@ public class UserController extends BaseController {
     if (request.oldPassword != null && !user.isPasswordEqual(request.oldPassword, passwordEncoder))
       addFlashMessage(redirectAttributes, "Stare hasło jest nieprawidłowe.");
 
-    if (!request.isPasswordCorrect())
+    if (request.isPasswordCorrect()) {
+      final double entropy = SecurityUtils.getPasswordEntropy(request.newPassword1());
+      final double minEntropy = GlobalConfiguration.getMinPasswordEntropy();
+      if (entropy < minEntropy) {
+        addFlashMessage(redirectAttributes, ("Zbyt słabe hasło. Minimalna entropia jest równa %.0f, "
+            + "entropia twojego hasła wynosiła %.2f.").formatted(minEntropy, entropy));
+      }
+    } else {
       addFlashMessage(redirectAttributes, "Nowe hasło jest nieprawidłowe.");
+    }
 
     if (!redirectAttributes.getFlashAttributes().isEmpty()) {
       return "redirect:/user/change-password";
@@ -152,11 +170,11 @@ public class UserController extends BaseController {
 
   public record PostRegisterRequest(String username, String password1, String password2) {
 
-    boolean isUsernameCorrect() {
+    private boolean isUsernameCorrect() {
       return username != null && username.length() > 0;
     }
 
-    boolean isPasswordCorrect() {
+    private boolean isPasswordCorrect() {
       return password1 != null && password1.length() > 0 && password1.equals(password2);
     }
   }
@@ -165,14 +183,14 @@ public class UserController extends BaseController {
 
   public record UpdateUserDetailsRequest(String username) {
 
-    boolean isUsernameCorrect() {
+    private boolean isUsernameCorrect() {
       return username != null && username.length() > 0;
     }
   }
 
   public record UpdatePasswordRequest(String oldPassword, String newPassword1, String newPassword2) {
 
-    boolean isPasswordCorrect() {
+    private boolean isPasswordCorrect() {
       return newPassword1 != null
           && newPassword1.length() > 0
           && newPassword1.equals(newPassword2);

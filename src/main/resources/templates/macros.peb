@@ -1,6 +1,6 @@
   {% macro averageRating(entity) %}
   <a class="btn btn-primary btn-fixed-width px-0">
-    ⭐ {{ entity.averageRating | numberformat("#.##") }}
+    ⭐{{ entity.averageRating | numberformat("#.##") }}
     <span class="badge bg-light text-dark rounded-pill">{{ entity.numberOfRatings }}</span>
   </a>
   {% endmacro %}
