@@ -84,6 +84,10 @@ public class Rating extends BaseEntity {
     return likes.stream().anyMatch(like -> like.isUserEqualTo(user));
   }
 
+  public int getNumberOfLikes() {
+    return likes.size();
+  }
+
   public int getStarsValue() {
     return stars.getValue();
   }

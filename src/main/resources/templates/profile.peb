@@ -104,18 +104,7 @@
                                 <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
                                 {{ csrf(request) }}
 
-                                {% if userProfileRating.hasLikeBy(user) %}
-                                  <input type="hidden" name="create" value="false">
-                                  <button class="btn btn-outline-primary my-1" type="submit">
-                                    <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
-                                  </button>
-
-                                  {% else %}
-                                  <input type="hidden" name="create" value="true">
-                                  <button class="btn btn-outline-primary my-1" type="submit">
-                                    <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
-                                  </button>
-                                {% endif %}
+                                {{ likeButton(userProfileRating, userProfile) }}
 
                                 {{ userProfileRatingModalButton(recording, userProfileRatings) }}
                               </form>
@@ -196,18 +185,7 @@
                                   <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
                                   {{ csrf(request) }}
 
-                                  {% if userProfileRating.hasLikeBy(user) %}
-                                    <input type="hidden" name="create" value="false">
-                                    <button class="btn btn-outline-primary my-1" type="submit">
-                                      <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
-                                    </button>
-
-                                    {% else %}
-                                    <input type="hidden" name="create" value="true">
-                                    <button class="btn btn-outline-primary my-1" type="submit">
-                                      <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
-                                    </button>
-                                  {% endif %}
+                                  {{ likeButton(userProfileRating, userProfile) }}
 
                                   {{ userProfileRatingModalButton(album, userProfileRatings) }}
                                 </form>
@@ -287,18 +265,7 @@
                                   <input type="hidden" name="ratingId" value="{{ userProfileRating.id }}">
                                   {{ csrf(request) }}
 
-                                  {% if userProfileRating.hasLikeBy(user) %}
-                                    <input type="hidden" name="create" value="false">
-                                    <button class="btn btn-outline-primary my-1" type="submit">
-                                      <img src="/thumbs-up-fill.svg" class="img-fluid m-0 p-0" alt="thumbs-up-fill">
-                                    </button>
-
-                                    {% else %}
-                                    <input type="hidden" name="create" value="true">
-                                    <button class="btn btn-outline-primary my-1" type="submit">
-                                      <img src="/thumbs-up.svg" class="img-fluid m-0 p-0" alt="thumbs-up">
-                                    </button>
-                                  {% endif %}
+                                  {{ likeButton(userProfileRating, userProfile) }}
 
                                   {{ userProfileRatingModalButton(artist, userProfileRatings) }}
                                 </form>

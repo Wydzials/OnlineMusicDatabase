@@ -101,6 +101,28 @@
     </button>
     {% endmacro %}
 
-  {% macro csrf(request) %}
-  <input type="hidden" name="_csrf" value="{{ request.getAttribute("_csrf").getToken() }}">
+    {% macro csrf(request) %}
+    <input type="hidden" name="_csrf" value="{{ request.getAttribute("_csrf").getToken() }}">
+    {% endmacro %}
+
+
+  {% macro likeButton(rating, user) %}
+  {# @pebvariable name="rating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
+  {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+
+    {% if rating.hasLikeBy(user) %}
+    <input type="hidden" name="create" value="false">
+    <button class="btn btn-outline-primary my-1" type="submit">
+      💙️
+      {{ rating.numberOfLikes }}
+    </button>
+
+    {% else %}
+    <input type="hidden" name="create" value="true">
+    <button class="btn btn-outline-primary my-1" type="submit">
+      🤍
+      {{ rating.numberOfLikes }}
+    </button>
+    {% endif %}
+
   {% endmacro %}
