@@ -27,6 +27,8 @@ import pl.wydzials.onlinemusicdatabase.model.Recording;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.FriendRequestRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
+import pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByGenre;
+import pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByStars;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
@@ -77,7 +79,29 @@ public class ProfileController extends BaseController {
       case RECORDINGS -> prepareModelWithRatings(userProfile, model, principal, page, Recording.class);
       case ALBUMS -> prepareModelWithRatings(userProfile, model, principal, page, Album.class);
       case ARTISTS -> prepareModelWithRatings(userProfile, model, principal, page, Artist.class);
-      case STATISTICS -> {}
+      case STATISTICS -> {
+        final List<RatingsCountByStars> ratingsCountByStars = ratingRepository.countUserRatingsGroupByStars(
+            userProfile);
+
+        final int ratingsCountByStarsMax = ratingsCountByStars.stream()
+            .mapToInt(RatingsCountByStars::getCount)
+            .max()
+            .orElse(0);
+
+        model.addAttribute("ratingsCountByStars", ratingsCountByStars);
+        model.addAttribute("ratingsCountByStarsMax", ratingsCountByStarsMax);
+
+        final List<RatingsCountByGenre> ratingsCountByArtistGenre = ratingRepository
+            .countUserRatingsGroupByArtistGenre(userProfile);
+
+        final int ratingsCountByArtistGenreMax = ratingsCountByArtistGenre.stream()
+            .mapToInt(RatingsCountByGenre::getCount)
+            .max()
+            .orElse(0);
+
+        model.addAttribute("ratingsCountByArtistGenre", ratingsCountByArtistGenre);
+        model.addAttribute("ratingsCountByArtistGenreMax", ratingsCountByArtistGenreMax);
+      }
     }
 
     Map<String, String> tabs = new LinkedHashMap<>();

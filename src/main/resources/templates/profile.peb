@@ -14,6 +14,9 @@
 {# @pebvariable name="tab" type="java.lang.String" #}
 {# @pebvariable name="totalCount" type="java.lang.Integer" #}
 
+{# @pebvariable name="ratingsCountByStars" type="java.util.List<pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByStars>" #}
+{# @pebvariable name="ratingsCountByArtistGenre" type="java.util.List<pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByGenre>" #}
+
   {% extends "base" %}
 
   {% block body %}
@@ -335,6 +338,65 @@
           </div>
         </div>
 
+        {% elseif tab == "statistics" %}
+
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <h3>Liczba ocen na daną liczbę gwiazdek</h3>
+            <table class="charts-css column show-labels data-spacing-10" style="height: 300px">
+
+              <thead>
+              <tr>
+                <th scope="col">Gwiazdki</th>
+                <th scope="col">Liczba ocen</th>
+              </tr>
+              </thead>
+
+              <tbody>
+                  {% for ratingCount in ratingsCountByStars %}
+                <tr>
+                  <th scope="row" class="fw-normal">
+                    ⭐{{ ratingCount.stars.value }}
+                  </th>
+                  <td class="text-light"
+                      style="--size: calc( {{ ratingCount.count }} / {{ ratingsCountByStarsMax }}); --color: #0d6efd">
+                      {{ ratingCount.count }}
+                  </td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-lg-12">
+            <h3 class="mt-3">Liczba ocen artystów w zależności od gatunku</h3>
+            <table class="charts-css bar show-labels labels-align-start data-spacing-3"
+                   style="height: {{ ratingsCountByArtistGenre.size() * 3 }}em; --labels-size: 10em">
+
+              <thead>
+              <tr>
+                <th scope="col">Gatunek</th>
+                <th scope="col">Liczba ocen</th>
+              </tr>
+              </thead>
+
+              <tbody>
+                  {% for ratingCount in ratingsCountByArtistGenre %}
+                <tr>
+                  <th scope="row" class="fw-normal">
+                      {{ ratingCount.genre.viewName }}
+                  </th>
+                  <td class="pe-1"
+                      style="--size: calc( {{ ratingCount.count }} / {{ ratingsCountByArtistGenreMax }});">
+                      {{ ratingCount.count }}
+                  </td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
 
       {% endif %}
 

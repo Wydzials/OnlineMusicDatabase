@@ -6,8 +6,10 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import pl.wydzials.onlinemusicdatabase.model.Artist.Genre;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating;
+import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
 import pl.wydzials.onlinemusicdatabase.model.User;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
@@ -26,4 +28,30 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
   @Query("select count(r) from Rating r where r.user = :user "
       + "and r.entityClass = :entityClass ")
   long countRatingsByUser(User user, Class<? extends RateableEntity> entityClass);
+
+  @Query("select r.stars as stars, count(r.stars) as count from Rating r "
+      + "where r.user = :user "
+      + "group by r.stars")
+  List<RatingsCountByStars> countUserRatingsGroupByStars(User user);
+
+  @Query("select a.genre as genre, count(r.stars) as count from Rating r, Artist a "
+      + "where r.user = :user "
+      + "and r.entity.id = a.id "
+      + "group by a.genre "
+      + "order by count(r.stars) desc")
+  List<RatingsCountByGenre> countUserRatingsGroupByArtistGenre(User user);
+
+  interface RatingsCountByStars {
+
+    Stars getStars();
+
+    Integer getCount();
+  }
+
+  interface RatingsCountByGenre {
+
+    Genre getGenre();
+
+    Integer getCount();
+  }
 }
