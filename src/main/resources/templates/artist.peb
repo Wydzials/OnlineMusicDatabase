@@ -16,7 +16,7 @@
       <p>{{ artist.description }}</p>
     </div>
 
-    <div class="row mx-1">
+    <div class="row mx-1 justify-content-center justify-content-lg-start">
       <div class="col-lg-5 mb-3">
         <ul class="list-group">
           <li class="list-group-item fs-4 text-center text-secondary">

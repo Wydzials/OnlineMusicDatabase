@@ -27,6 +27,7 @@ import pl.wydzials.onlinemusicdatabase.model.Recording;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.FriendRequestRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
+import pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByArtist;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByGenre;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository.RatingsCountByStars;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
@@ -80,6 +81,12 @@ public class ProfileController extends BaseController {
       case ALBUMS -> prepareModelWithRatings(userProfile, model, principal, page, Album.class);
       case ARTISTS -> prepareModelWithRatings(userProfile, model, principal, page, Artist.class);
       case STATISTICS -> {
+        final long totalCount = ratingRepository.countRatingsByUser(userProfile);
+        final double averageRating = ratingRepository.averateRatingByUser(userProfile);
+
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("averageRating", averageRating);
+
         final List<RatingsCountByStars> ratingsCountByStars = ratingRepository.countUserRatingsGroupByStars(
             userProfile);
 
@@ -87,7 +94,6 @@ public class ProfileController extends BaseController {
             .mapToInt(RatingsCountByStars::getCount)
             .max()
             .orElse(0);
-
         model.addAttribute("ratingsCountByStars", ratingsCountByStars);
         model.addAttribute("ratingsCountByStarsMax", ratingsCountByStarsMax);
 
@@ -98,9 +104,23 @@ public class ProfileController extends BaseController {
             .mapToInt(RatingsCountByGenre::getCount)
             .max()
             .orElse(0);
-
         model.addAttribute("ratingsCountByArtistGenre", ratingsCountByArtistGenre);
         model.addAttribute("ratingsCountByArtistGenreMax", ratingsCountByArtistGenreMax);
+
+        final List<RatingsCountByArtist> ratingsCountByArtist = ratingRepository.countUserRatingsGroupByArtist(
+            userProfile, PageRequest.of(0, 5));
+
+        for (RatingsCountByArtist r : ratingsCountByArtist) {
+          System.out.println(r.getCount() + " " + r.getArtist());
+        }
+
+        final int ratingsCountByArtistMax = ratingsCountByArtist.stream()
+            .mapToInt(RatingsCountByArtist::getCount)
+            .max()
+            .orElse(0);
+        model.addAttribute("ratingsCountByArtist", ratingsCountByArtist);
+        model.addAttribute("ratingsCountByArtistMax", ratingsCountByArtistMax);
+
       }
     }
 

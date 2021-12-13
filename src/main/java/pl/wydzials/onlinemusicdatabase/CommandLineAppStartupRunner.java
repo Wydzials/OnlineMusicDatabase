@@ -18,6 +18,7 @@ import pl.wydzials.onlinemusicdatabase.model.Artist.ArtistType;
 import pl.wydzials.onlinemusicdatabase.model.Artist.Genre;
 import pl.wydzials.onlinemusicdatabase.model.RateableEntity;
 import pl.wydzials.onlinemusicdatabase.model.Rating.Stars;
+import pl.wydzials.onlinemusicdatabase.model.Recording;
 import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.ArtistRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
@@ -233,11 +234,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
       final Artist artist = new Artist(faker.rockBand().name(), "Opis...", artistType, genre);
       artistRepository.save(artist);
 
-      for (User user : users) {
-        if (faker.random().nextBoolean())
-          artist.createRating(user, Stars.of(faker.random().nextInt(1, 5)), null, ratingRepository,
-              GlobalConfiguration.getCurrentDate());
-      }
+      addRandomRatings(artist);
 
       for (int singleNumber = 0; singleNumber < SINGLES_FOR_ARTIST; singleNumber++) {
         artist.createSingleRecording(faker.book().title(), getRandomRecordingDuration());
@@ -247,9 +244,20 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         final Album album = artist.createAlbum(faker.book().title(), 2020);
 
         for (int albumRecordingNumber = 0; albumRecordingNumber < RECORDINGS_FOR_ALBUM; albumRecordingNumber++) {
-          album.createAlbumRecording(faker.book().title(), getRandomRecordingDuration(), albumRecordingNumber + 1);
+          final Recording recording = album.createAlbumRecording(faker.book().title(), getRandomRecordingDuration(),
+              albumRecordingNumber + 1);
+
+          addRandomRatings(recording);
         }
       }
+    }
+  }
+
+  private void addRandomRatings(final RateableEntity entity) {
+    for (User user : users) {
+      if (faker.random().nextBoolean())
+        entity.createRating(user, Stars.of(faker.random().nextInt(1, 5)), null, ratingRepository,
+            GlobalConfiguration.getCurrentDate());
     }
   }
 
