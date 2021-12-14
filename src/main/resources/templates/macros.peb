@@ -106,23 +106,46 @@
     {% endmacro %}
 
 
-  {% macro likeButton(rating, user) %}
-  {# @pebvariable name="rating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
-  {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
+    {% macro likeButton(rating, user) %}
+    {# @pebvariable name="rating" type="pl.wydzials.onlinemusicdatabase.model.Rating" #}
+    {# @pebvariable name="user" type="pl.wydzials.onlinemusicdatabase.model.User" #}
 
-    {% if rating.hasLikeBy(user) %}
-    <input type="hidden" name="create" value="false">
-    <button class="btn btn-outline-primary my-1" type="submit">
-      💙️
-      {{ rating.numberOfLikes }}
-    </button>
+      {% if rating.hasLikeBy(user) %}
+      <input type="hidden" name="create" value="false">
+      <button class="btn btn-outline-primary my-1" type="submit">
+        💙️
+        {{ rating.numberOfLikes }}
+      </button>
 
-    {% else %}
-    <input type="hidden" name="create" value="true">
-    <button class="btn btn-outline-primary my-1" type="submit">
-      🤍
-      {{ rating.numberOfLikes }}
-    </button>
-    {% endif %}
+      {% else %}
+      <input type="hidden" name="create" value="true">
+      <button class="btn btn-outline-primary my-1" type="submit">
+        🤍
+        {{ rating.numberOfLikes }}
+      </button>
+      {% endif %}
 
+    {% endmacro %}
+
+  {% macro pagination(currentPage, href) %}
+  {# @pebvariable name="currentPage" type="java.lang.Integer" #}
+  {# @pebvariable name="href" type="java.lang.String" #}
+
+  <nav aria-label="page navigation" class="mt-2">
+    <ul class="pagination justify-content-center">
+      <li class="page-item {{ currentPage == 1 ? 'disabled' : '' }}">
+        <a class="page-link"
+           href="{{ href }}&page={{ currentPage - 1 }}">
+          Poprzednia strona
+        </a>
+      </li>
+      <li class="page-item active"><a class="page-link">Strona: {{ currentPage }}</a></li>
+      <li class="page-item">
+        <a class="page-link"
+           href="{{ href }}&page={{ currentPage + 1 }}">
+          Następna strona
+        </a>
+      </li>
+    </ul>
+  </nav>
   {% endmacro %}

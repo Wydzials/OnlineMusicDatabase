@@ -91,17 +91,8 @@
         </div>
       </div>
 
-      <nav aria-label="page navigation" class="mt-2">
-        <ul class="pagination justify-content-center">
-          <li class="page-item {{ page == 1 ? 'disabled' : '' }}">
-            <a class="page-link" href="/user/find-friends?query={{ query }}&page={{ page - 1 }}">Poprzednia strona</a>
-          </li>
-          <li class="page-item active"><a class="page-link">Strona: {{ page }}</a></li>
-          <li class="page-item">
-            <a class="page-link" href="/user/find-friends?query={{ query }}&page={{ page + 1 }}">Następna strona</a>
-          </li>
-        </ul>
-      </nav>
+      {{ pagination(page, '/user/find-friends?query=' + query) }}
+
     {% endif %}
 
   </div>
