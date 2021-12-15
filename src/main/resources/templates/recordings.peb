@@ -39,6 +39,19 @@
                 <h1 style="font-size: xxx-large">{{ loop.index + 1 }}</h1>
               </div>
 
+              <div class="col-lg-6 col">
+                <div class="card-body">
+                  <h5 class="card-title">{{ recording.title }}</h5>
+                  <p class="card-text">
+                    <span class="mb-1">
+                        {{ averageRating(recording) }}
+                    </span>
+                    {{ userRatingModalButton(recording, userRatings) }}
+                    {{ userRatingModal(recording, currentDate, request, userRatings) }}
+                  </p>
+                </div>
+              </div>
+
               <div class="col-lg-5 col-9 flex-column justify-content-center h-100">
                 <ul class="list-group">
                   {% if not recording.single %}
@@ -58,21 +71,6 @@
                   </li>
 
                 </ul>
-              </div>
-
-              <div class="col-lg-6 col">
-                <div class="card-body">
-                  <a href="/album/{{ recording.id }}" class="link-unstyled">
-                    <h5 class="card-title">{{ recording.title }}</h5>
-                  </a>
-                  <p class="card-text">
-                    <span class="mb-1">
-                        {{ averageRating(recording) }}
-                    </span>
-                    {{ userRatingModalButton(recording, userRatings) }}
-                    {{ userRatingModal(recording, currentDate, request, userRatings) }}
-                  </p>
-                </div>
               </div>
 
             </div>

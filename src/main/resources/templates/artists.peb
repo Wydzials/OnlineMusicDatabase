@@ -51,10 +51,10 @@
           <input type="number" min="0" max="10000000" step="1" class="form-control" id="maxRatings" name="maxRatings"
                  value="{{ request.getParameter("maxRatings") }}" aria-label="maxRatings">
         </div>
+      </div>
 
-        <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
-          <button type="submit" class="btn btn-primary mt-3 col-6 col-md-4 align-self-start">Filtruj</button>
-        </div>
+      <div class="row mb-3 justify-content-center px-5 px-md-0 align-items-end">
+        <button type="submit" class="btn btn-primary mt-3 col-6 col-md-4 align-self-start">Filtruj</button>
       </div>
     </form>
 

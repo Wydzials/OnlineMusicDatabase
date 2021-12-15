@@ -17,19 +17,15 @@ import pl.wydzials.onlinemusicdatabase.model.Artist;
 import pl.wydzials.onlinemusicdatabase.model.Artist.ArtistType;
 import pl.wydzials.onlinemusicdatabase.model.Artist.Genre;
 import pl.wydzials.onlinemusicdatabase.repository.ArtistRepository;
-import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
 public class ArtistController extends BaseController {
 
   private final ArtistRepository artistRepository;
-  private final RatingRepository ratingRepository;
 
-  public ArtistController(final ArtistRepository artistRepository,
-      final RatingRepository ratingRepository) {
+  public ArtistController(final ArtistRepository artistRepository) {
     this.artistRepository = artistRepository;
-    this.ratingRepository = ratingRepository;
   }
 
   @GetMapping("/artist/{id}")

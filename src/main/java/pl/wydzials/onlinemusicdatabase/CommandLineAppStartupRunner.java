@@ -56,6 +56,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws IOException {
+    if (userRepository.findByUsername("szymon").isPresent())
+      return;
+
     GlobalConfiguration.setIsGeneratingData(true);
 
     createUsers();

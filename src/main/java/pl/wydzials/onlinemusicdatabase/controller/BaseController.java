@@ -29,11 +29,8 @@ public class BaseController {
 
   @Autowired
   private UserRepository userRepository;
-
   @Autowired
   private RatingRepository ratingRepository;
-
-  public BaseController() {}
 
   @ModelAttribute("username")
   public String getUsername(final Principal principal) {
@@ -79,7 +76,7 @@ public class BaseController {
     } else if (flashMessages == null) {
       redirectAttributes.addFlashAttribute("flashMessages", new ArrayList<>(Collections.singleton(message)));
     } else {
-      Validation.throwIllegalArgumentException();
+      Validation.throwIllegalStateException();
     }
   }
 

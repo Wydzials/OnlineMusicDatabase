@@ -11,19 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.wydzials.onlinemusicdatabase.model.Album;
 import pl.wydzials.onlinemusicdatabase.repository.AlbumRepository;
-import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
 public class AlbumController extends BaseController {
 
   private final AlbumRepository albumRepository;
-  private final RatingRepository ratingRepository;
 
-  public AlbumController(final AlbumRepository albumRepository,
-      final RatingRepository ratingRepository) {
+  public AlbumController(final AlbumRepository albumRepository) {
     this.albumRepository = albumRepository;
-    this.ratingRepository = ratingRepository;
   }
 
   @GetMapping("/album/{id}")

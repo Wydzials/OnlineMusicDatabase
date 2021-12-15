@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Configuration
 public class PebbleConfiguration {
@@ -26,13 +27,14 @@ public class PebbleConfiguration {
       @Override
       public Object apply(Object input, Map<String, Object> args, PebbleTemplate self, EvaluationContext context,
           int lineNumber) {
-        if (input instanceof final Duration duration) {
-          long minutes = duration.getSeconds() / 60;
-          long seconds = duration.getSeconds() % 60;
-          return String.format("%02d:%02d", minutes, seconds);
-        } else {
-          return null;
-        }
+        if (!(input instanceof Duration))
+          Validation.throwIllegalArgumentException();
+
+        final Duration duration = (Duration) input;
+        final long minutes = duration.getSeconds() / 60;
+        final long seconds = duration.getSeconds() % 60;
+
+        return String.format("%02d:%02d", minutes, seconds);
       }
     }
 
