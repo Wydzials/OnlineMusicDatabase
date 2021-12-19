@@ -16,7 +16,10 @@ public enum MvcView {
   RECORDINGS("recordings"),
   SEARCH("search"),
   PROFILE("profile"),
-  NOT_FOUND("not-found");
+  NOT_FOUND("not-found"),
+  ADD_RECORDING("admin/add-recording"),
+  ADD_ALBUM("admin/add-album"),
+  ADD_ARTIST("admin/add-artist");
 
   private final String path;
 

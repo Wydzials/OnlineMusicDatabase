@@ -1,0 +1,42 @@
+  {% extends "base" %}
+
+  {% block body %}
+
+  <div class="row justify-content-center mx-5">
+    <div class="col-md-6 col-lg-4 mx-5">
+      <h4 class="mb-3">Dodawanie utworu</h4>
+
+      <form action="/admin/add-recording" method="post">
+
+        <div class="col mb-3">
+          <label for="title" class="form-label">Tytuł</label>
+          <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="col mb-3">
+          <div class="row">
+            <div class="col">
+              <label for="minutes" class="form-label">Długość: minuty</label>
+              <input type="number" min="0" step="1" class="form-control" id="minutes" name="minutes" required>
+            </div>
+
+            <div class="col">
+              <label for="seconds" class="form-label">Długość: sekundy</label>
+              <input type="number" min="0" max=59 step="1" class="form-control" id="seconds" name="seconds" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="col mb-3">
+          <label for="albumPosition" class="form-label">Pozycja w albumie</label>
+          <input type="number" min="1" step="1" class="form-control" id="albumPosition" name="albumPosition" required>
+        </div>
+
+        <input type="hidden" name="albumId" value="{{ request.getParameter('albumId') }}">
+
+        {{ csrf(request) }}
+        <button class="btn btn-primary mt-3" type="submit">Dodaj utwór</button>
+      </form>
+    </div>
+  </div>
+  {% endblock %}

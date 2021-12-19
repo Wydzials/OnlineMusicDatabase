@@ -1,0 +1,58 @@
+{# @pebvariable name="genres" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist.Genre>" #}
+{# @pebvariable name="artistTypes" type="java.util.List<pl.wydzials.onlinemusicdatabase.model.Artist.ArtistType>" #}
+
+  {% extends "base" %}
+
+{% block body %}
+
+<div class="row justify-content-center mx-5">
+  <div class="col-md-6 col-lg-4 mx-5">
+    <h4 class="mb-3">Dodawanie artysty</h4>
+
+    <form action="/admin/add-artist" method="post" enctype="multipart/form-data">
+
+      <div class="col mb-3">
+        <label for="name" class="form-label">Nazwa</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+
+      <div class="col mb-3">
+        <label for="description" class="form-label">Opis</label>
+        <input type="text" class="form-control" id="description" name="description" required>
+      </div>
+
+      <div class="col mb-3">
+        <label for="type" class="form-label">Rodzaj artysty</label>
+        <select class="form-select" id="type" name="type" aria-label="type">
+          <option selected></option>
+          {% for artistType in artistTypes %}
+            <option value="{{ artistType.name() }}">{{ artistType.viewName }}</option>
+          {% endfor%}
+        </select>
+      </div>
+
+      <div class="col mb-3">
+        <label for="genre" class="form-label">Gatunek muzyczny</label>
+        <select class="form-select" id="genre" name="genre" aria-label="genre">
+          <option selected></option>
+          {% for genre in genres %}
+            <option value="{{ genre.name() }}">
+                {{ genre.viewName }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col mb-3">
+        <label for="image" class="form-label">Zdjęcie</label>
+        <input type="file" class="form-control" id="image" name="image" accept=".jpg,.jpeg,.png,.bmp,.wbmp" required>
+      </div>
+
+      <input type="hidden" name="artistId" value="{{ request.getParameter('artistId') }}">
+
+      {{ csrf(request) }}
+      <button class="btn btn-primary mt-3" type="submit">Dodaj artystę</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

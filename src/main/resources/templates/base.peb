@@ -70,6 +70,14 @@
                   <hr class="dropdown-divider">
                 </li>
 
+                {% if user.admin %}
+                  <li><h6 class="dropdown-header text-primary">Administrator</h6></li>
+                  <li><a class="dropdown-item" href="/admin/add-artist">Dodaj artystę</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                {% endif %}
+
                 <li><a class="dropdown-item text-danger" href="/logout">Wyloguj</a></li>
               </ul>
             </li>

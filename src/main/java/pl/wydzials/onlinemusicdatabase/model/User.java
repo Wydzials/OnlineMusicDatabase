@@ -222,6 +222,10 @@ public class User extends BaseEntity implements UserDetails {
     }
   }
 
+  public boolean isAdmin() {
+    return getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Arrays.stream(authorities.split(","))

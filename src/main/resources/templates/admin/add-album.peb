@@ -1,0 +1,33 @@
+  {% extends "base" %}
+
+  {% block body %}
+
+  <div class="row justify-content-center mx-5">
+    <div class="col-md-6 col-lg-4 mx-5">
+      <h4 class="mb-3">Dodawanie albumu</h4>
+
+      <form action="/admin/add-album" method="post" enctype="multipart/form-data">
+
+        <div class="col mb-3">
+          <label for="name" class="form-label">Nazwa</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="col mb-3">
+          <label for="year" class="form-label">Rok wydania</label>
+          <input type="number" min="1" step="1" class="form-control" id="year" name="year" required>
+        </div>
+
+        <div class="col mb-3">
+          <label for="image" class="form-label">Zdjęcie okładki</label>
+          <input type="file" class="form-control" id="image" name="image" accept=".jpg,.jpeg,.png,.bmp,.wbmp" required>
+        </div>
+
+        <input type="hidden" name="artistId" value="{{ request.getParameter('artistId') }}">
+
+        {{ csrf(request) }}
+        <button class="btn btn-primary mt-3" type="submit">Dodaj album</button>
+      </form>
+    </div>
+  </div>
+  {% endblock %}

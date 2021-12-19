@@ -18,28 +18,40 @@
       <h1 class="display-5">{{ album.name }}</h1>
     </div>
 
-    <div class="col-lg-5">
-      <ul class="list-group">
-        <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/osoba</strong></span>
-          <a href="/artist/{{ album.artist.id }}" class="text-decoration-none">
-              {{ album.artist.name }}
-          </a>
-        </li>
-        <li class="list-group-item text-end"><span class="float-start"><strong>Rok wydania</strong></span>
-          {{ album.year }}
-        </li>
-        <li class="list-group-item text-end"><span class="float-start"><strong>Całkowita długość</strong></span>
-          {{ album.duration | durationFormat }}
-        </li>
-        <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
-          {{ averageRating(album) }}
-        </li>
-        <li class="list-group-item text-end align-middle"><span class="float-start"><strong>Twoja ocena</strong></span>
-          {{ userRatingModalButton(album, userRatings) }}
-          {{ userRatingModal(album, currentDate, request, userRatings) }}
-        </li>
-      </ul>
+    <div class="row">
+
+      <div class="col-lg-5">
+        <ul class="list-group">
+          <li class="list-group-item text-end"><span class="float-start"><strong>Zespół/osoba</strong></span>
+            <a href="/artist/{{ album.artist.id }}" class="text-decoration-none">
+                {{ album.artist.name }}
+            </a>
+          </li>
+          <li class="list-group-item text-end"><span class="float-start"><strong>Rok wydania</strong></span>
+            {{ album.year }}
+          </li>
+          <li class="list-group-item text-end"><span class="float-start"><strong>Całkowita długość</strong></span>
+            {{ album.duration | durationFormat }}
+          </li>
+          <li class="list-group-item text-end"><span class="float-start"><strong>Średnia ocena</strong></span>
+            {{ averageRating(album) }}
+          </li>
+          <li class="list-group-item text-end align-middle"><span
+              class="float-start"><strong>Twoja ocena</strong></span>
+            {{ userRatingModalButton(album, userRatings) }}
+            {{ userRatingModal(album, currentDate, request, userRatings) }}
+          </li>
+        </ul>
+      </div>
+
+      {% if user is not null and user.admin %}
+        <div class="col-lg-3">
+          <a class="btn btn-outline-dark" href="/admin/add-recording?albumId={{ album.id }}">Dodaj utwór</a>
+        </div>
+      {% endif %}
+
     </div>
+
   </div>
 </div>
 

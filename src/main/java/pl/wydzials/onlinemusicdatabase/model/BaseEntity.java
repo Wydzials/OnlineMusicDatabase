@@ -25,7 +25,11 @@ public abstract class BaseEntity implements Serializable {
   @Version
   private Integer version;
 
-  private String uuid = UUID.randomUUID().toString();
+  private String uuid;
+
+  public BaseEntity() {
+    uuid = UUID.randomUUID().toString();
+  }
 
   public Long getId() {
     return id;
@@ -35,10 +39,14 @@ public abstract class BaseEntity implements Serializable {
     this.id = id;
   }
 
+  public String getUuid() {
+    return uuid;
+  }
+
   @Override
   public boolean equals(final Object object) {
     return object instanceof BaseEntity
-        && Objects.equals(((BaseEntity) object).uuid, uuid);
+        && Objects.equals(((BaseEntity) object).getUuid(), getUuid());
   }
 
   @Override
