@@ -46,7 +46,9 @@
 
       {% if user is not null and user.admin %}
         <div class="col-lg-3">
-          <a class="btn btn-outline-dark" href="/admin/add-recording?albumId={{ album.id }}">Dodaj utwór</a>
+          <a class="btn btn-outline-dark my-2" href="/admin/add-recording?albumId={{ album.id }}">Dodaj utwór</a>
+          {{ deleteEntityModalButton(album, "Usuń album") }}
+          {{ deleteEntityModal(album, "/admin/delete-album/" + album.id, "album", request) }}
         </div>
       {% endif %}
 
@@ -66,6 +68,10 @@
       <th scope="col">Twoja ocena</th>
       {% if user is not null %}
         <th scope="col">Dodaj do playlisty</th>
+
+        {% if user.admin %}
+          <th scope="col">Usuń utwór</th>
+        {% endif %}
       {% endif %}
     </tr>
     </thead>
@@ -99,6 +105,13 @@
               </div>
             </form>
           </td>
+
+          {% if user.admin %}
+            <td>
+              {{ deleteEntityModalButton(recording) }}
+              {{ deleteEntityModal(recording, "/admin/delete-recording/" + recording.id, "utwór", request) }}
+            </td>
+          {% endif %}
         {% endif %}
 
       </tr>

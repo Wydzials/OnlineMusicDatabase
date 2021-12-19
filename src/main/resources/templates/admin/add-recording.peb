@@ -27,12 +27,15 @@
           </div>
         </div>
 
-        <div class="col mb-3">
-          <label for="albumPosition" class="form-label">Pozycja w albumie</label>
-          <input type="number" min="1" step="1" class="form-control" id="albumPosition" name="albumPosition" required>
-        </div>
+        {% if request.getParameter('albumId') is not null %}
+          <div class="col mb-3">
+            <label for="albumPosition" class="form-label">Pozycja w albumie</label>
+            <input type="number" min="1" step="1" class="form-control" id="albumPosition" name="albumPosition" required>
+          </div>
+        {% endif %}
 
         <input type="hidden" name="albumId" value="{{ request.getParameter('albumId') }}">
+        <input type="hidden" name="artistId" value="{{ request.getParameter('artistId') }}">
 
         {{ csrf(request) }}
         <button class="btn btn-primary mt-3" type="submit">Dodaj utwór</button>

@@ -55,6 +55,10 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
       + "order by count(r.stars) desc")
   List<RatingsCountByArtist> countUserRatingsGroupByArtist(User user, Pageable pageable);
 
+  void deleteAllByEntity(RateableEntity rateableEntity);
+
+  void deleteAllByEntityIn(Set<RateableEntity> rateableEntities);
+
   interface RatingsCountByStars {
 
     Stars getStars();

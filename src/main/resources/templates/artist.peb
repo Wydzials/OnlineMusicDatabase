@@ -36,6 +36,14 @@
             {{ userRatingModal(artist, currentDate, request, userRatings) }}
           </li>
         </ul>
+
+        {% if user is not null and user.admin %}
+          <a class="btn btn-outline-dark my-2" href="/admin/add-album?artistId={{ artist.id }}">Dodaj album</a>
+          <a class="btn btn-outline-dark my-2" href="/admin/add-recording?artistId={{ artist.id }}">Dodaj utwór</a>
+
+          {{ deleteEntityModalButton(artist, "Usuń artystę") }}
+          {{ deleteEntityModal(artist, "/admin/delete-artist/" + artist.id, "artystę", request) }}
+        {% endif %}
       </div>
 
       {% if artist.links.size() > 0 %}
@@ -50,12 +58,6 @@
               </li>
             {% endfor %}
           </ul>
-        </div>
-      {% endif %}
-
-      {% if user is not null and user.admin %}
-        <div class="col-lg-3">
-          <a class="btn btn-outline-dark" href="/admin/add-album?artistId={{ artist.id }}">Dodaj album</a>
         </div>
       {% endif %}
 
