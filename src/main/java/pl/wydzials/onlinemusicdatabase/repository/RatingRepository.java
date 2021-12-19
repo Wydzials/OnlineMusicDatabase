@@ -34,7 +34,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
   long countRatingsByUser(User user);
 
   @Query("select avg(r.stars) from Rating r where r.user = :user")
-  double averateRatingByUser(User user);
+  Double averateRatingByUser(User user);
 
   @Query("select r.stars as stars, count(r.stars) as count from Rating r "
       + "where r.user = :user "

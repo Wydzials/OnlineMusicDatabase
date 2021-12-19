@@ -2,12 +2,13 @@ package pl.wydzials.onlinemusicdatabase.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,8 @@ public class User extends BaseEntity implements UserDetails {
   private String password;
 
   private String imageId;
+
+  private String authorities;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
   private List<Playlist> playlists = new ArrayList<>();
@@ -61,7 +65,7 @@ public class User extends BaseEntity implements UserDetails {
   protected User() {
   }
 
-  public User(final String username, final String password) {
+  public User(final String username, final String password, final boolean isAdmin) {
     Validation.notEmpty(username);
     Validation.notEmpty(password);
 
@@ -69,6 +73,7 @@ public class User extends BaseEntity implements UserDetails {
     this.password = password;
 
     this.imageId = MvcConfiguration.PLACEHOLDER_IMAGE_ID;
+    this.authorities = "USER" + (isAdmin ? ",ADMIN" : "");
   }
 
   public void updateDetails(final String username) {
@@ -219,7 +224,9 @@ public class User extends BaseEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.emptyList();
+    return Arrays.stream(authorities.split(","))
+        .map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toSet());
   }
 
   @Override

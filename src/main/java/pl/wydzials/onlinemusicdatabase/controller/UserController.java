@@ -73,7 +73,7 @@ public class UserController extends BaseController {
       return "redirect:/register";
     }
 
-    User user = new User(request.username, passwordEncoder.encode(request.password1));
+    User user = new User(request.username, passwordEncoder.encode(request.password1), false);
     userRepository.save(user);
 
     addFlashMessage(redirectAttributes, "Konto zostało utworzone, możesz się zalogować.");

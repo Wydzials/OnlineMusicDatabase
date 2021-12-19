@@ -13,12 +13,21 @@ public class Validation extends org.apache.commons.lang3.Validate {
     isTrue(!expression);
   }
 
-  public static void throwIllegalArgumentException() {
-    throw new IllegalArgumentException();
+  public static void throwIllegalArgumentException(final Object... args) {
+    throw new IllegalArgumentException(buildMessage(args));
   }
 
-  public static void throwIllegalStateException() {
-    throw new IllegalStateException();
+  public static void throwIllegalStateException(final Object... args) {
+    throw new IllegalStateException(buildMessage(args));
+  }
+
+  private static String buildMessage(final Object... args) {
+    final StringBuilder message = new StringBuilder();
+
+    for (final Object arg : args) {
+      message.append(arg).append(" ");
+    }
+    return message.toString();
   }
 }
 

@@ -41,7 +41,7 @@
         </ul>
 
         <form class="mx-lg-3 mb-2 mb-lg-0" method="get" action="/search">
-          <input class="form-control" type="search" placeholder="Wyszukaj" aria-label="search" name="query">
+          <input class="form-control" type="search" placeholder="Wyszukaj" aria-label="search" name="query" required>
         </form>
 
         {% if username is not null and user is not null %}

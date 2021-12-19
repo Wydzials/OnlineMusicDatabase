@@ -51,7 +51,7 @@ public class Rating extends BaseEntity {
 
     Validation.notNull(date);
     if (date.isAfter(GlobalConfiguration.getCurrentDate()))
-      Validation.throwIllegalArgumentException();
+      Validation.throwIllegalArgumentException(date);
 
     this.entity = entity;
     this.user = user;

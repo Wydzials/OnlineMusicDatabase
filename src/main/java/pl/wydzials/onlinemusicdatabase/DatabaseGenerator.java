@@ -27,7 +27,7 @@ import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.ImageStorageService;
 
 @Component
-public class CommandLineAppStartupRunner implements CommandLineRunner {
+public class DatabaseGenerator implements CommandLineRunner {
 
   private final ArtistRepository artistRepository;
   private final UserRepository userRepository;
@@ -39,7 +39,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
   private final List<User> users = new ArrayList<>();
 
-  public CommandLineAppStartupRunner(final ArtistRepository artistRepository,
+  public DatabaseGenerator(final ArtistRepository artistRepository,
       final UserRepository userRepository,
       final PasswordEncoder passwordEncoder,
       final RatingRepository ratingRepository,
@@ -71,7 +71,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
   }
 
   private void createUsers() {
-    final User szymon = new User("szymon", passwordEncoder.encode("1"));
+    final User szymon = new User("szymon", passwordEncoder.encode("1"), false);
+    final User admin = new User("admin", passwordEncoder.encode("1"), true);
     users.add(szymon);
 
     szymon.createPlaylist("Moja pierwsza playlista");
@@ -82,13 +83,14 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
       final String username = faker.name().firstName() + " " + faker.name().lastName();
       final String password = "$2a$10$0HuvqUt44Gqsa7jFMODsMeTvlMQN7C4S7RuKBqTQc2NKsZBlKdb1i";
 
-      final User user = new User(username, password);
+      final User user = new User(username, password, false);
       users.add(user);
 
       if (faker.random().nextBoolean())
         szymon.addFriend(user);
     }
     userRepository.saveAll(users);
+    userRepository.save(admin);
   }
 
   private void createRatings(final Set<? extends RateableEntity> entities, int min, int max) {

@@ -82,7 +82,7 @@ public class ProfileController extends BaseController {
       case ARTISTS -> prepareModelWithRatings(userProfile, model, principal, page, Artist.class);
       case STATISTICS -> {
         final long totalCount = ratingRepository.countRatingsByUser(userProfile);
-        final double averageRating = ratingRepository.averateRatingByUser(userProfile);
+        final Double averageRating = ratingRepository.averateRatingByUser(userProfile);
 
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("averageRating", averageRating);
@@ -109,10 +109,6 @@ public class ProfileController extends BaseController {
 
         final List<RatingsCountByArtist> ratingsCountByArtist = ratingRepository.countUserRatingsGroupByArtist(
             userProfile, PageRequest.of(0, 5));
-
-        for (RatingsCountByArtist r : ratingsCountByArtist) {
-          System.out.println(r.getCount() + " " + r.getArtist());
-        }
 
         final int ratingsCountByArtistMax = ratingsCountByArtist.stream()
             .mapToInt(RatingsCountByArtist::getCount)

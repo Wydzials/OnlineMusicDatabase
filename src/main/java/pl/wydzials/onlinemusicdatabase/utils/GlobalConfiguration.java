@@ -20,7 +20,7 @@ public class GlobalConfiguration {
     return LocalDateTime.now();
   }
 
-  public static boolean isIsGeneratingData() {
+  public static boolean isGeneratingData() {
     return isGeneratingData;
   }
 
