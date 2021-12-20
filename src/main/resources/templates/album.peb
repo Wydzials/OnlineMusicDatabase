@@ -18,7 +18,7 @@
       <h1 class="display-5">{{ album.name }}</h1>
     </div>
 
-    <div class="row">
+    <div class="row g-3">
 
       <div class="col-lg-5">
         <ul class="list-group">
@@ -45,10 +45,17 @@
       </div>
 
       {% if user is not null and user.admin %}
-        <div class="col-lg-3">
-          <a class="btn btn-outline-dark my-2" href="/admin/add-recording?albumId={{ album.id }}">Dodaj utwór</a>
-          {{ deleteEntityModalButton(album, "Usuń album") }}
-          {{ deleteEntityModal(album, "/admin/delete-album/" + album.id, "album", request) }}
+        <div class="col-lg-4">
+          <ul class="list-group">
+            <li class="list-group-item fs-4 text-center text-secondary">
+              Panel administratora
+            </li>
+            <li class="list-group-item">
+              <a class="btn btn-outline-dark my-2" href="/admin/add-recording?albumId={{ album.id }}">Dodaj utwór</a>
+              {{ deleteEntityModalButton(album, "Usuń album") }}
+              {{ deleteEntityModal(album, "/admin/delete-album/" + album.id, "album", request) }}
+            </li>
+          </ul>
         </div>
       {% endif %}
 

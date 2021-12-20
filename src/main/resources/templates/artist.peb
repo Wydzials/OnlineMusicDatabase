@@ -16,8 +16,8 @@
       <p>{{ artist.description }}</p>
     </div>
 
-    <div class="row mx-1 justify-content-center justify-content-lg-start">
-      <div class="col-lg-5 mb-3">
+    <div class="row g-3 justify-content-center justify-content-lg-start">
+      <div class="col-lg-6">
         <ul class="list-group">
           <li class="list-group-item fs-4 text-center text-secondary">
             Informacje
@@ -36,18 +36,10 @@
             {{ userRatingModal(artist, currentDate, request, userRatings) }}
           </li>
         </ul>
-
-        {% if user is not null and user.admin %}
-          <a class="btn btn-outline-dark my-2" href="/admin/add-album?artistId={{ artist.id }}">Dodaj album</a>
-          <a class="btn btn-outline-dark my-2" href="/admin/add-recording?artistId={{ artist.id }}">Dodaj utwór</a>
-
-          {{ deleteEntityModalButton(artist, "Usuń artystę") }}
-          {{ deleteEntityModal(artist, "/admin/delete-artist/" + artist.id, "artystę", request) }}
-        {% endif %}
       </div>
 
       {% if artist.links.size() > 0 %}
-        <div class="col-lg-4 mx-1">
+        <div class="col-lg-4">
           <ul class="list-group">
             <li class="list-group-item fs-4 text-center text-secondary">
               Linki
@@ -57,6 +49,23 @@
                 <a href="{{ link.link }}">{{ link.text }}</a>
               </li>
             {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if user is not null and user.admin %}
+        <div class="col-lg-6">
+          <ul class="list-group">
+            <li class="list-group-item fs-4 text-center text-secondary">
+              Panel administratora
+            </li>
+            <li class="list-group-item">
+              <a class="btn btn-outline-dark my-2" href="/admin/add-album?artistId={{ artist.id }}">Dodaj album</a>
+              <a class="btn btn-outline-dark my-2" href="/admin/add-recording?artistId={{ artist.id }}">Dodaj utwór</a>
+
+              {{ deleteEntityModalButton(artist, "Usuń artystę") }}
+              {{ deleteEntityModal(artist, "/admin/delete-artist/" + artist.id, "artystę", request) }}
+            </li>
           </ul>
         </div>
       {% endif %}
