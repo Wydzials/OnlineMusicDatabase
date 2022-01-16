@@ -203,7 +203,7 @@ public class ProfileController extends BaseController {
       return "redirect:/user/find-friends?query=" + query + "&page=1";
     }
 
-    final List<User> users = userRepository.searchByUsername(query, PageRequest.of(page - 1, 10));
+    final List<User> users = userRepository.searchByUsername(query.toLowerCase(), PageRequest.of(page - 1, 10));
     model.addAttribute("users", users);
     model.addAttribute("query", query);
     model.addAttribute("page", page);

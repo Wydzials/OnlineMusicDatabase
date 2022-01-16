@@ -232,13 +232,13 @@
 
           {{ pagination(page, ('/profile/' + userProfile.id + '?tab=' + tab)) }}
 
-          <div class="row row-cols-1 g-1 mb-5">
+          <div class="row row-cols-1 g-1 mb-5 mx-5">
               {% for artist in artists %}
 
               <div class="card mb-3 bg-light">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <a href="/album/{{ artist.id }}" class="link-unstyled">
+                    <a href="/artist/{{ artist.id }}" class="link-unstyled">
                       <img src="/images/{{ artist.imageId }}.jpg" class="img-fluid rounded-start" alt="album cover">
                     </a>
                   </div>

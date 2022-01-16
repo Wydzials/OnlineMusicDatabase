@@ -17,6 +17,7 @@ import pl.wydzials.onlinemusicdatabase.model.User;
 import pl.wydzials.onlinemusicdatabase.repository.RateableEntityRepository;
 import pl.wydzials.onlinemusicdatabase.repository.RatingRepository;
 import pl.wydzials.onlinemusicdatabase.repository.UserRepository;
+import pl.wydzials.onlinemusicdatabase.utils.GlobalConfiguration;
 import pl.wydzials.onlinemusicdatabase.utils.Validation;
 
 @Controller
@@ -41,6 +42,11 @@ public class RatingController extends BaseController {
     Validation.notNull(principal);
     Validation.notNull(request);
 
+    if(request.review != null && request.review.length() > 1000) {
+      addFlashMessage(redirectAttributes, "Długość recenzji nie może przekroczyć 1000 znaków");
+      redirectToReferrer(httpServletRequest);
+    }
+
     final RateableEntity entity = rateableEntityRepository.findById(id).orElseThrow();
     final User user = userRepository.findByUsername(principal.getName()).orElseThrow();
 
@@ -52,6 +58,11 @@ public class RatingController extends BaseController {
     if (!request.isDeleteRequest()) {
       try {
         final LocalDate parsedDate = LocalDate.parse(request.date());
+        if (parsedDate.isAfter(GlobalConfiguration.getCurrentDate())) {
+          addFlashMessage(redirectAttributes, "Data nie może być w przyszłości.");
+          return redirectToReferrer(httpServletRequest);
+        }
+
         entity.createRating(user, request.getStarsEnum(), request.getReview(), ratingRepository, parsedDate);
       } catch (DateTimeParseException e) {
         addFlashMessage(redirectAttributes, "Podano nieprawidłową datę.");

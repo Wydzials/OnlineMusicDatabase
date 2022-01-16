@@ -27,6 +27,6 @@ public class SecurityUtils {
     }
     System.out.println(totalPool);
 
-    return FastMath.log(2, FastMath.pow(totalPool, password.length()));
+    return password.length() * FastMath.log(2, totalPool);
   }
 }

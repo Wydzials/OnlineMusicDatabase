@@ -9,9 +9,6 @@ public class Validation extends org.apache.commons.lang3.Validate {
       throw new IllegalArgumentException(String.format("The validated object is not null: %s", object));
   }
 
-  public static void isFalse(final boolean expression) {
-    isTrue(!expression);
-  }
 
   public static void throwIllegalArgumentException(final Object... args) {
     throw new IllegalArgumentException(buildMessage(args));
